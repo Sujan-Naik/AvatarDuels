@@ -41,9 +41,9 @@ public class QuickWeld extends MetalAbility implements AddonAbility{
 		}
 		
 		this.item = item;
-		this.cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Earth.QuickWeld.Cooldown");
-		this.repairAmount = AvatarDuels.instance.getConfig().getInt("Abilities.Earth.QuickWeld.RepairAmount");
-		this.repairCooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Earth.QuickWeld.RepairInterval");
+		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.QuickWeld.Cooldown");
+		this.repairAmount = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.QuickWeld.RepairAmount");
+		this.repairCooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.QuickWeld.RepairInterval");
 		
 		start();
 	}
@@ -144,6 +144,6 @@ public class QuickWeld extends MetalAbility implements AddonAbility{
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Earth.QuickWeld.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Earth.QuickWeld.Enabled");
 	}
 }

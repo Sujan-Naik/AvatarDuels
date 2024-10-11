@@ -55,10 +55,10 @@ public class Bulwark extends EarthAbility implements AddonAbility {
 			return;
 		}
 		
-		this.cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Earth.Bulwark.Cooldown");
-		this.damage = AvatarDuels.instance.getConfig().getDouble("Abilities.Earth.Bulwark.Damage");
-		this.throwSpeed = AvatarDuels.instance.getConfig().getDouble("Abilities.Earth.Bulwark.ThrowSpeed");
-		this.height = AvatarDuels.instance.getConfig().getInt("Abilities.Earth.Bulwark.Height");
+		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.Bulwark.Cooldown");
+		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.Bulwark.Damage");
+		this.throwSpeed = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.Bulwark.ThrowSpeed");
+		this.height = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.Bulwark.Height");
 		this.blocks = new HashSet<>();
 		this.moved = new HashSet<>();
 		this.tops = new HashSet<>();
@@ -235,6 +235,6 @@ public class Bulwark extends EarthAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Earth.Bulwark.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Earth.Bulwark.Enabled");
 	}
 }

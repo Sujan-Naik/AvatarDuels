@@ -56,9 +56,9 @@ public class EarthKick extends EarthAbility implements AddonAbility, Listener{
 	}
 	
 	public void setFields() {
-		damage = AvatarDuels.instance.getConfig().getDouble("Abilities.Earth.EarthKick.Damage");
-		maxBlocks = AvatarDuels.instance.getConfig().getInt("Abilities.Earth.EarthKick.MaxBlocks");
-		lavaMult = AvatarDuels.instance.getConfig().getDouble("Abilities.Earth.EarthKick.LavaMultiplier");
+		damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.EarthKick.Damage");
+		maxBlocks = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.EarthKick.MaxBlocks");
+		lavaMult = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.EarthKick.LavaMultiplier");
 		kick = new ArrayList<>();
 	}
 
@@ -203,7 +203,7 @@ public class EarthKick extends EarthAbility implements AddonAbility, Listener{
 
 	@Override
 	public long getCooldown() {
-		return AvatarDuels.instance.getConfig().getLong("Abilities.Earth.EarthKick.Cooldown");
+		return AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.EarthKick.Cooldown");
 	}
 
 	@Override
@@ -245,6 +245,6 @@ public class EarthKick extends EarthAbility implements AddonAbility, Listener{
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Earth.EarthKick.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Earth.EarthKick.Enabled");
 	}
 }

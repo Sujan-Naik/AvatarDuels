@@ -51,10 +51,10 @@ public class MistShards extends IceAbility implements AddonAbility, ComboAbility
 			return;
 		}
 		
-		this.cooldown = AvatarDuels.instance.getConfig().getLong("Combos.Water.MistShards.Cooldown");
-		this.damage = AvatarDuels.instance.getConfig().getDouble("Combos.Water.MistShards.Damage");
-		this.range = AvatarDuels.instance.getConfig().getDouble("Combos.Water.MistShards.Range");
-		this.icicleCount = AvatarDuels.instance.getConfig().getInt("Combos.Water.MistShards.IcicleCount");
+		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Water.MistShards.Cooldown");
+		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Water.MistShards.Damage");
+		this.range = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Water.MistShards.Range");
+		this.icicleCount = AvatarDuels.instance.getConfig(getName()).getInt("Combos.Water.MistShards.IcicleCount");
 		this.icicles = new HashSet<>();
 		this.forming = true;
 		this.formed = false;
@@ -188,7 +188,7 @@ public class MistShards extends IceAbility implements AddonAbility, ComboAbility
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Combos.Water.MistShards.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Water.MistShards.Enabled");
 	}
 	
 	@Override

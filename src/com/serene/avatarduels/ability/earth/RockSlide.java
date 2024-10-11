@@ -61,14 +61,14 @@ public class RockSlide extends EarthAbility implements AddonAbility, ComboAbilit
 		}
 		
 		this.blocks = new HashSet<>();
-		this.speed = AvatarDuels.instance.getConfig().getDouble("Combos.Earth.RockSlide.Speed");
-		this.cooldown = AvatarDuels.instance.getConfig().getLong("Combos.Earth.RockSlide.Cooldown");
-		this.damage = AvatarDuels.instance.getConfig().getDouble("Combos.Earth.RockSlide.Damage");
+		this.speed = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Earth.RockSlide.Speed");
+		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Earth.RockSlide.Cooldown");
+		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Earth.RockSlide.Damage");
 		this.direction = player.getEyeLocation().getDirection().normalize().multiply(speed);
-		this.knockback = AvatarDuels.instance.getConfig().getDouble("Combos.Earth.RockSlide.Knockback");
-		this.knockup = AvatarDuels.instance.getConfig().getDouble("Combos.Earth.RockSlide.Knockup");
-		this.angular = AvatarDuels.instance.getConfig().getDouble("Combos.Earth.RockSlide.TurningSpeed");
-		this.duration = AvatarDuels.instance.getConfig().getLong("Combos.Earth.RockSlide.Duration");
+		this.knockback = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Earth.RockSlide.Knockback");
+		this.knockup = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Earth.RockSlide.Knockup");
+		this.angular = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Earth.RockSlide.TurningSpeed");
+		this.duration = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Earth.RockSlide.Duration");
 		this.direction.setY(0);
 		this.health = player.getHealth();
 		
@@ -179,7 +179,7 @@ public class RockSlide extends EarthAbility implements AddonAbility, ComboAbilit
 			}
 		}
 		
-		if (blocks.size() < AvatarDuels.instance.getConfig().getInt("Combos.Earth.RockSlide.RequiredRockCount")) {
+		if (blocks.size() < AvatarDuels.instance.getConfig(getName()).getInt("Combos.Earth.RockSlide.RequiredRockCount")) {
 			remove();
 			return;
 		}
@@ -261,7 +261,7 @@ public class RockSlide extends EarthAbility implements AddonAbility, ComboAbilit
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Combos.Earth.RockSlide.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Earth.RockSlide.Enabled");
 	}
 	
 	@Override

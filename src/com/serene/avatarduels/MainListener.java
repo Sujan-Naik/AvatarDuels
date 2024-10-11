@@ -499,7 +499,7 @@ public class MainListener implements Listener {
 	
 	@EventHandler
 	public void onReload(BendingReloadEvent event) {
-		AvatarDuels.instance.config().reload();
+		AvatarDuels.instance.reloadConfigs();
 		event.getSender().sendMessage(AvatarDuels.instance.prefix() + " Config reloaded");
 		
 		new BukkitRunnable() {

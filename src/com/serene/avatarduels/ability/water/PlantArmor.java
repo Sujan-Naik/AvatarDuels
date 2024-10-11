@@ -145,14 +145,14 @@ public class PlantArmor extends PlantAbility implements AddonAbility, MultiAbili
 		}
 		
 		if (type == ClickType.SHIFT_DOWN) {
-			this.duration = AvatarDuels.instance.getConfig().getLong("Abilities.Water.PlantArmor.Duration");
-			this.cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Water.PlantArmor.Cooldown");
-			this.durability = this.maxDurability = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.PlantArmor.Durability");
-			this.duration = AvatarDuels.instance.getConfig().getLong("Abilities.Water.PlantArmor.Duration");
+			this.duration = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Water.PlantArmor.Duration");
+			this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Water.PlantArmor.Cooldown");
+			this.durability = this.maxDurability = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.PlantArmor.Durability");
+			this.duration = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Water.PlantArmor.Duration");
 			this.durabilityDecay = duration <= 0 ? 0 : maxDurability / (20.0 * duration / 1000.0);
-			this.swim = AvatarDuels.instance.getConfig().getInt("Abilities.Water.PlantArmor.Boost.Swim") - 1;
-			this.speed = AvatarDuels.instance.getConfig().getInt("Abilities.Water.PlantArmor.Boost.Speed") - 1;
-			this.jump = AvatarDuels.instance.getConfig().getInt("Abilities.Water.PlantArmor.Boost.Jump") - 1;
+			this.swim = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.PlantArmor.Boost.Swim") - 1;
+			this.speed = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.PlantArmor.Boost.Speed") - 1;
+			this.jump = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.PlantArmor.Boost.Jump") - 1;
 			this.armor = null;
 			
 			armors[0] = leafLeather(Material.LEATHER_BOOTS);
@@ -168,33 +168,33 @@ public class PlantArmor extends PlantAbility implements AddonAbility, MultiAbili
 			this.effects.add(new PotionEffect(PotionEffectType.SPEED, 5, speed));
 			this.effects.add(new PotionEffect(PotionEffectType.JUMP_BOOST, 5, jump));
 			
-			this.requiredPlants = AvatarDuels.instance.getConfig().getInt("Abilities.Water.PlantArmor.RequiredPlants");
-			this.selectRange = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.PlantArmor.SelectRange");
+			this.requiredPlants = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.PlantArmor.RequiredPlants");
+			this.selectRange = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.PlantArmor.SelectRange");
 			
 			this.forward = true;
 			this.range = 0;
-			this.maxRange = AvatarDuels.instance.getConfig().getInt("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Range");
-			this.vdmg = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Damage");
-			this.vSpeed = AvatarDuels.instance.getConfig().getInt("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Speed");
+			this.maxRange = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Range");
+			this.vdmg = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Damage");
+			this.vSpeed = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Speed");
 			
-			this.radius = AvatarDuels.instance.getConfig().getInt("Abilities.Water.PlantArmor.SubAbilities.LeafShield.Radius");
+			this.radius = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.PlantArmor.SubAbilities.LeafShield.Radius");
 			
 			this.current = null;
-			this.tRadius = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.PlantArmor.SubAbilities.Tangle.Radius");
-			this.tRange = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.PlantArmor.SubAbilities.Tangle.Range");
-			this.tDuration = AvatarDuels.instance.getConfig().getLong("Abilities.Water.PlantArmor.SubAbilities.Tangle.Duration");
+			this.tRadius = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.PlantArmor.SubAbilities.Tangle.Radius");
+			this.tRange = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.PlantArmor.SubAbilities.Tangle.Range");
+			this.tDuration = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Water.PlantArmor.SubAbilities.Tangle.Duration");
 			this.angle = 0;
 			
-			this.gMax = AvatarDuels.instance.getConfig().getInt("Abilities.Water.PlantArmor.SubAbilities.Grapple.Range");
-			this.gSpeed = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.PlantArmor.SubAbilities.Grapple.Speed");
+			this.gMax = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.PlantArmor.SubAbilities.Grapple.Range");
+			this.gSpeed = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.PlantArmor.SubAbilities.Grapple.Speed");
 			this.pulling = false;
 			this.gRange = 0;
 			
-			this.dRadius = AvatarDuels.instance.getConfig().getInt("Abilities.Water.PlantArmor.SubAbilities.LeafDome.Radius");
+			this.dRadius = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.PlantArmor.SubAbilities.LeafDome.Radius");
 			
-			this.power = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.PlantArmor.SubAbilities.Leap.Power");
+			this.power = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.PlantArmor.SubAbilities.Leap.Power");
 			
-			this.regen = AvatarDuels.instance.getConfig().getInt("Abilities.Water.PlantArmor.SubAbilities.Regenerate.RegenAmount");
+			this.regen = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.PlantArmor.SubAbilities.Regenerate.RegenAmount");
 			
 			start();
 		}
@@ -315,7 +315,7 @@ public class PlantArmor extends PlantAbility implements AddonAbility, MultiAbili
 	
 	private void reset() {
 		if (active != null) {
-			bPlayer.addCooldown(active.getName(), AvatarDuels.instance.getConfig().getLong("Abilities.Water.PlantArmor.SubAbilities." + active.getName() + ".Cooldown"));
+			bPlayer.addCooldown(active.getName(), AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Water.PlantArmor.SubAbilities." + active.getName() + ".Cooldown"));
 		
 			this.active = null;
 		}
@@ -662,7 +662,7 @@ public class PlantArmor extends PlantAbility implements AddonAbility, MultiAbili
 	}
 	
 	private int getAbilityCost(String ability) {
-		return AvatarDuels.instance.getConfig().getInt("Abilities.Water.PlantArmor.SubAbilities." + ability + ".Cost");
+		return AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.PlantArmor.SubAbilities." + ability + ".Cost");
 	}
 	
 	private Block getRandomPlantSource() {
@@ -738,7 +738,7 @@ public class PlantArmor extends PlantAbility implements AddonAbility, MultiAbili
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Water.PlantArmor.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Water.PlantArmor.Enabled");
 	}
 	
 	@Override

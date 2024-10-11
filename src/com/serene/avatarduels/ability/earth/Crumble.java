@@ -41,18 +41,18 @@ public class Crumble extends SandAbility implements AddonAbility {
 		}
 		
 		if (click == ClickType.LEFT_CLICK) {
-			int selectRange = AvatarDuels.instance.getConfig().getInt("Abilities.Earth.Crumble.SelectRange");
+			int selectRange = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.Crumble.SelectRange");
 			this.center = player.getTargetBlock(null, selectRange);
 		} else {
 			this.center = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 		}
 
 		this.revert = new HashMap<>();
-		this.revertTime = AvatarDuels.instance.getConfig().getInt("Abilities.Earth.Crumble.RevertTime");
+		this.revertTime = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.Crumble.RevertTime");
 		this.counter = 0;
 		this.radius = 0;
-		this.cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Earth.Crumble.Cooldown");
-		this.maxRadius = AvatarDuels.instance.getConfig().getInt("Abilities.Earth.Crumble.Radius");
+		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.Crumble.Cooldown");
+		this.maxRadius = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.Crumble.Radius");
 		
 		start();
 	}
@@ -177,7 +177,7 @@ public class Crumble extends SandAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Earth.Crumble.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Earth.Crumble.Enabled");
 	}
 	
 	@Override

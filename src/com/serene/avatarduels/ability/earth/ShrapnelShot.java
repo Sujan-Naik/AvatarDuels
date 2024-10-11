@@ -54,9 +54,9 @@ public class ShrapnelShot extends MetalAbility implements AddonAbility {
 		is.setAmount(is.getAmount() - 1);
 		player.getInventory().setItem(slot, is);
 		
-		this.speed = AvatarDuels.instance.getConfig().getDouble("Abilities.Earth.Shrapnel.Shot.Speed");
-		this.damage = AvatarDuels.instance.getConfig().getDouble("Abilities.Earth.Shrapnel.Shot.Damage");
-		this.cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Earth.Shrapnel.Shot.Cooldown");
+		this.speed = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.Shrapnel.Shot.Speed");
+		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.Shrapnel.Shot.Damage");
+		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.Shrapnel.Shot.Cooldown");
 		
 		Location spawn = GeneralMethods.getRightSide(player.getLocation(), 0.12).add(0, 1.3, 0);
 		
@@ -91,8 +91,8 @@ public class ShrapnelShot extends MetalAbility implements AddonAbility {
 		player.getInventory().setItem(slot, is);
 		
 		this.speed = speed;
-		this.damage = AvatarDuels.instance.getConfig().getDouble("Abilities.Earth.Shrapnel.Shot.Damage");
-		this.cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Earth.Shrapnel.Shot.Cooldown");
+		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.Shrapnel.Shot.Damage");
+		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.Shrapnel.Shot.Cooldown");
 		
 		Location spawn = GeneralMethods.getRightSide(player.getLocation(), 0.12).add(0, 1.3, 0);
 		
@@ -191,6 +191,6 @@ public class ShrapnelShot extends MetalAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Earth.Shrapnel.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Earth.Shrapnel.Enabled");
 	}
 }

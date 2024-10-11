@@ -28,8 +28,8 @@ public class Jab extends ChiAbility implements AddonAbility{
 	public Jab(Player player, Entity entity, JabHand hand) {
 		super(player);
 		
-		cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Chi.Jab.Cooldown");
-		maxUses = AvatarDuels.instance.getConfig().getInt("Abilities.Chi.Jab.MaxUses");
+		cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Chi.Jab.Cooldown");
+		maxUses = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Chi.Jab.MaxUses");
 		
 		start();
 		activate(entity, hand);
@@ -117,6 +117,6 @@ public class Jab extends ChiAbility implements AddonAbility{
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Chi.Jab.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Chi.Jab.Enabled");
 	}
 }

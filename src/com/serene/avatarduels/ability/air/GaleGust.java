@@ -39,11 +39,11 @@ public class GaleGust extends AirAbility implements AddonAbility {
 	public GaleGust(Player player) {
 		super(player);
 		
-		this.cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Air.GaleGust.Cooldown");
-		this.knockback = AvatarDuels.instance.getConfig().getDouble("Abilities.Air.GaleGust.Knockback");
-		this.radius = AvatarDuels.instance.getConfig().getDouble("Abilities.Air.GaleGust.Radius");
-		this.damage = AvatarDuels.instance.getConfig().getDouble("Abilities.Air.GaleGust.Damage");
-		this.range = AvatarDuels.instance.getConfig().getDouble("Abilities.Air.GaleGust.Range");
+		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Air.GaleGust.Cooldown");
+		this.knockback = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Air.GaleGust.Knockback");
+		this.radius = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Air.GaleGust.Radius");
+		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Air.GaleGust.Damage");
+		this.range = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Air.GaleGust.Range");
 		
 		if (player.getMainHand() == MainHand.LEFT) {
 			current = GeneralMethods.getLeftSide(player.getLocation().add(0, 1.2, 0), 0.55);
@@ -204,7 +204,7 @@ public class GaleGust extends AirAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Air.GaleGust.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Air.GaleGust.Enabled");
 	}
 	
 	@Override

@@ -45,13 +45,13 @@ public class ChargeBolt extends LightningAbility implements AddonAbility {
 			return;
 		}
 		
-		chargeTime = AvatarDuels.instance.getConfig().getLong("Abilities.Fire.ChargeBolt.ChargeTime");
-		damage = AvatarDuels.instance.getConfig().getDouble("Abilities.Fire.ChargeBolt.Damage");
-		boltRange = AvatarDuels.instance.getConfig().getDouble("Abilities.Fire.ChargeBolt.BoltRange");
-		blastRadius = AvatarDuels.instance.getConfig().getDouble("Abilities.Fire.ChargeBolt.BlastRadius");
-		speed = AvatarDuels.instance.getConfig().getInt("Abilities.Fire.ChargeBolt.Speed");
-		cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Fire.ChargeBolt.Cooldown");
-		dischargeBolts = AvatarDuels.instance.getConfig().getInt("Abilities.Fire.ChargeBolt.DischargeBoltCount");
+		chargeTime = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.ChargeBolt.ChargeTime");
+		damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.ChargeBolt.Damage");
+		boltRange = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.ChargeBolt.BoltRange");
+		blastRadius = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.ChargeBolt.BlastRadius");
+		speed = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Fire.ChargeBolt.Speed");
+		cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.ChargeBolt.Cooldown");
+		dischargeBolts = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Fire.ChargeBolt.DischargeBoltCount");
 		bolts = new HashSet<>(dischargeBolts);
 		
 		start();
@@ -189,7 +189,7 @@ public class ChargeBolt extends LightningAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Fire.ChargeBolt.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Fire.ChargeBolt.Enabled");
 	}
 	
 	private class Bolt {

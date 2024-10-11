@@ -3,6 +3,7 @@ package com.serene.avatarduels;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import com.google.common.reflect.ClassPath;
@@ -43,7 +44,7 @@ public class AvatarDuels extends JavaPlugin {
 	
 	public static AvatarDuels instance;
 	
-	private Config config;
+	private HashMap<String, Config> abilityNameConfigHashMap = new HashMap<>();
 	private MainListener listener;
 	private Element soundElement;
 
@@ -62,7 +63,6 @@ public class AvatarDuels extends JavaPlugin {
 		plugin = this;
 
 
-		this.config = new Config(new File("project_addons.yml"));
 		this.setupConfig();
 		soundElement = new SubElement("Sound", Element.AIR, ElementType.BENDING, this);
 
@@ -188,396 +188,482 @@ public class AvatarDuels extends JavaPlugin {
 	public Element getSoundElement() {
 		return soundElement;
 	}
-	
-	@Override
-	public FileConfiguration getConfig() {
-		return config.get();
+
+	private void createAbilityConfig(String abilityName, Pair<String, Object>... pathValuePairs){
+		Config newConfig = new Config(new File("project_addons/" + abilityName));
+		FileConfiguration c = newConfig.get();
+		Arrays.stream(pathValuePairs).forEach(stringObjectPair -> {
+			c.addDefault(stringObjectPair.first, stringObjectPair.second);
+		});
+		newConfig.save();
+		abilityNameConfigHashMap.put(abilityName, newConfig);
 	}
-	
-	public Config config() {
-		return config;
+
+	public void reloadConfigs(){
+		abilityNameConfigHashMap.values().forEach(Config::reload);
+	}
+
+	public FileConfiguration getConfig(String name){
+
+		return abilityNameConfigHashMap.get(name).get();
 	}
 	
 	private void setupConfig() {
-		FileConfiguration c = config.get();
 		
-		c.addDefault("Chat.Colors.Sound", "#3e4d52"); //Make soundbending have a color
+//		new Pair<>("Chat.Colors.Sound", "#3e4d52"); //Make soundbending have a color
 
-		c.addDefault("Properties.MetallicBlocks", Arrays.asList("GOLD_BLOCK", "IRON_BLOCK", "NETHERITE_BLOCK"));
+//		new Pair<>("Properties.MetallicBlocks", Arrays.asList("GOLD_BLOCK", "IRON_BLOCK", "NETHERITE_BLOCK"));
 
 		// ---- Avatar ----
 		// EnergyBeam
-		c.addDefault("Abilities.Avatar.EnergyBeam.Enabled", true);
-		c.addDefault("Abilities.Avatar.EnergyBeam.Cooldown", 12000);
-		c.addDefault("Abilities.Avatar.EnergyBeam.Duration", 10000);
-		c.addDefault("Abilities.Avatar.EnergyBeam.Damage", 3);
-		c.addDefault("Abilities.Avatar.EnergyBeam.Range", 40);
-		c.addDefault("Abilities.Avatar.EnergyBeam.EasterEgg", true);
+		createAbilityConfig("EnergyBeam", 
+				new Pair<>("Abilities.Avatar.EnergyBeam.Enabled", true), 
+				new Pair<>("Abilities.Avatar.EnergyBeam.Cooldown", 12000),
+		new Pair<>("Abilities.Avatar.EnergyBeam.Duration", 10000),
+		new Pair<>("Abilities.Avatar.EnergyBeam.Damage", 3),
+		new Pair<>("Abilities.Avatar.EnergyBeam.Range", 40),
+		new Pair<>("Abilities.Avatar.EnergyBeam.EasterEgg", true));
 		
 		// ---- Airbending ----
 		// Flying
-		c.addDefault("Passives.Air.Flying.Enabled", true);
-		c.addDefault("Passives.Air.Flying.FlySpeed", 0.05);
-		c.addDefault("Passives.Air.Flying.Glide.StartSpeed", 0.8);
-		c.addDefault("Passives.Air.Flying.Glide.MaxSpeed", 1.6);
-		c.addDefault("Passives.Air.Flying.Acceleration", 0.001);
-		c.addDefault("Passives.Air.Flying.AbilityBlacklist", Arrays.asList("Tornado", "EarthSmash", "Surge", "Lightning"));
+		createAbilityConfig("Flying",
+
+				new Pair<>("Passives.Air.Flying.Enabled", true),
+		new Pair<>("Passives.Air.Flying.FlySpeed", 0.05),
+		new Pair<>("Passives.Air.Flying.Glide.StartSpeed", 0.8),
+		new Pair<>("Passives.Air.Flying.Glide.MaxSpeed", 1.6),
+		new Pair<>("Passives.Air.Flying.Acceleration", 0.001),
+		new Pair<>("Passives.Air.Flying.AbilityBlacklist", Arrays.asList("Tornado", "EarthSmash", "Surge", "Lightning")));
 		
 		// Deafen
-		c.addDefault("Abilities.Air.Deafen.Enabled", true);
-		c.addDefault("Abilities.Air.Deafen.Cooldown", 10000);
-		c.addDefault("Abilities.Air.Deafen.Duration", 6000);
+		createAbilityConfig("Deafen",
+				new Pair<>("Abilities.Air.Deafen.Enabled", true),
+		new Pair<>("Abilities.Air.Deafen.Cooldown", 10000),
+		new Pair<>("Abilities.Air.Deafen.Duration", 6000));
 		
 		// GaleGust
-		c.addDefault("Abilities.Air.GaleGust.Enabled", true);
-		c.addDefault("Abilities.Air.GaleGust.Cooldown", 9000);
-		c.addDefault("Abilities.Air.GaleGust.Damage", 4);
-		c.addDefault("Abilities.Air.GaleGust.Radius", 1);
-		c.addDefault("Abilities.Air.GaleGust.Range", 18);
-		c.addDefault("Abilities.Air.GaleGust.Knockback", 0.67);
+		createAbilityConfig("GaleGust",
+				new Pair<>("Abilities.Air.GaleGust.Enabled", true),
+		new Pair<>("Abilities.Air.GaleGust.Cooldown", 9000),
+		new Pair<>("Abilities.Air.GaleGust.Damage", 4),
+		new Pair<>("Abilities.Air.GaleGust.Radius", 1),
+		new Pair<>("Abilities.Air.GaleGust.Range", 18),
+		new Pair<>("Abilities.Air.GaleGust.Knockback", 0.67));
 		
 		// SonicWave
-		c.addDefault("Abilities.Air.SonicWave.Enabled", true);
-		c.addDefault("Abilities.Air.SonicWave.Cooldown", 4000);
-		c.addDefault("Abilities.Air.SonicWave.Range", 25);
-		c.addDefault("Abilities.Air.SonicWave.Width", 10);
-		c.addDefault("Abilities.Air.SonicWave.Nausea.Duration", 120);
-		c.addDefault("Abilities.Air.SonicWave.Nausea.Power", 2);
+		createAbilityConfig("SonicWave",
+
+				new Pair<>("Abilities.Air.SonicWave.Enabled", true),
+		new Pair<>("Abilities.Air.SonicWave.Cooldown", 4000),
+		new Pair<>("Abilities.Air.SonicWave.Range", 25),
+		new Pair<>("Abilities.Air.SonicWave.Width", 10),
+		new Pair<>("Abilities.Air.SonicWave.Nausea.Duration", 120),
+		new Pair<>("Abilities.Air.SonicWave.Nausea.Power", 2));
 		
-		// VocalManipulation
-		c.addDefault("Abilities.Air.VocalMimicry.Enabled", true);
-		c.addDefault("Abilities.Air.VocalMimicry.Volume", 0.7);
-		c.addDefault("Abilities.Air.VocalMimicry.Pitch", 1);
-		c.addDefault("Abilities.Air.VocalMimicry.SoundBlacklist", Arrays.asList("SOUND_NAME_HERE"));
+		// VocalMimicry
+		createAbilityConfig("VocalMimicry",
+
+				new Pair<>("Abilities.Air.VocalMimicry.Enabled", true),
+		new Pair<>("Abilities.Air.VocalMimicry.Volume", 0.7),
+		new Pair<>("Abilities.Air.VocalMimicry.Pitch", 1),
+		new Pair<>("Abilities.Air.VocalMimicry.SoundBlacklist", Arrays.asList("SOUND_NAME_HERE")));
 		
 		// Zephyr
-		c.addDefault("Abilities.Air.Zephyr.Enabled", true);
-		c.addDefault("Abilities.Air.Zephyr.Cooldown", 1000);
-		c.addDefault("Abilities.Air.Zephyr.Radius", 4);
+		createAbilityConfig("Zephyr",
+
+				new Pair<>("Abilities.Air.Zephyr.Enabled", true),
+		new Pair<>("Abilities.Air.Zephyr.Cooldown", 1000),
+		new Pair<>("Abilities.Air.Zephyr.Radius", 4));
 		
 		// Tailwind
-		c.addDefault("Combos.Air.Tailwind.Enabled", true);
-		c.addDefault("Combos.Air.Tailwind.Cooldown", 7000);
-		c.addDefault("Combos.Air.Tailwind.Duration", 22000);
-		c.addDefault("Combos.Air.Tailwind.Speed", 9);
+		createAbilityConfig("Tailwind",
+
+				new Pair<>("Combos.Air.Tailwind.Enabled", true),
+		new Pair<>("Combos.Air.Tailwind.Cooldown", 7000),
+		new Pair<>("Combos.Air.Tailwind.Duration", 22000),
+		new Pair<>("Combos.Air.Tailwind.Speed", 9));
 		
 		// ---- Earthbending ----
 		// LandLaunch
-		c.addDefault("Passives.Earth.LandLaunch.Enabled", true);
-		c.addDefault("Passives.Earth.LandLaunch.Power", 3);
+		createAbilityConfig("LandLaunch",
+
+				new Pair<>("Passives.Earth.LandLaunch.Enabled", true),
+		new Pair<>("Passives.Earth.LandLaunch.Power", 3));
 
 		// Accretion
-		c.addDefault("Abilities.Earth.Accretion.Enabled", true);
-		c.addDefault("Abilities.Earth.Accretion.Cooldown", 10000);
-		c.addDefault("Abilities.Earth.Accretion.Damage", 1);
-		c.addDefault("Abilities.Earth.Accretion.Blocks", 8);
-		c.addDefault("Abilities.Earth.Accretion.SelectRange", 6);
-		c.addDefault("Abilities.Earth.Accretion.RevertTime", 20000);
-		c.addDefault("Abilities.Earth.Accretion.ThrowSpeed", 1.6);
+		createAbilityConfig("Accretion",
+
+				new Pair<>("Abilities.Earth.Accretion.Enabled", true),
+		new Pair<>("Abilities.Earth.Accretion.Cooldown", 10000),
+		new Pair<>("Abilities.Earth.Accretion.Damage", 1),
+		new Pair<>("Abilities.Earth.Accretion.Blocks", 8),
+		new Pair<>("Abilities.Earth.Accretion.SelectRange", 6),
+		new Pair<>("Abilities.Earth.Accretion.RevertTime", 20000),
+		new Pair<>("Abilities.Earth.Accretion.ThrowSpeed", 1.6));
 
 		// Bulwark
-		c.addDefault("Abilities.Earth.Bulwark.Enabled", true);
-		c.addDefault("Abilities.Earth.Bulwark.Cooldown", 6000);
-		c.addDefault("Abilities.Earth.Bulwark.Damage", 1);
-		c.addDefault("Abilities.Earth.Bulwark.ThrowSpeed", 0.94);
-		c.addDefault("Abilities.Earth.Bulwark.Height", 2);
+		createAbilityConfig("Bulwark",
+
+				new Pair<>("Abilities.Earth.Bulwark.Enabled", true),
+		new Pair<>("Abilities.Earth.Bulwark.Cooldown", 6000),
+		new Pair<>("Abilities.Earth.Bulwark.Damage", 1),
+		new Pair<>("Abilities.Earth.Bulwark.ThrowSpeed", 0.94),
+		new Pair<>("Abilities.Earth.Bulwark.Height", 2));
 		
 		// Crumble
-		c.addDefault("Abilities.Earth.Crumble.Enabled", true);
-		c.addDefault("Abilities.Earth.Crumble.Cooldown", 3000);
-		c.addDefault("Abilities.Earth.Crumble.Radius", 6);
-		c.addDefault("Abilities.Earth.Crumble.SelectRange", 9);
-		c.addDefault("Abilities.Earth.Crumble.RevertTime", 60);
+		createAbilityConfig("Crumble",
+
+				new Pair<>("Abilities.Earth.Crumble.Enabled", true),
+		new Pair<>("Abilities.Earth.Crumble.Cooldown", 3000),
+		new Pair<>("Abilities.Earth.Crumble.Radius", 6),
+		new Pair<>("Abilities.Earth.Crumble.SelectRange", 9),
+		new Pair<>("Abilities.Earth.Crumble.RevertTime", 60));
 		
 		// Dig
-		c.addDefault("Abilities.Earth.Dig.Enabled", true);
-		c.addDefault("Abilities.Earth.Dig.Cooldown", 3000);
-		c.addDefault("Abilities.Earth.Dig.Duration", -1);
-		c.addDefault("Abilities.Earth.Dig.RevertTime", 3500);
-		c.addDefault("Abilities.Earth.Dig.Speed", 0.51);
+		createAbilityConfig("Dig",
+
+				new Pair<>("Abilities.Earth.Dig.Enabled", true),
+		new Pair<>("Abilities.Earth.Dig.Cooldown", 3000),
+		new Pair<>("Abilities.Earth.Dig.Duration", -1),
+		new Pair<>("Abilities.Earth.Dig.RevertTime", 3500),
+		new Pair<>("Abilities.Earth.Dig.Speed", 0.51));
 		
 		// EarthKick
-		c.addDefault("Abilities.Earth.EarthKick.Enabled", true);
-		c.addDefault("Abilities.Earth.EarthKick.Cooldown", 4000);
-		c.addDefault("Abilities.Earth.EarthKick.Damage", 0.5);
-		c.addDefault("Abilities.Earth.EarthKick.MaxBlocks", 9);
-		c.addDefault("Abilities.Earth.EarthKick.LavaMultiplier", 1.5);
+		createAbilityConfig("EarthKick",
+
+				new Pair<>("Abilities.Earth.EarthKick.Enabled", true),
+		new Pair<>("Abilities.Earth.EarthKick.Cooldown", 4000),
+		new Pair<>("Abilities.Earth.EarthKick.Damage", 0.5),
+		new Pair<>("Abilities.Earth.EarthKick.MaxBlocks", 9),
+		new Pair<>("Abilities.Earth.EarthKick.LavaMultiplier", 1.5));
 		
 		// LavaSurge
-		c.addDefault("Abilities.Earth.LavaSurge.Enabled", true);
-		c.addDefault("Abilities.Earth.LavaSurge.Cooldown", 4000);
-		c.addDefault("Abilities.Earth.LavaSurge.Damage", 0.5);
-		c.addDefault("Abilities.Earth.LavaSurge.Speed", 1.14);
-		c.addDefault("Abilities.Earth.LavaSurge.SelectRange", 5);
-		c.addDefault("Abilities.Earth.LavaSurge.SourceRadius", 3);
-		c.addDefault("Abilities.Earth.LavaSurge.MaxBlocks", 10);
-		c.addDefault("Abilities.Earth.LavaSurge.Burn.Enabled", true);
-		c.addDefault("Abilities.Earth.LavaSurge.Burn.Duration", 3000);
+		createAbilityConfig("LavaSurge",
+
+				new Pair<>("Abilities.Earth.LavaSurge.Enabled", true),
+		new Pair<>("Abilities.Earth.LavaSurge.Cooldown", 4000),
+		new Pair<>("Abilities.Earth.LavaSurge.Damage", 0.5),
+		new Pair<>("Abilities.Earth.LavaSurge.Speed", 1.14),
+		new Pair<>("Abilities.Earth.LavaSurge.SelectRange", 5),
+		new Pair<>("Abilities.Earth.LavaSurge.SourceRadius", 3),
+		new Pair<>("Abilities.Earth.LavaSurge.MaxBlocks", 10),
+		new Pair<>("Abilities.Earth.LavaSurge.Burn.Enabled", true),
+		new Pair<>("Abilities.Earth.LavaSurge.Burn.Duration", 3000));
 
 		// MagmaSlap
-		c.addDefault("Abilities.Earth.MagmaSlap.Enabled", true);
-		c.addDefault("Abilities.Earth.MagmaSlap.Cooldown", 4000);
-		c.addDefault("Abilities.Earth.MagmaSlap.Offset", 1.5);
-		c.addDefault("Abilities.Earth.MagmaSlap.Damage", 2);
-		c.addDefault("Abilities.Earth.MagmaSlap.Length", 13);
-		c.addDefault("Abilities.Earth.MagmaSlap.Width", 1);
-		c.addDefault("Abilities.Earth.MagmaSlap.RevertTime", 7000);
+		createAbilityConfig("MagmaSlap",
+
+				new Pair<>("Abilities.Earth.MagmaSlap.Enabled", true),
+		new Pair<>("Abilities.Earth.MagmaSlap.Cooldown", 4000),
+		new Pair<>("Abilities.Earth.MagmaSlap.Offset", 1.5),
+		new Pair<>("Abilities.Earth.MagmaSlap.Damage", 2),
+		new Pair<>("Abilities.Earth.MagmaSlap.Length", 13),
+		new Pair<>("Abilities.Earth.MagmaSlap.Width", 1),
+		new Pair<>("Abilities.Earth.MagmaSlap.RevertTime", 7000));
 
 		// QuickWeld
-		c.addDefault("Abilities.Earth.QuickWeld.Enabled", true);
-		c.addDefault("Abilities.Earth.QuickWeld.Cooldown", 1000);
-		c.addDefault("Abilities.Earth.QuickWeld.RepairAmount", 25);
-		c.addDefault("Abilities.Earth.QuickWeld.RepairInterval", 1250);
+		createAbilityConfig("QuickWeld",
+
+				new Pair<>("Abilities.Earth.QuickWeld.Enabled", true),
+		new Pair<>("Abilities.Earth.QuickWeld.Cooldown", 1000),
+		new Pair<>("Abilities.Earth.QuickWeld.RepairAmount", 25),
+		new Pair<>("Abilities.Earth.QuickWeld.RepairInterval", 1250));
 		
 		// Shrapnel
-		c.addDefault("Abilities.Earth.Shrapnel.Enabled", true);
-		c.addDefault("Abilities.Earth.Shrapnel.Shot.Cooldown", 2000);
-		c.addDefault("Abilities.Earth.Shrapnel.Shot.Damage", 2);
-		c.addDefault("Abilities.Earth.Shrapnel.Shot.Speed", 2.3);
-		c.addDefault("Abilities.Earth.Shrapnel.Blast.Cooldown", 8000);
-		c.addDefault("Abilities.Earth.Shrapnel.Blast.Shots", 9);
-		c.addDefault("Abilities.Earth.Shrapnel.Blast.Spread", 24);
-		c.addDefault("Abilities.Earth.Shrapnel.Blast.Speed", 1.7);
+		createAbilityConfig("Shrapnel",
+
+				new Pair<>("Abilities.Earth.Shrapnel.Enabled", true),
+		new Pair<>("Abilities.Earth.Shrapnel.Shot.Cooldown", 2000),
+		new Pair<>("Abilities.Earth.Shrapnel.Shot.Damage", 2),
+		new Pair<>("Abilities.Earth.Shrapnel.Shot.Speed", 2.3),
+		new Pair<>("Abilities.Earth.Shrapnel.Blast.Cooldown", 8000),
+		new Pair<>("Abilities.Earth.Shrapnel.Blast.Shots", 9),
+		new Pair<>("Abilities.Earth.Shrapnel.Blast.Spread", 24),
+		new Pair<>("Abilities.Earth.Shrapnel.Blast.Speed", 1.7));
 		
 		// RockSlide
-		c.addDefault("Combos.Earth.RockSlide.Enabled", true);
-		c.addDefault("Combos.Earth.RockSlide.Cooldown", 7000);
-		c.addDefault("Combos.Earth.RockSlide.Damage", 1);
-		c.addDefault("Combos.Earth.RockSlide.Knockback", 0.9);
-		c.addDefault("Combos.Earth.RockSlide.Knockup", 0.4);
-		c.addDefault("Combos.Earth.RockSlide.Speed", 0.68);
-		c.addDefault("Combos.Earth.RockSlide.RequiredRockCount", 6);
-		c.addDefault("Combos.Earth.RockSlide.TurningSpeed", 0.086);
-		c.addDefault("Combos.Earth.RockSlide.Duration", -1);
+		createAbilityConfig("RockSlide",
+
+				new Pair<>("Combos.Earth.RockSlide.Enabled", true),
+		new Pair<>("Combos.Earth.RockSlide.Cooldown", 7000),
+		new Pair<>("Combos.Earth.RockSlide.Damage", 1),
+		new Pair<>("Combos.Earth.RockSlide.Knockback", 0.9),
+		new Pair<>("Combos.Earth.RockSlide.Knockup", 0.4),
+		new Pair<>("Combos.Earth.RockSlide.Speed", 0.68),
+		new Pair<>("Combos.Earth.RockSlide.RequiredRockCount", 6),
+		new Pair<>("Combos.Earth.RockSlide.TurningSpeed", 0.086),
+		new Pair<>("Combos.Earth.RockSlide.Duration", -1));
 		
 		// ---- Firebending ----
 		// ArcSpark
-		c.addDefault("Abilities.Fire.ArcSpark.Enabled", true);
-		c.addDefault("Abilities.Fire.ArcSpark.Speed", 6);
-		c.addDefault("Abilities.Fire.ArcSpark.Length", 7);
-		c.addDefault("Abilities.Fire.ArcSpark.Damage", 1);
-		c.addDefault("Abilities.Fire.ArcSpark.Cooldown", 6500);
-		c.addDefault("Abilities.Fire.ArcSpark.Duration", 4000);
-		c.addDefault("Abilities.Fire.ArcSpark.ChargeTime", 500);
+		createAbilityConfig("ArcSpark",
+
+				new Pair<>("Abilities.Fire.ArcSpark.Enabled", true),
+		new Pair<>("Abilities.Fire.ArcSpark.Speed", 6),
+		new Pair<>("Abilities.Fire.ArcSpark.Length", 7),
+		new Pair<>("Abilities.Fire.ArcSpark.Damage", 1),
+		new Pair<>("Abilities.Fire.ArcSpark.Cooldown", 6500),
+		new Pair<>("Abilities.Fire.ArcSpark.Duration", 4000),
+		new Pair<>("Abilities.Fire.ArcSpark.ChargeTime", 500));
 		
 		// CombustBeam
-		c.addDefault("Abilities.Fire.CombustBeam.Enabled", true);
-		c.addDefault("Abilities.Fire.CombustBeam.Range", 50);
-		c.addDefault("Abilities.Fire.CombustBeam.Cooldown", 5000);
-		c.addDefault("Abilities.Fire.CombustBeam.Minimum.Power", 0.6);
-		c.addDefault("Abilities.Fire.CombustBeam.Minimum.Angle", 0.2);
-		c.addDefault("Abilities.Fire.CombustBeam.Minimum.ChargeTime", 1000);
-		c.addDefault("Abilities.Fire.CombustBeam.Minimum.Damage", 2);
-		c.addDefault("Abilities.Fire.CombustBeam.Maximum.Power", 2.7);
-		c.addDefault("Abilities.Fire.CombustBeam.Maximum.Angle", 40);
-		c.addDefault("Abilities.Fire.CombustBeam.Maximum.ChargeTime", 5000);
-		c.addDefault("Abilities.Fire.CombustBeam.Maximum.Damage", 10);
-		c.addDefault("Abilities.Fire.CombustBeam.InterruptedDamage", 10);
-		c.addDefault("Abilities.Fire.CombustBeam.RevertTime", 13000);
+		createAbilityConfig("CombustBeam",
+
+				new Pair<>("Abilities.Fire.CombustBeam.Enabled", true),
+		new Pair<>("Abilities.Fire.CombustBeam.Range", 50),
+		new Pair<>("Abilities.Fire.CombustBeam.Cooldown", 5000),
+		new Pair<>("Abilities.Fire.CombustBeam.Minimum.Power", 0.6),
+		new Pair<>("Abilities.Fire.CombustBeam.Minimum.Angle", 0.2),
+		new Pair<>("Abilities.Fire.CombustBeam.Minimum.ChargeTime", 1000),
+		new Pair<>("Abilities.Fire.CombustBeam.Minimum.Damage", 2),
+		new Pair<>("Abilities.Fire.CombustBeam.Maximum.Power", 2.7),
+		new Pair<>("Abilities.Fire.CombustBeam.Maximum.Angle", 40),
+		new Pair<>("Abilities.Fire.CombustBeam.Maximum.ChargeTime", 5000),
+		new Pair<>("Abilities.Fire.CombustBeam.Maximum.Damage", 10),
+		new Pair<>("Abilities.Fire.CombustBeam.InterruptedDamage", 10),
+		new Pair<>("Abilities.Fire.CombustBeam.RevertTime", 13000));
 		
 		// ChargeBolt
-		c.addDefault("Abilities.Fire.ChargeBolt.Enabled", true);
-		c.addDefault("Abilities.Fire.ChargeBolt.Damage", 2);
-		c.addDefault("Abilities.Fire.ChargeBolt.Cooldown", 8000);
-		c.addDefault("Abilities.Fire.ChargeBolt.Speed", 6);
-		c.addDefault("Abilities.Fire.ChargeBolt.ChargeTime", 3000);
-		c.addDefault("Abilities.Fire.ChargeBolt.BoltRange", 26);
-		c.addDefault("Abilities.Fire.ChargeBolt.BlastRadius", 13);
-		c.addDefault("Abilities.Fire.ChargeBolt.DischargeBoltCount", 6);
+		createAbilityConfig("ChargeBolt",
+
+				new Pair<>("Abilities.Fire.ChargeBolt.Enabled", true),
+		new Pair<>("Abilities.Fire.ChargeBolt.Damage", 2),
+		new Pair<>("Abilities.Fire.ChargeBolt.Cooldown", 8000),
+		new Pair<>("Abilities.Fire.ChargeBolt.Speed", 6),
+		new Pair<>("Abilities.Fire.ChargeBolt.ChargeTime", 3000),
+		new Pair<>("Abilities.Fire.ChargeBolt.BoltRange", 26),
+		new Pair<>("Abilities.Fire.ChargeBolt.BlastRadius", 13),
+		new Pair<>("Abilities.Fire.ChargeBolt.DischargeBoltCount", 6));
 		
 		// Electrify
-		c.addDefault("Abilities.Fire.Electrify.Enabled", true);
-		c.addDefault("Abilities.Fire.Electrify.Cooldown", 4000);
-		c.addDefault("Abilities.Fire.Electrify.Duration", 7000);
-		c.addDefault("Abilities.Fire.Electrify.DamageInWater", 2);
-		c.addDefault("Abilities.Fire.Electrify.Slowness", 2);
-		c.addDefault("Abilities.Fire.Electrify.Weakness", 1);
+		createAbilityConfig("Electrify",
+
+				new Pair<>("Abilities.Fire.Electrify.Enabled", true),
+		new Pair<>("Abilities.Fire.Electrify.Cooldown", 4000),
+		new Pair<>("Abilities.Fire.Electrify.Duration", 7000),
+		new Pair<>("Abilities.Fire.Electrify.DamageInWater", 2),
+		new Pair<>("Abilities.Fire.Electrify.Slowness", 2),
+		new Pair<>("Abilities.Fire.Electrify.Weakness", 1));
 		
 		// Explode
-		c.addDefault("Abilities.Fire.Explode.Enabled", true);
-		c.addDefault("Abilities.Fire.Explode.Cooldown", 4500);
-		c.addDefault("Abilities.Fire.Explode.Damage", 2);
-		c.addDefault("Abilities.Fire.Explode.Radius", 2.4);
-		c.addDefault("Abilities.Fire.Explode.Knockback", 1.94);
-		c.addDefault("Abilities.Fire.Explode.Range", 7.4);
+		createAbilityConfig("Explode",
+
+				new Pair<>("Abilities.Fire.Explode.Enabled", true),
+		new Pair<>("Abilities.Fire.Explode.Cooldown", 4500),
+		new Pair<>("Abilities.Fire.Explode.Damage", 2),
+		new Pair<>("Abilities.Fire.Explode.Radius", 2.4),
+		new Pair<>("Abilities.Fire.Explode.Knockback", 1.94),
+		new Pair<>("Abilities.Fire.Explode.Range", 7.4));
 		
 		// FireDisc
-		c.addDefault("Abilities.Fire.FireDisc.Enabled", true);
-		c.addDefault("Abilities.Fire.FireDisc.Cooldown", 1700);
-		c.addDefault("Abilities.Fire.FireDisc.Damage", 1.5);
-		c.addDefault("Abilities.Fire.FireDisc.Range", 32);
-		c.addDefault("Abilities.Fire.FireDisc.Knockback", 0.84);
-		c.addDefault("Abilities.Fire.FireDisc.Controllable", true);
-		c.addDefault("Abilities.Fire.FireDisc.RevertCutBlocks", true);
-		c.addDefault("Abilities.Fire.FireDisc.DropCutBlocks", false);
-		c.addDefault("Abilities.Fire.FireDisc.CuttableBlocks", Arrays.asList("ACACIA_LOG", "OAK_LOG", "JUNGLE_LOG", "BIRCH_LOG", "DARK_OAK_LOG", "SPRUCE_LOG"));
+		createAbilityConfig("FireDisc",
+
+				new Pair<>("Abilities.Fire.FireDisc.Enabled", true),
+		new Pair<>("Abilities.Fire.FireDisc.Cooldown", 1700),
+		new Pair<>("Abilities.Fire.FireDisc.Damage", 1.5),
+		new Pair<>("Abilities.Fire.FireDisc.Range", 32),
+		new Pair<>("Abilities.Fire.FireDisc.Knockback", 0.84),
+		new Pair<>("Abilities.Fire.FireDisc.Controllable", true),
+		new Pair<>("Abilities.Fire.FireDisc.RevertCutBlocks", true),
+		new Pair<>("Abilities.Fire.FireDisc.DropCutBlocks", false),
+		new Pair<>("Abilities.Fire.FireDisc.CuttableBlocks", Arrays.asList("ACACIA_LOG", "OAK_LOG", "JUNGLE_LOG", "BIRCH_LOG", "DARK_OAK_LOG", "SPRUCE_LOG")));
 
 		// Jets
-		c.addDefault("Abilities.Fire.Jets.Enabled", true);
-		c.addDefault("Abilities.Fire.Jets.Cooldown.Minimum", 4000);
-		c.addDefault("Abilities.Fire.Jets.Cooldown.Maximum", 12000);
-		c.addDefault("Abilities.Fire.Jets.Duration", 20000);
-		c.addDefault("Abilities.Fire.Jets.FlySpeed", 0.65);
-		c.addDefault("Abilities.Fire.Jets.HoverSpeed", 0.065);
-		c.addDefault("Abilities.Fire.Jets.SpeedThreshold", 2.4);
-		c.addDefault("Abilities.Fire.Jets.DamageThreshold", 4);
-		c.addDefault("Abilities.Fire.Jets.MaxHeight", -1);
+		createAbilityConfig("Jets",
+
+				new Pair<>("Abilities.Fire.Jets.Enabled", true),
+		new Pair<>("Abilities.Fire.Jets.Cooldown.Minimum", 4000),
+		new Pair<>("Abilities.Fire.Jets.Cooldown.Maximum", 12000),
+		new Pair<>("Abilities.Fire.Jets.Duration", 20000),
+		new Pair<>("Abilities.Fire.Jets.FlySpeed", 0.65),
+		new Pair<>("Abilities.Fire.Jets.HoverSpeed", 0.065),
+		new Pair<>("Abilities.Fire.Jets.SpeedThreshold", 2.4),
+		new Pair<>("Abilities.Fire.Jets.DamageThreshold", 4),
+		new Pair<>("Abilities.Fire.Jets.MaxHeight", -1));
 		
 		// FlameBreath
-		c.addDefault("Combos.Fire.FlameBreath.Enabled", true);
-		c.addDefault("Combos.Fire.FlameBreath.Cooldown", 8000);
-		c.addDefault("Combos.Fire.FlameBreath.Damage", 0.2);
-		c.addDefault("Combos.Fire.FlameBreath.FireTick", 30);
-		c.addDefault("Combos.Fire.FlameBreath.Range", 5);
-		c.addDefault("Combos.Fire.FlameBreath.Speed", 0.65);
-		c.addDefault("Combos.Fire.FlameBreath.Duration", 4000);
-		c.addDefault("Combos.Fire.FlameBreath.Burn.Ground", true);
-		c.addDefault("Combos.Fire.FlameBreath.Burn.Entities", true);
-		c.addDefault("Combos.Fire.FlameBreath.Rainbow", true);
+		createAbilityConfig("FlameBreath",
+
+				new Pair<>("Combos.Fire.FlameBreath.Enabled", true),
+		new Pair<>("Combos.Fire.FlameBreath.Cooldown", 8000),
+		new Pair<>("Combos.Fire.FlameBreath.Damage", 0.2),
+		new Pair<>("Combos.Fire.FlameBreath.FireTick", 30),
+		new Pair<>("Combos.Fire.FlameBreath.Range", 5),
+		new Pair<>("Combos.Fire.FlameBreath.Speed", 0.65),
+		new Pair<>("Combos.Fire.FlameBreath.Duration", 4000),
+		new Pair<>("Combos.Fire.FlameBreath.Burn.Ground", true),
+		new Pair<>("Combos.Fire.FlameBreath.Burn.Entities", true),
+		new Pair<>("Combos.Fire.FlameBreath.Rainbow", true));
 
 		// TurboJet
-		c.addDefault("Combos.Fire.TurboJet.Enabled", true);
-		c.addDefault("Combos.Fire.TurboJet.Cooldown", 12000);
-		c.addDefault("Combos.Fire.TurboJet.Speed", 1.95);
+		createAbilityConfig("TurboJet",
+
+				new Pair<>("Combos.Fire.TurboJet.Enabled", true),
+		new Pair<>("Combos.Fire.TurboJet.Cooldown", 12000),
+		new Pair<>("Combos.Fire.TurboJet.Speed", 1.95));
 		
 		// ---- Waterbending ----
 		// Hydrojet
-		c.addDefault("Passives.Water.Hydrojet.Enabled", true);
-		c.addDefault("Passives.Water.Hydrojet.Speed", 8);
+		createAbilityConfig("Hydrojet",
+
+				new Pair<>("Passives.Water.Hydrojet.Enabled", true),
+		new Pair<>("Passives.Water.Hydrojet.Speed", 8));
 		
 		// BloodGrip
 		/*
-		c.addDefault("Abilities.Water.BloodGrip.Enabled", true);
-		c.addDefault("Abilities.Water.BloodGrip.Cooldown", 6000);
-		c.addDefault("Abilities.Water.BloodGrip.Range", 8);
-		c.addDefault("Abilities.Water.BloodGrip.DragSpeed", 0.32);
-		c.addDefault("Abilities.Water.BloodGrip.ThrowPower", 1.3);
-		c.addDefault("Abilities.Water.BloodGrip.MangleDamage", 3);
-		c.addDefault("Abilities.Water.BloodGrip.SlamSpeed", 2);
-		c.addDefault("Abilities.Water.BloodGrip.DamageThreshold", 4);
-		c.addDefault("Abilities.Water.BloodGrip.EntityFilter", Arrays.asList(EntityType.ENDER_CRYSTAL.toString(), EntityType.ENDER_DRAGON.toString(), EntityType.ARMOR_STAND.toString(), EntityType.BLAZE.toString(), EntityType.WITHER.toString()));
-		c.addDefault("Abilities.Water.BloodGrip.BasicAbilities", Arrays.asList("AirBlast", "AirSwipe", "EarthBlast", "FireBlast", "FireDisc", "WaterManipulation"));
+		new Pair<>("Abilities.Water.BloodGrip.Enabled", true),
+		new Pair<>("Abilities.Water.BloodGrip.Cooldown", 6000),
+		new Pair<>("Abilities.Water.BloodGrip.Range", 8),
+		new Pair<>("Abilities.Water.BloodGrip.DragSpeed", 0.32),
+		new Pair<>("Abilities.Water.BloodGrip.ThrowPower", 1.3),
+		new Pair<>("Abilities.Water.BloodGrip.MangleDamage", 3),
+		new Pair<>("Abilities.Water.BloodGrip.SlamSpeed", 2),
+		new Pair<>("Abilities.Water.BloodGrip.DamageThreshold", 4),
+		new Pair<>("Abilities.Water.BloodGrip.EntityFilter", Arrays.asList(EntityType.ENDER_CRYSTAL.toString(), EntityType.ENDER_DRAGON.toString(), EntityType.ARMOR_STAND.toString(), EntityType.BLAZE.toString(), EntityType.WITHER.toString()));
+		new Pair<>("Abilities.Water.BloodGrip.BasicAbilities", Arrays.asList("AirBlast", "AirSwipe", "EarthBlast", "FireBlast", "FireDisc", "WaterManipulation"));
 		*/
 
 		// RazorLeaf
-		c.addDefault("Abilities.Water.RazorLeaf.Enabled", true);
-		c.addDefault("Abilities.Water.RazorLeaf.Cooldown", 3000);
-		c.addDefault("Abilities.Water.RazorLeaf.Damage", 2);
-		c.addDefault("Abilities.Water.RazorLeaf.Radius", 0.7);
-		c.addDefault("Abilities.Water.RazorLeaf.Range", 24);
-		c.addDefault("Abilities.Water.RazorLeaf.MaxRecalls", 3);
-		c.addDefault("Abilities.Water.RazorLeaf.Particles", 300);
+		createAbilityConfig("RazorLeaf",
+
+				new Pair<>("Abilities.Water.RazorLeaf.Enabled", true),
+		new Pair<>("Abilities.Water.RazorLeaf.Cooldown", 3000),
+		new Pair<>("Abilities.Water.RazorLeaf.Damage", 2),
+		new Pair<>("Abilities.Water.RazorLeaf.Radius", 0.7),
+		new Pair<>("Abilities.Water.RazorLeaf.Range", 24),
+		new Pair<>("Abilities.Water.RazorLeaf.MaxRecalls", 3),
+		new Pair<>("Abilities.Water.RazorLeaf.Particles", 300));
 		
 		// PlantArmor
-		c.addDefault("Abilities.Water.PlantArmor.Enabled", true);
-		c.addDefault("Abilities.Water.PlantArmor.Cooldown", 10000);
-		c.addDefault("Abilities.Water.PlantArmor.Duration", -1);
-		c.addDefault("Abilities.Water.PlantArmor.Durability", 2000);
-		c.addDefault("Abilities.Water.PlantArmor.SelectRange", 9);
-		c.addDefault("Abilities.Water.PlantArmor.RequiredPlants", 14);
-		c.addDefault("Abilities.Water.PlantArmor.Boost.Swim", 3);
-		c.addDefault("Abilities.Water.PlantArmor.Boost.Speed", 2);
-		c.addDefault("Abilities.Water.PlantArmor.Boost.Jump", 2);
+		createAbilityConfig("PlantArmor",
+
+				new Pair<>("Abilities.Water.PlantArmor.Enabled", true),
+		new Pair<>("Abilities.Water.PlantArmor.Cooldown", 10000),
+		new Pair<>("Abilities.Water.PlantArmor.Duration", -1),
+		new Pair<>("Abilities.Water.PlantArmor.Durability", 2000),
+		new Pair<>("Abilities.Water.PlantArmor.SelectRange", 9),
+		new Pair<>("Abilities.Water.PlantArmor.RequiredPlants", 14),
+		new Pair<>("Abilities.Water.PlantArmor.Boost.Swim", 3),
+		new Pair<>("Abilities.Water.PlantArmor.Boost.Speed", 2),
+		new Pair<>("Abilities.Water.PlantArmor.Boost.Jump", 2),
 		
 		// PlantArmor - VineWhip
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Cost", 50);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Cooldown", 2000);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Damage", 2);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Range", 18);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Speed", 3);
+
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Cost", 50),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Cooldown", 2000),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Damage", 2),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Range", 18),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.VineWhip.Speed", 3),
 		
 		// PlantArmor - RazorLeaf
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.RazorLeaf.Cost", 150);
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.RazorLeaf.Cost", 150),
 		
 		// PlantArmor - LeafShield
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.LeafShield.Cost", 100);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.LeafShield.Cooldown", 1500);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.LeafShield.Radius", 2);
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.LeafShield.Cost", 100),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.LeafShield.Cooldown", 1500),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.LeafShield.Radius", 2),
 		
 		// PlantArmor - Tangle
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Tangle.Cost", 200);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Tangle.Cooldown", 7000);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Tangle.Radius", 0.45);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Tangle.Duration", 3000);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Tangle.Range", 18);
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Tangle.Cost", 200),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Tangle.Cooldown", 7000),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Tangle.Radius", 0.45),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Tangle.Duration", 3000),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Tangle.Range", 18),
 		
 		// PlantArmor - Leap
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Leap.Cost", 100);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Leap.Cooldown", 2500);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Leap.Power", 1.4);
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Leap.Cost", 100),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Leap.Cooldown", 2500),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Leap.Power", 1.4),
 		
 		// PlantArmor - Grapple
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Grapple.Cost", 100);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Grapple.Cooldown", 2000);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Grapple.Range", 25);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Grapple.Speed", 1.24);
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Grapple.Cost", 100),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Grapple.Cooldown", 2000),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Grapple.Range", 25),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Grapple.Speed", 1.24),
 		
 		// PlantArmor - LeafDome
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.LeafDome.Cost", 400);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.LeafDome.Cooldown", 5000);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.LeafDome.Radius", 3);
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.LeafDome.Cost", 400),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.LeafDome.Cooldown", 5000),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.LeafDome.Radius", 3),
 		
 		// PlantArmor - Regenerate
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Regenerate.Cooldown", 10000);
-		c.addDefault("Abilities.Water.PlantArmor.SubAbilities.Regenerate.RegenAmount", 150);
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Regenerate.Cooldown", 10000),
+		new Pair<>("Abilities.Water.PlantArmor.SubAbilities.Regenerate.RegenAmount", 150));
 		
 		// LeafStorm
-		c.addDefault("Combos.Water.LeafStorm.Enabled", true);
-		c.addDefault("Combos.Water.LeafStorm.Cooldown", 7000);
-		c.addDefault("Combos.Water.LeafStorm.PlantArmorCost", 800);
-		c.addDefault("Combos.Water.LeafStorm.LeafCount", 10);
-		c.addDefault("Combos.Water.LeafStorm.LeafSpeed", 14);
-		c.addDefault("Combos.Water.LeafStorm.Damage", 0.5);
-		c.addDefault("Combos.Water.LeafStorm.Radius", 6);
+				createAbilityConfig("LeafStorm",
+
+						new Pair<>("Combos.Water.LeafStorm.Enabled", true),
+		new Pair<>("Combos.Water.LeafStorm.Cooldown", 7000),
+		new Pair<>("Combos.Water.LeafStorm.PlantArmorCost", 800),
+		new Pair<>("Combos.Water.LeafStorm.LeafCount", 10),
+		new Pair<>("Combos.Water.LeafStorm.LeafSpeed", 14),
+		new Pair<>("Combos.Water.LeafStorm.Damage", 0.5),
+		new Pair<>("Combos.Water.LeafStorm.Radius", 6));
 		
 		// MistShards
-		c.addDefault("Combos.Water.MistShards.Enabled", true);
-		c.addDefault("Combos.Water.MistShards.Cooldown", 7000);
-		c.addDefault("Combos.Water.MistShards.Damage", 1);
-		c.addDefault("Combos.Water.MistShards.Range", 20);
-		c.addDefault("Combos.Water.MistShards.IcicleCount", 8);
+				createAbilityConfig("MistShards",
+
+						new Pair<>("Combos.Water.MistShards.Enabled", true),
+		new Pair<>("Combos.Water.MistShards.Cooldown", 7000),
+		new Pair<>("Combos.Water.MistShards.Damage", 1),
+		new Pair<>("Combos.Water.MistShards.Range", 20),
+		new Pair<>("Combos.Water.MistShards.IcicleCount", 8));
 		
 		// ---- Chiblocking ----
 		// Dodging
-		c.addDefault("Passives.Chi.Dodging.Enabled", true);
-		c.addDefault("Passives.Chi.Dodging.Chance", 18);
+		createAbilityConfig("Dodging",
+
+				new Pair<>("Passives.Chi.Dodging.Enabled", true),
+		new Pair<>("Passives.Chi.Dodging.Chance", 18));
 		
 		// Camouflage
-		c.addDefault("Passives.Chi.Camouflage.Enabled", true);
+		createAbilityConfig("Camouflage",
+
+				new Pair<>("Passives.Chi.Camouflage.Enabled", true));
 		
 		// Jab
-		c.addDefault("Abilities.Chi.Jab.Enabled", true);
-		c.addDefault("Abilities.Chi.Jab.Cooldown", 3000);
-		c.addDefault("Abilities.Chi.Jab.MaxUses", 4);
+		createAbilityConfig("Jab",
+
+				new Pair<>("Abilities.Chi.Jab.Enabled", true),
+		new Pair<>("Abilities.Chi.Jab.Cooldown", 3000),
+		new Pair<>("Abilities.Chi.Jab.MaxUses", 4));
 		
 		// NinjaStance
-		c.addDefault("Abilities.Chi.NinjaStance.Enabled", true);
-		c.addDefault("Abilities.Chi.NinjaStance.Cooldown", 0);
-		c.addDefault("Abilities.Chi.NinjaStance.Stealth.Duration", 5000);
-		c.addDefault("Abilities.Chi.NinjaStance.Stealth.ChargeTime", 2000);
-		c.addDefault("Abilities.Chi.NinjaStance.Stealth.Cooldown", 8000);
-		c.addDefault("Abilities.Chi.NinjaStance.SpeedAmplifier", 5);
-		c.addDefault("Abilities.Chi.NinjaStance.JumpAmplifier", 5);
-		c.addDefault("Abilities.Chi.NinjaStance.DamageModifier", 0.75);
+		createAbilityConfig("NinjaStance",
+
+				new Pair<>("Abilities.Chi.NinjaStance.Enabled", true),
+		new Pair<>("Abilities.Chi.NinjaStance.Cooldown", 0),
+		new Pair<>("Abilities.Chi.NinjaStance.Stealth.Duration", 5000),
+		new Pair<>("Abilities.Chi.NinjaStance.Stealth.ChargeTime", 2000),
+		new Pair<>("Abilities.Chi.NinjaStance.Stealth.Cooldown", 8000),
+		new Pair<>("Abilities.Chi.NinjaStance.SpeedAmplifier", 5),
+		new Pair<>("Abilities.Chi.NinjaStance.JumpAmplifier", 5),
+		new Pair<>("Abilities.Chi.NinjaStance.DamageModifier", 0.75));
 		
 		// ChiblockJab
-		c.addDefault("Combos.Chi.ChiblockJab.Enabled", true);
-		c.addDefault("Combos.Chi.ChiblockJab.Cooldown", 5000);
-		c.addDefault("Combos.Chi.ChiblockJab.Duration", 2000);
+		createAbilityConfig("ChiblockJab",
+
+				new Pair<>("Combos.Chi.ChiblockJab.Enabled", true),
+		new Pair<>("Combos.Chi.ChiblockJab.Cooldown", 5000),
+		new Pair<>("Combos.Chi.ChiblockJab.Duration", 2000));
 		
 		// FlyingKick
-		c.addDefault("Combos.Chi.FlyingKick.Enabled", true);
-		c.addDefault("Combos.Chi.FlyingKick.Cooldown", 4000);
-		c.addDefault("Combos.Chi.FlyingKick.Damage", 2.0);
-		c.addDefault("Combos.Chi.FlyingKick.LaunchPower", 1.85);
+		createAbilityConfig("FlyingKick",
+
+				new Pair<>("Combos.Chi.FlyingKick.Enabled", true),
+		new Pair<>("Combos.Chi.FlyingKick.Cooldown", 4000),
+		new Pair<>("Combos.Chi.FlyingKick.Damage", 2.0),
+		new Pair<>("Combos.Chi.FlyingKick.LaunchPower", 1.85));
 		
 		// WeakeningJab
-		c.addDefault("Combos.Chi.WeakeningJab.Enabled", true);
-		c.addDefault("Combos.Chi.WeakeningJab.Cooldown", 6000);
-		c.addDefault("Combos.Chi.WeakeningJab.Duration", 4000);
-		c.addDefault("Combos.Chi.WeakeningJab.Modifier", 1.5);
-		
-		config.save();
+		createAbilityConfig("WeakeningJab",
+
+				new Pair<>("Combos.Chi.WeakeningJab.Enabled", true),
+		new Pair<>("Combos.Chi.WeakeningJab.Cooldown", 6000),
+		new Pair<>("Combos.Chi.WeakeningJab.Duration", 4000),
+		new Pair<>("Combos.Chi.WeakeningJab.Modifier", 1.5));
+
 	}
 	
 	private void setupCollisions() {

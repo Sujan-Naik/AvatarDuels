@@ -30,8 +30,8 @@ public class Zephyr extends AirAbility implements AddonAbility {
 		super(player);
 		
 		this.angle = new Random().nextInt(360);
-		this.radius = AvatarDuels.instance.getConfig().getDouble("Abilities.Air.Zephyr.Radius");
-		this.cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Air.Zephyr.Cooldown");
+		this.radius = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Air.Zephyr.Radius");
+		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Air.Zephyr.Cooldown");
 		
 		start();
 	}
@@ -113,7 +113,7 @@ public class Zephyr extends AirAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Air.Zephyr.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Air.Zephyr.Enabled");
 	}
 	
 	@Override

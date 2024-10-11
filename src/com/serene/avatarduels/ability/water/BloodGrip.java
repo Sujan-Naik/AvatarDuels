@@ -50,23 +50,23 @@ public class BloodGrip extends BloodAbility implements AddonAbility, MultiAbilit
 		}
 		
 		if (!MultiAbilityManager.hasMultiAbilityBound(player, getName()) && sneak) {
-			range = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.BloodGrip.Range");
+			range = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.BloodGrip.Range");
 			Entity e = GeneralMethods.getTargetedEntity(player, range);
 		
 			if (e == null || !(e instanceof LivingEntity)) {
 				return;
-			} else if (AvatarDuels.instance.getConfig().getStringList("Abilities.Water.BloodGrip.EntityFilter").contains(e.getType().toString())) {
+			} else if (AvatarDuels.instance.getConfig(getName()).getStringList("Abilities.Water.BloodGrip.EntityFilter").contains(e.getType().toString())) {
 				return;
 			}
 			
 			target = (LivingEntity) e;
-			cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Water.BloodGrip.Cooldown");
-			dragSpeed = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.BloodGrip.DragSpeed");
-			throwPower = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.BloodGrip.ThrowPower");
-			mangleDmg = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.BloodGrip.MangleDamage");
-			slamSpeed = AvatarDuels.instance.getConfig().getDouble("Abilities.Water.BloodGrip.SlamSpeed");
+			cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Water.BloodGrip.Cooldown");
+			dragSpeed = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.BloodGrip.DragSpeed");
+			throwPower = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.BloodGrip.ThrowPower");
+			mangleDmg = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.BloodGrip.MangleDamage");
+			slamSpeed = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.BloodGrip.SlamSpeed");
 			
-			health = player.getHealth() - AvatarDuels.instance.getConfig().getDouble("Abilities.Water.BloodGrip.DamageThreshold");
+			health = player.getHealth() - AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.BloodGrip.DamageThreshold");
 			TARGETS.add(target);
 			
 			MultiAbilityManager.bindMultiAbility(player, getName());
@@ -210,7 +210,7 @@ public class BloodGrip extends BloodAbility implements AddonAbility, MultiAbilit
 	
 	@Override
 	public boolean isEnabled() {
-		//return AvatarDuels.instance.getConfig().getBoolean("Abilities.Water.BloodGrip.Enabled");
+		//return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Water.BloodGrip.Enabled");
 		return false;
 	}
 	

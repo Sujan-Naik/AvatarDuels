@@ -44,11 +44,11 @@ public class NinjaStance extends ChiAbility implements AddonAbility{
 			}
 		}
 		
-		stealthDuration = AvatarDuels.instance.getConfig().getLong("Abilities.Chi.NinjaStance.Stealth.Duration");
-		stealthChargeTime = AvatarDuels.instance.getConfig().getLong("Abilities.Chi.NinjaStance.Stealth.ChargeTime");
-		stealthCooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Chi.NinjaStance.Stealth.Cooldown");
-		effects.add(new PotionEffect(PotionEffectType.SPEED, 5, AvatarDuels.instance.getConfig().getInt("Abilities.Chi.NinjaStance.SpeedAmplifier") + 1, true, false));
-		effects.add(new PotionEffect(PotionEffectType.JUMP_BOOST, 5, AvatarDuels.instance.getConfig().getInt("Abilities.Chi.NinjaStance.JumpAmplifier") + 1, true, false));
+		stealthDuration = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Chi.NinjaStance.Stealth.Duration");
+		stealthChargeTime = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Chi.NinjaStance.Stealth.ChargeTime");
+		stealthCooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Chi.NinjaStance.Stealth.Cooldown");
+		effects.add(new PotionEffect(PotionEffectType.SPEED, 5, AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Chi.NinjaStance.SpeedAmplifier") + 1, true, false));
+		effects.add(new PotionEffect(PotionEffectType.JUMP_BOOST, 5, AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Chi.NinjaStance.JumpAmplifier") + 1, true, false));
 		
 		start();
 		bPlayer.setStance(this);
@@ -58,7 +58,7 @@ public class NinjaStance extends ChiAbility implements AddonAbility{
 
 	@Override
 	public long getCooldown() {
-		return AvatarDuels.instance.getConfig().getLong("Abilities.Chi.NinjaStance.Cooldown");
+		return AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Chi.NinjaStance.Cooldown");
 	}
 
 	@Override
@@ -150,7 +150,7 @@ public class NinjaStance extends ChiAbility implements AddonAbility{
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Chi.NinjaStance.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Chi.NinjaStance.Enabled");
 	}
 
 	public void beginStealth() {
@@ -176,6 +176,6 @@ public class NinjaStance extends ChiAbility implements AddonAbility{
 	}
 	
 	public static double getDamageModifier() {
-		return AvatarDuels.instance.getConfig().getDouble("Abilities.Chi.NinjaStance.DamageModifier");
+		return AvatarDuels.instance.getConfig("NinjaStance").getDouble("Abilities.Chi.NinjaStance.DamageModifier");
 	}
 }

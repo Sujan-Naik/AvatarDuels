@@ -51,9 +51,9 @@ public class FlyingKick extends ChiAbility implements ComboAbility, AddonAbility
 			return;
 		}
 		
-		launch = AvatarDuels.instance.getConfig().getDouble("Combos.Chi.FlyingKick.LaunchPower");
-		damage = AvatarDuels.instance.getConfig().getDouble("Combos.Chi.FlyingKick.Damage");
-		cooldown = AvatarDuels.instance.getConfig().getLong("Combos.Chi.FlyingKick.Cooldown");
+		launch = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Chi.FlyingKick.LaunchPower");
+		damage = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Chi.FlyingKick.Damage");
+		cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Chi.FlyingKick.Cooldown");
 		affected = new ArrayList<>();
 		
 		player.setVelocity(player.getLocation().getDirection().add(new Vector(0, 0.25485, 0)).normalize().multiply(launch));
@@ -159,6 +159,6 @@ public class FlyingKick extends ChiAbility implements ComboAbility, AddonAbility
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Combos.Chi.FlyingKick.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Chi.FlyingKick.Enabled");
 	}
 }

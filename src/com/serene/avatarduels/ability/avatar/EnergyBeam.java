@@ -80,11 +80,11 @@ public class EnergyBeam extends AvatarAbility implements AddonAbility{
 	public void setFields() {
 		map = new ConcurrentHashMap<>();
 		ranges = new HashMap<>();
-		damage = AvatarDuels.instance.getConfig().getDouble("Abilities.Avatar.EnergyBeam.Damage");
-		range = AvatarDuels.instance.getConfig().getInt("Abilities.Avatar.EnergyBeam.Range");
-		cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Avatar.EnergyBeam.Cooldown");
-		duration = AvatarDuels.instance.getConfig().getLong("Abilities.Avatar.EnergyBeam.Duration");
-		effects = AvatarDuels.instance.getConfig().getBoolean("Abilities.Avatar.EnergyBeam.EasterEgg");
+		damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Avatar.EnergyBeam.Damage");
+		range = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Avatar.EnergyBeam.Range");
+		cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Avatar.EnergyBeam.Cooldown");
+		duration = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Avatar.EnergyBeam.Duration");
+		effects = AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Avatar.EnergyBeam.EasterEgg");
 		color = colors.containsKey(player.getUniqueId()) ? colors.get(player.getUniqueId()) : EnergyColor.BLUE;
 	}
 
@@ -358,6 +358,6 @@ public class EnergyBeam extends AvatarAbility implements AddonAbility{
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Avatar.EnergyBeam.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Avatar.EnergyBeam.Enabled");
 	}
 }

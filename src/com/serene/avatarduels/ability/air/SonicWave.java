@@ -42,11 +42,11 @@ public class SonicWave extends SoundAbility implements AddonAbility {
 	public SonicWave(Player player) {
 		super(player);
 		
-		this.width = AvatarDuels.instance.getConfig().getDouble("Abilities.Air.SonicWave.Width");
-		this.duration = AvatarDuels.instance.getConfig().getInt("Abilities.Air.SonicWave.Nausea.Duration");
-		this.amp = AvatarDuels.instance.getConfig().getInt("Abilities.Air.SonicWave.Nausea.Power") + 1;
-		this.cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Air.SonicWave.Cooldown");
-		this.maxRange = AvatarDuels.instance.getConfig().getDouble("Abilities.Air.SonicWave.Range");
+		this.width = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Air.SonicWave.Width");
+		this.duration = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Air.SonicWave.Nausea.Duration");
+		this.amp = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Air.SonicWave.Nausea.Power") + 1;
+		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Air.SonicWave.Cooldown");
+		this.maxRange = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Air.SonicWave.Range");
 		this.range = 0;
 		this.parts = new HashMap<>();
 		
@@ -181,6 +181,6 @@ public class SonicWave extends SoundAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Air.SonicWave.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Air.SonicWave.Enabled");
 	}
 }

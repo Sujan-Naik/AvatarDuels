@@ -57,7 +57,7 @@ public class Electrify extends LightningAbility implements AddonAbility {
 	public Electrify(Player player, Block block, boolean direct, int spread) {
 		super(player);
 		
-		if (!AvatarDuels.instance.getConfig().getStringList("Properties.MetallicBlocks").contains(block.getType().toString()) && block.getType() != Material.WATER) {
+		if (!AvatarDuels.instance.getConfig(getName()).getStringList("Properties.MetallicBlocks").contains(block.getType().toString()) && block.getType() != Material.WATER) {
 			return;
 		} else if (electrified.contains(block)) {
 			return;
@@ -66,11 +66,11 @@ public class Electrify extends LightningAbility implements AddonAbility {
 		electrified.add(block);
 		this.block = block;
 		this.center = block.getLocation().add(0.5, 0.5, 0.5);
-		this.cooldown = AvatarDuels.instance.getConfig().getLong("Abilities.Fire.Electrify.Cooldown");
-		this.duration = AvatarDuels.instance.getConfig().getLong("Abilities.Fire.Electrify.Duration");
-		this.waterdmg = AvatarDuels.instance.getConfig().getDouble("Abilities.Fire.Electrify.DamageInWater");
-		this.slowness = AvatarDuels.instance.getConfig().getInt("Abilities.Fire.Electrify.Slowness") + 1;
-		this.weakness = AvatarDuels.instance.getConfig().getInt("Abilities.Fire.Electrify.Weakness") + 1;
+		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.Electrify.Cooldown");
+		this.duration = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.Electrify.Duration");
+		this.waterdmg = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.Electrify.DamageInWater");
+		this.slowness = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Fire.Electrify.Slowness") + 1;
+		this.weakness = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Fire.Electrify.Weakness") + 1;
 		this.spread = spread;
 		
 		effects.add(new PotionEffect(PotionEffectType.SLOWNESS, 10, slowness, true, false));
@@ -93,7 +93,7 @@ public class Electrify extends LightningAbility implements AddonAbility {
 			return;
 		}
 		
-		if (!AvatarDuels.instance.getConfig().getStringList("Properties.MetallicBlocks").contains(block.getType().toString()) && block.getType() != Material.WATER) {
+		if (!AvatarDuels.instance.getConfig(getName()).getStringList("Properties.MetallicBlocks").contains(block.getType().toString()) && block.getType() != Material.WATER) {
 			remove();
 			return;
 		}
@@ -187,7 +187,7 @@ public class Electrify extends LightningAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig().getBoolean("Abilities.Fire.Electrify.Enabled");
+		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Fire.Electrify.Enabled");
 	}
 	
 	@Override
