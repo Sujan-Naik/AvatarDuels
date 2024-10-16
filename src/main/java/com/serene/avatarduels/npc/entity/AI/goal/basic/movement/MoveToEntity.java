@@ -1,14 +1,15 @@
 package com.serene.avatarduels.npc.entity.AI.goal.basic.movement;
 
 import com.serene.avatarduels.npc.entity.AI.goal.interfaces.EntityInteraction;
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.world.entity.LivingEntity;
+import org.bukkit.Bukkit;
 
 public class MoveToEntity extends Movement implements EntityInteraction {
 
     private LivingEntity targetEntity;
 
-    public MoveToEntity(String name, SereneHumanEntity npc, int priority, double requiredDistance, LivingEntity targetEntity) {
+    public MoveToEntity(String name, BendingNPC npc, int priority, double requiredDistance, LivingEntity targetEntity) {
         super(name, npc, priority, targetEntity.getPosition(0), requiredDistance);
         this.targetEntity = targetEntity;
     }

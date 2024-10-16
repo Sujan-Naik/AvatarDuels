@@ -3,7 +3,7 @@ package com.serene.avatarduels.npc.entity.AI.goal.complex.interaction;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.interaction.BreakBlock;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.look.LookAroundForBlock;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.MoveToBlock;
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -21,7 +21,7 @@ public class GatherBlocks extends MasterInteraction {
 
     private boolean goalInReach = false;
 
-    public GatherBlocks(String name, SereneHumanEntity npc, Block block, int requiredAmount) {
+    public GatherBlocks(String name, BendingNPC npc, Block block, int requiredAmount) {
         super(name, npc);
         this.requiredAmount = requiredAmount;
         this.block = block;

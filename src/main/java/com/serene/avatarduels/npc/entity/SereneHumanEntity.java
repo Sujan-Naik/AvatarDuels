@@ -2,6 +2,7 @@ package com.serene.avatarduels.npc.entity;
 
 import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import com.mojang.authlib.GameProfile;
+import com.serene.avatarduels.npc.entity.AI.bending.SourceManager;
 import com.serene.avatarduels.npc.entity.AI.control.BodyRotationControl;
 import com.serene.avatarduels.npc.entity.AI.control.JumpControl;
 import com.serene.avatarduels.npc.entity.AI.control.LookControl;
@@ -97,6 +98,8 @@ public class SereneHumanEntity extends ServerPlayer {
     private int levitationStartTime;
     private boolean on = true;
 
+
+
     public SereneHumanEntity(MinecraftServer server, ServerLevel world, GameProfile profile, ClientInformation clientOptions) {
         super(server, world, profile, clientOptions);
 
@@ -123,6 +126,7 @@ public class SereneHumanEntity extends ServerPlayer {
         this.cooldowns = this.createItemCooldowns();
 
         this.advancements = server.getPlayerList().getPlayerAdvancements(this);
+
 
 
 //        this.setItemSlot(EquipmentSlot.HEAD, net.minecraft.world.item.ItemStack.fromBukkitCopy(new org.bukkit.inventory.ItemStack(Material.IRON_HELMET)));
@@ -821,7 +825,7 @@ public class SereneHumanEntity extends ServerPlayer {
             masterGoalSelector.tick();
             targetSelector.tick();
             inventoryTracker.tick();
-
+//            sourceManager.tick();
         }
 
 //        if (!masterGoalSelector.doingGoal("break wood")) {

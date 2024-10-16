@@ -2,6 +2,7 @@ package com.serene.avatarduels.npc.entity.AI.target;
 
 import com.serene.avatarduels.npc.entity.SereneHumanEntity;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -16,6 +17,16 @@ public class TargetSelector {
     private PriorityQueue<Entity> peacefulEntityStack;
 
     private PriorityQueue<Player> players;
+
+    private LivingEntity currentTarget;
+
+    public LivingEntity getCurrentTarget() {
+        return currentTarget;
+    }
+
+    public void setCurrentTarget(LivingEntity currentTarget) {
+        this.currentTarget = currentTarget;
+    }
 
     private SereneHumanEntity npc;
     private long time = 0;

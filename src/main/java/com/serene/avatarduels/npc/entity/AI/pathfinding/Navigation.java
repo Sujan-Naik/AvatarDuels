@@ -34,6 +34,10 @@ public class Navigation {
         this.goalPos = pos;
     }
 
+    public Vec3 getGoalPos() {
+        return goalPos;
+    }
+
     private boolean isSolid(Vec3 pos){
         return !humanEntity.level().getBlockState(BlockPos.containing(pos)).isAir();
     }

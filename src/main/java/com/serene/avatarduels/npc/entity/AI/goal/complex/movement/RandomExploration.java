@@ -2,7 +2,7 @@ package com.serene.avatarduels.npc.entity.AI.goal.complex.movement;
 
 import com.serene.avatarduels.npc.entity.AI.goal.basic.look.PeriodicallyRotate;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.MoveForward;
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.core.BlockPos;
 
 import java.util.function.Predicate;
@@ -12,7 +12,7 @@ public class RandomExploration extends MasterMovement {
     private MoveForward moveForward;
     private PeriodicallyRotate periodicallyRotate;
 
-    public RandomExploration(String name, SereneHumanEntity npc, Predicate<BlockPos> condition) {
+    public RandomExploration(String name, BendingNPC npc, Predicate<BlockPos> condition) {
         super(name, npc, condition);
 
         this.moveForward = new MoveForward("move", npc, 1, 0);

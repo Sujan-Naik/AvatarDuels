@@ -1,7 +1,7 @@
 package com.serene.avatarduels.npc.entity.AI.goal.basic.look;
 
 import com.serene.avatarduels.npc.entity.AI.goal.basic.BasicGoal;
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -14,7 +14,7 @@ public class LookAroundForBlock extends BasicGoal {
 
     private BlockPos finishedBlockPos;
 
-    public LookAroundForBlock(String name, SereneHumanEntity npc, int priority, Predicate<BlockPos> condition) {
+    public LookAroundForBlock(String name, BendingNPC npc, int priority, Predicate<BlockPos> condition) {
         super(name, npc, priority);
         if (condition == null) {
             finished = true;

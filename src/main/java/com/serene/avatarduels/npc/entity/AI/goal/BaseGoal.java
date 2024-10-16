@@ -1,16 +1,16 @@
 package com.serene.avatarduels.npc.entity.AI.goal;
 
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 
 public abstract class BaseGoal {
 
     protected boolean finished;
     protected boolean inProgress;
-    protected SereneHumanEntity npc;
+    protected BendingNPC npc;
     private String name;
     private int priority;
 
-    public BaseGoal(String name, SereneHumanEntity npc) {
+    public BaseGoal(String name, BendingNPC npc) {
         this.name = name;
         this.npc = npc;
     }
@@ -33,7 +33,7 @@ public abstract class BaseGoal {
         return inProgress;
     }
 
-    public SereneHumanEntity getNpc() {
+    public BendingNPC getNpc() {
         return npc;
     }
 

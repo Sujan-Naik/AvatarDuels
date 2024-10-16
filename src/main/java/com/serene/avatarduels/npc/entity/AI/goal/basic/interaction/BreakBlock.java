@@ -2,7 +2,7 @@ package com.serene.avatarduels.npc.entity.AI.goal.basic.interaction;
 
 import com.serene.avatarduels.npc.entity.AI.goal.basic.BasicGoal;
 import com.serene.avatarduels.npc.entity.AI.goal.interfaces.BlockInteraction;
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -12,7 +12,7 @@ public class BreakBlock extends BasicGoal implements BlockInteraction {
     private BlockPos blockPos;
     private Level level;
 
-    public BreakBlock(String name, SereneHumanEntity npc, BlockPos blockPos) {
+    public BreakBlock(String name, BendingNPC npc, BlockPos blockPos) {
         super(name, npc, 1);
         level = npc.level();
         this.blockPos = blockPos;

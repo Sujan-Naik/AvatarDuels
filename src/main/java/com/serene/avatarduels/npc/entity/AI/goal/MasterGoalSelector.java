@@ -36,6 +36,7 @@ public class MasterGoalSelector {
 
             if (goals.peek().finished) {
                 goals.pop();
+
             } else {
 //                Bukkit.broadcastMessage(goals.peek().getName());
 

@@ -2,11 +2,13 @@ package com.serene.avatarduels.npc.command;
 
 
 import com.projectkorra.projectkorra.BendingPlayer;
+import com.projectkorra.projectkorra.ProjectKorra;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.earthbending.EarthBlast;
 import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.ability.earth.MudSurge;
 import com.serene.avatarduels.npc.NPCHandler;
+import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
 import com.serene.avatarduels.npc.utils.NPCUtils;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -28,6 +30,9 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class SerenityCommand implements CommandExecutor {
 
@@ -44,40 +49,15 @@ public class SerenityCommand implements CommandExecutor {
                     case "spawn" -> {
                         NPCHandler.addNPC(NPCUtils.spawnNPC(player.getLocation(), player, strings[1]));
                     }
-                    case "MudSurge" -> {
+                    case "bend" -> {
                         NPCHandler.getNpcs().forEach(bendingNPC -> {
-                            net.minecraft.world.entity.player.Player nmsPlayer = ((CraftPlayer) player).getHandle();
-//                            new EarthBlast(Bukkit.getPlayer(bendingNPC.getUUID()));
-                            Player NPCPlayer = Bukkit.getPlayer(bendingNPC.getUUID());
-                            BendingPlayer bPlayer =  BendingPlayer.getBendingPlayer(NPCPlayer);
-                            bPlayer.bindAbility("MudSurge");
+//                            bendingNPC.getSourceManager().useAbility(CoreAbility.getAbility(strings[1]));
+                            if (strings.length == 1) {
 
-
-//                            Vec3 targetLoc = nmsPlayer.getRayTrace(20, ClipContext.Fluid.NONE).getLocation();
-//                            Vec3 dir = targetLoc.subtract(bendingNPC.getEyePosition());
-//                            bendingNPC.lookControl.setLookAt(nmsPlayer.getEyePosition().subtract(0,3,0));
-
-                            bendingNPC.lookAt(EntityAnchorArgument.Anchor.EYES, nmsPlayer.getEyePosition().subtract(0,5,0));
-                            Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(NPCPlayer, true));
-
-//                            new MudSurge(mcBendingPlayer);
-//                            bendingNPC.setShiftKeyDown(true);
-//                            mcBendingPlayer.setSneaking(true);
-
-                            Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-//                                bendingNPC.setShiftKeyDown(false);
-//                                Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(NPCPlayer, false));
-
-//                                mcBendingPlayer.setSneaking(false);
-
-                                bendingNPC.lookAt(EntityAnchorArgument.Anchor.EYES, nmsPlayer, EntityAnchorArgument.Anchor.EYES);
-//                                bendingNPC.swing(InteractionHand.MAIN_HAND);
-                                CoreAbility.getAbilities(NPCPlayer, MudSurge.class);
-                                Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(NPCPlayer, Action.LEFT_CLICK_AIR,  null, null, BlockFace.SELF));
-
-
-                            }, 40L);
-//                            bendingNPC.lookAt(EntityAnchorArgument.Anchor.EYES, nmsPlayer.getEyePosition());
+                                bendingNPC.useAbility(getRandom(Arrays.stream(AbilityUsages.values()).collect(Collectors.toSet())));
+                            } else {
+                                bendingNPC.useAbility(AbilityUsages.valueOf(strings[1]));
+                            }
                         });
                     }
                     default -> {
@@ -92,5 +72,12 @@ public class SerenityCommand implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    public static <E> E getRandom (Collection<E> e) {
+
+        return e.stream()
+                .skip((int) (e.size() * Math.random()))
+                .findFirst().get();
     }
 }

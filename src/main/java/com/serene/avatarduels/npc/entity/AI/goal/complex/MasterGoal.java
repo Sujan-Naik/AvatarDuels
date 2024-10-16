@@ -3,7 +3,7 @@ package com.serene.avatarduels.npc.entity.AI.goal.complex;
 import com.serene.avatarduels.npc.entity.AI.goal.BaseGoal;
 import com.serene.avatarduels.npc.entity.AI.goal.GoalSelector;
 import com.serene.avatarduels.npc.entity.AI.goal.NPCStates;
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 
 public abstract class MasterGoal extends BaseGoal {
 
@@ -14,7 +14,7 @@ public abstract class MasterGoal extends BaseGoal {
 
     protected NPCStates state;
 
-    public MasterGoal(String name, SereneHumanEntity npc) {
+    public MasterGoal(String name, BendingNPC npc) {
         super(name, npc);
 
         this.actionGoalSelector = new GoalSelector();

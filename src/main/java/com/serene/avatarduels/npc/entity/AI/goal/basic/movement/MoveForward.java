@@ -1,6 +1,6 @@
 package com.serene.avatarduels.npc.entity.AI.goal.basic.movement;
 
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 import com.serene.avatarduels.npc.utils.Vec3Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
@@ -12,7 +12,7 @@ public class MoveForward extends Movement {
     private boolean isStuck = true;
     private boolean isBugged = false;
 
-    public MoveForward(String name, SereneHumanEntity npc, int priority, double requiredDistance) {
+    public MoveForward(String name, BendingNPC npc, int priority, double requiredDistance) {
         super(name, npc, priority, null, requiredDistance);
         //  this.lastGoalTicks = npc.tickCount;
     }
