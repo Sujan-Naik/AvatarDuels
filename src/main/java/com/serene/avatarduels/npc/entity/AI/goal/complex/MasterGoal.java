@@ -2,7 +2,6 @@ package com.serene.avatarduels.npc.entity.AI.goal.complex;
 
 import com.serene.avatarduels.npc.entity.AI.goal.BaseGoal;
 import com.serene.avatarduels.npc.entity.AI.goal.GoalSelector;
-import com.serene.avatarduels.npc.entity.AI.goal.NPCStates;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 
 public abstract class MasterGoal extends BaseGoal {
@@ -11,8 +10,8 @@ public abstract class MasterGoal extends BaseGoal {
     protected GoalSelector movementGoalSelector;
 
     protected GoalSelector lookGoalSelector;
+    protected GoalSelector bendingGoalSelector;
 
-    protected NPCStates state;
 
     public MasterGoal(String name, BendingNPC npc) {
         super(name, npc);
@@ -20,14 +19,17 @@ public abstract class MasterGoal extends BaseGoal {
         this.actionGoalSelector = new GoalSelector();
         this.movementGoalSelector = new GoalSelector();
         this.lookGoalSelector = new GoalSelector();
-        this.state = NPCStates.RELAXED;
+        this.bendingGoalSelector = new GoalSelector();
     }
 
 
     @Override
     public void tick() {
-        actionGoalSelector.tick();
-        movementGoalSelector.tick();
-        lookGoalSelector.tick();
+        if (!npc.isBusyBending()) {
+            actionGoalSelector.tick();
+            movementGoalSelector.tick();
+            lookGoalSelector.tick();
+        }
+        bendingGoalSelector.tick();
     }
 }

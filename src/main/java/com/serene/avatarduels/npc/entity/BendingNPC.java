@@ -10,6 +10,7 @@ import com.serene.avatarduels.ability.air.GaleGust;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
 import com.serene.avatarduels.npc.entity.AI.bending.BlastManager;
 import com.serene.avatarduels.npc.entity.AI.bending.SourceManager;
+import com.serene.avatarduels.npc.entity.AI.goal.complex.bending.BendingKillEntity;
 import com.serene.avatarduels.npc.entity.AI.goal.complex.combat.KillTargetEntity;
 import com.serene.avatarduels.npc.utils.Vec3Utils;
 import net.minecraft.server.MinecraftServer;
@@ -37,6 +38,16 @@ public class BendingNPC extends SereneHumanEntity{
 
     public BlastManager getBlastManager() {
         return blastManager;
+    }
+
+    private boolean isBusyBending;
+
+    public boolean isBusyBending() {
+        return isBusyBending;
+    }
+
+    public void setBusyBending(boolean busyBending) {
+        isBusyBending = busyBending;
     }
 
     public BendingNPC(MinecraftServer server, ServerLevel world, GameProfile profile, ClientInformation clientOptions) {
@@ -75,7 +86,9 @@ public class BendingNPC extends SereneHumanEntity{
         inventoryTracker.tick();
         if (!masterGoalSelector.doingGoal("kill hostile entity")) {
             if (targetSelector.retrieveTopHostile() instanceof LivingEntity hostile && (!Vec3Utils.isObstructed(this.getPosition(0), hostile.getPosition(0), this.level()))) {
-                masterGoalSelector.addMasterGoal(new KillTargetEntity("kill hostile entity", this, hostile));
+//                masterGoalSelector.addMasterGoal(new KillTargetEntity("kill hostile entity", this, hostile));
+
+                masterGoalSelector.addMasterGoal(new BendingKillEntity("kill hostile entity", this, hostile));
             }
         }
     }

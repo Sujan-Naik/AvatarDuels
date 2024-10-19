@@ -48,8 +48,9 @@ public class Navigation {
 
 
     private boolean isAcceptableDirection(Direction direction){
-        Vec3 currentPos = humanEntity.getPosition(0);
+        Vec3 currentPos = humanEntity.getOnPos().getCenter();
         Vec3 newPos = currentPos.relative(direction, 1);
+
         return (  (isAir(newPos.relative(Direction.UP, 1)) && isSolid(newPos) ) || // forward
                 (isAir(newPos) && isSolid(newPos.relative(Direction.DOWN, 1)) ) || // down
                 (isAir(newPos.relative(Direction.UP, 2)) && isSolid(newPos.relative(Direction.UP, 1)) )); //up
@@ -60,13 +61,27 @@ public class Navigation {
                 directions.stream().filter(this::isAcceptableDirection)
                         .min(Comparator.comparingDouble(value -> humanEntity.getPosition(0).relative(value, 1).distanceToSqr(goalPos)))
                         .ifPresentOrElse(direction -> {
-                            newPos = humanEntity.getPosition(0).relative(direction, 1);
-                            moveControl.setWantedPosition(newPos.x, newPos.y, newPos.z, 10);
+                            newPos = humanEntity.getOnPos().getCenter().relative(direction, 1);
+                            if ((isAir(newPos.relative(Direction.UP, 2)) && isSolid(newPos.relative(Direction.UP, 1)) )){
+                                moveControl.setWantedPosition(newPos.x, newPos.y + 1, newPos.z, 10);
+                                humanEntity.getJumpControl().jump();
+                            } else {
+                                moveControl.setWantedPosition(newPos.x, newPos.y, newPos.z, 10);
+
+                            }
                         }, () -> {
                             isStuck = true;
                             Bukkit.broadcastMessage("Stuck");
                         });
 
         }
+    }
+
+    public boolean isStuck() {
+        return isStuck;
+    }
+
+    public void setStuck(boolean stuck) {
+        isStuck = stuck;
     }
 }

@@ -13,6 +13,9 @@ import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 
+import java.util.Arrays;
+import java.util.HashMap;
+
 import static com.projectkorra.projectkorra.ability.CoreAbility.getConfig;
 import static com.projectkorra.projectkorra.object.Preset.config;
 
@@ -129,6 +132,7 @@ public enum AbilityUsages {
 
     private AbilityUsageInterface function;
 
+
     AbilityUsages(String name, AbilityUsageInterface function) {
         this.name = name;
         this.function = function;
@@ -142,5 +146,8 @@ public enum AbilityUsages {
         function.performFunction(player);
     }
 
+    public static AbilityUsages fromName(String string){
+        return Arrays.stream(values()).filter(abilityUsages -> abilityUsages.name.equals(string)).findAny().get();
+    }
 
 }

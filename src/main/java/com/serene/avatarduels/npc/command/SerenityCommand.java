@@ -60,6 +60,12 @@ public class SerenityCommand implements CommandExecutor {
                             }
                         });
                     }
+                    case "jump" -> {
+                        NPCHandler.getNpcs().forEach(bendingNPC -> {
+
+                            bendingNPC.getJumpControl().jump();
+                        });
+                    }
                     default -> {
                         NPCHandler.getNpcs().forEach(bendingNPC -> {
                             try {

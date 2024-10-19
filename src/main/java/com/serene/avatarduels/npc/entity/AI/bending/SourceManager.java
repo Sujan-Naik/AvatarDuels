@@ -59,16 +59,7 @@ public class SourceManager {
         if (nmsTarget== null){
             return;
         }
-        org.bukkit.entity.LivingEntity target = (org.bukkit.entity.LivingEntity) Bukkit.getEntity(nmsTarget.getUUID());
-        Set<Block> nearbyBlocks = GeneralMethods.getBlocksAroundPoint(player.getLocation(), maxSourceRange).stream().filter(block -> block.getRelative(BlockFace.NORTH).isPassable()).collect(Collectors.toSet());
-
-        Block source = null;
-        switch (coreAbility.getElement().getName()){
-            case "Earth" ->
-                source = nearbyBlocks.stream().filter(block -> EarthAbility.isEarth(block.getType())).min(getBestSource(player, target)).orElse(null);
-            case "Water" ->
-                source = nearbyBlocks.stream().filter(block -> WaterAbility.isWater(block.getType())).min(getBestSource(player, target)).orElse(null);
-        }
+       Block source = getSource(player, nmsTarget, coreAbility);
         if (source != null){
             BendingPlayer.getBendingPlayer(player).bindAbility(coreAbility.getName());
 
@@ -98,7 +89,21 @@ public class SourceManager {
             }, Math.ceilDiv(chargeTimeMS,50) + 20L);
 
         }
+    }
 
+    public Block getSource(Player player, LivingEntity nmsTarget, CoreAbility coreAbility){
+        org.bukkit.entity.LivingEntity target = (org.bukkit.entity.LivingEntity) Bukkit.getEntity(nmsTarget.getUUID());
+        Set<Block> nearbyBlocks = GeneralMethods.getBlocksAroundPoint(player.getLocation(), maxSourceRange).stream().filter(block -> block.getRelative(BlockFace.NORTH).isPassable()).collect(Collectors.toSet());
+
+        Block source = null;
+        switch (coreAbility.getElement().getName()){
+            case "Earth" ->
+                    source = nearbyBlocks.stream().filter(block -> EarthAbility.isEarth(block.getType())).min(getBestSource(player, target)).orElse(null);
+            case "Water" ->
+                    source = nearbyBlocks.stream().filter(block -> WaterAbility.isWater(block.getType())).min(getBestSource(player, target)).orElse(null);
+        }
+
+        return source;
     }
     
     private Vec3 locToVec3(Location loc){

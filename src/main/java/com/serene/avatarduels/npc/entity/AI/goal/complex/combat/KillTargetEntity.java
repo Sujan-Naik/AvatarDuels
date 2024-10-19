@@ -1,17 +1,9 @@
 package com.serene.avatarduels.npc.entity.AI.goal.complex.combat;
 
-import com.projectkorra.projectkorra.BendingPlayer;
-import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
-import com.serene.avatarduels.npc.entity.AI.goal.NPCStates;
-import com.serene.avatarduels.npc.entity.AI.goal.basic.combat.PunchEntity;
-import com.serene.avatarduels.npc.entity.AI.goal.basic.look.LookAtEntity;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.MoveToEntity;
 import com.serene.avatarduels.npc.entity.BendingNPC;
-import com.serene.avatarduels.npc.entity.BendingNPC;
-import com.serene.avatarduels.npc.utils.Vec3Utils;
 import net.minecraft.world.entity.LivingEntity;
-import org.bukkit.Bukkit;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,7 +23,6 @@ public class KillTargetEntity extends MasterCombat {
 //            finished = true;
 //        }
 
-        state = NPCStates.AGGRESSIVE;
         this.lastShotBowTicks = npc.tickCount;
         this.lastPunchTicks = npc.tickCount;
         this.lastBentTicks = npc.tickCount;
@@ -74,9 +65,7 @@ public class KillTargetEntity extends MasterCombat {
 
         if (npc.tickCount - lastBentTicks > 2){
             boolean stillUsing = false;
-            if (BendingPlayer.getBendingPlayer(Bukkit.getPlayer(npc.getUUID())).getBoundAbility() != null){
-                stillUsing = CoreAbility.hasAbility(Bukkit.getPlayer(npc.getUUID()), BendingPlayer.getBendingPlayer(Bukkit.getPlayer(npc.getUUID())).getBoundAbility().getClass());
-            }
+
             if (!stillUsing) {
                 npc.useAbility(getRandom(Arrays.stream(AbilityUsages.values()).collect(Collectors.toSet())));
                 this.lastBentTicks = npc.tickCount;

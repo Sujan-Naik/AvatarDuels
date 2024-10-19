@@ -10,7 +10,7 @@ public abstract class Movement extends BasicGoal {
 
     private Vec3 goalPos;
 
-    private double requiredDistance;
+    protected double requiredDistance;
 
     private Navigation navigation;
 

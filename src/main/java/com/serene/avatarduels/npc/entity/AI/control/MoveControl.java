@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.Control;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.bukkit.Bukkit;
 
 public class MoveControl implements Control {
     public static final float MIN_SPEED = 5.0E-4F;
@@ -107,6 +108,7 @@ public class MoveControl implements Control {
             BlockPos blockPos = this.mob.blockPosition();
             BlockState blockState = this.mob.level().getBlockState(blockPos);
             VoxelShape voxelShape = blockState.getCollisionShape(this.mob.level(), blockPos);
+
             if (o > (double) this.mob.maxUpStep() && d * d + e * e < (double) Math.max(1.0F, this.mob.getBbWidth()) || !voxelShape.isEmpty() && this.mob.getY() < voxelShape.max(Axis.Y) + (double) blockPos.getY() && !blockState.is(BlockTags.DOORS) && !blockState.is(BlockTags.FENCES)) {
                 this.mob.getJumpControl().jump();
                 this.operation = Operation.JUMPING;
