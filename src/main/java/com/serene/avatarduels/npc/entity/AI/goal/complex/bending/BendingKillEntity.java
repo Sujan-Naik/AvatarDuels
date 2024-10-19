@@ -1,11 +1,8 @@
 package com.serene.avatarduels.npc.entity.AI.goal.complex.bending;
 
-import com.projectkorra.projectkorra.Element;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
+import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.BendingUseAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.RangedAbility;
-import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.charged.ChargedAbility;
-import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.sourced.SourcedAbility;
-import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.MoveToBlock;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.MoveToEntity;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.RunFromEntity;
 import com.serene.avatarduels.npc.entity.AI.goal.complex.combat.MasterCombat;
@@ -13,9 +10,8 @@ import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.world.entity.LivingEntity;
 import org.bukkit.Bukkit;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class BendingKillEntity extends MasterCombat {
 
@@ -36,6 +32,11 @@ public class BendingKillEntity extends MasterCombat {
         npc.getTargetSelector().setCurrentTarget(target);
     }
 
+    private static final List<AbilityUsages> POINT_BLANK_ABILITIES = List.of(AbilityUsages.BLAZE, AbilityUsages.EARTHLINE, AbilityUsages.ACCRETION, AbilityUsages.WALLOFFIRE);
+    private static final List<AbilityUsages> RUSHDOWN_ABILITIES = List.of(AbilityUsages.GALEGUST, AbilityUsages.SONICBLAST, AbilityUsages.SHOCKWAVE, AbilityUsages.AIRSWIPE);
+    private static final List<AbilityUsages> NEUTRAL_ABILITIES = List.of(AbilityUsages.FIREBURST, AbilityUsages.LIGHTNING);
+    private static final List<AbilityUsages> KEEPAWAY_ABILITIES = List.of(AbilityUsages.MUDSURGE, AbilityUsages.FIREBALL, AbilityUsages.FIRECOMET);
+
     @Override
     public void tick() {
         super.tick();
@@ -45,7 +46,7 @@ public class BendingKillEntity extends MasterCombat {
         boolean canChangeState = npc.tickCount - lastChangedState > 200;
             switch (state) {
                 case POINT_BLANK -> {
-                    bendingGoalSelector.addGoal(new RangedAbility("WallOfFire", npc, "WallOfFire", 10));
+                    bendingGoalSelector.addGoal(getRandom(POINT_BLANK_ABILITIES).makeGoal(npc));
                     if (canChangeState && distanceSqr > VERY_CLOSE * VERY_CLOSE) {
                         state = NPC_STATES.NEUTRAL;
                         widenTheGap(MEDIUM);
@@ -56,8 +57,7 @@ public class BendingKillEntity extends MasterCombat {
                     }
                 }
                 case RUSHDOWN -> {
-                    bendingGoalSelector.addGoal(new RangedAbility("FireDisc", npc, "FireDisc", 10));
-
+                    bendingGoalSelector.addGoal(getRandom(RUSHDOWN_ABILITIES).makeGoal(npc));
 //                    bendingGoalSelector.addGoal(new SourcedAbility("Accretion", npc, "Accretion", 10, 10, Element.EARTH));
 
                     if (canChangeState && distanceSqr > VERY_CLOSE * VERY_CLOSE) {
@@ -76,7 +76,7 @@ public class BendingKillEntity extends MasterCombat {
                 }
 
                 case NEUTRAL -> {
-                    bendingGoalSelector.addGoal(new RangedAbility("AirBlade", npc, "AirBlade", 20));
+                    bendingGoalSelector.addGoal(getRandom(NEUTRAL_ABILITIES).makeGoal(npc));
 
 //                    bendingGoalSelector.addGoal(new SourcedAbility("MudSurge", npc, "MudSurge", 25, 25, Element.EARTH));
 
@@ -95,7 +95,7 @@ public class BendingKillEntity extends MasterCombat {
                     }
                 }
                 case KEEP_AWAY -> {
-                    bendingGoalSelector.addGoal(new RangedAbility("FireBall", npc, "FireBall", 25));
+                    bendingGoalSelector.addGoal(getRandom(KEEPAWAY_ABILITIES).makeGoal(npc));
 
 //                    bendingGoalSelector.addGoal(new SourcedAbility("EarthShard", npc, "EarthShard", 25, 25, Element.EARTH));
 

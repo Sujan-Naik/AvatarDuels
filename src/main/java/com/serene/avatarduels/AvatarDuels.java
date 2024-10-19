@@ -47,7 +47,9 @@ import oshi.util.tuples.Pair;
 public class AvatarDuels extends JavaPlugin {
 	
 	public static AvatarDuels instance;
-	
+	public static final FileConfiguration PK_CONFIG = ProjectKorra.plugin.getConfig();
+	public static FileConfiguration JC_CONFIG;
+
 	private HashMap<String, Config> abilityNameConfigHashMap = new HashMap<>();
 	private MainListener listener;
 	private Element soundElement;
@@ -72,6 +74,7 @@ public class AvatarDuels extends JavaPlugin {
 
 		AvatarDuels.log = this.getLogger();
 		new AvatarDuelsConfig(this);
+		JC_CONFIG = AvatarDuels.plugin.getConfig();
 
 		CoreAbility.registerPluginAbilities(this, "com.serene.avatarduels.ability");
 		

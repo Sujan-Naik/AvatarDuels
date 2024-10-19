@@ -6,6 +6,7 @@ import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
 import com.serene.avatarduels.npc.entity.AI.goal.BaseGoal;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.BasicGoal;
 import com.serene.avatarduels.npc.entity.BendingNPC;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import org.bukkit.Bukkit;
@@ -55,6 +56,8 @@ public abstract class BendingUseAbility extends BasicGoal {
                 if (!CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass())) {
                     setFinished(true);
                     npc.setBusyBending(false);
+                } else {
+                    npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.EYES);
                 }
             }
         }

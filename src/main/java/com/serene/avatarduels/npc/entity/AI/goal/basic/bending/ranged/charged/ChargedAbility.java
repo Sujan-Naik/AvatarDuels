@@ -10,7 +10,7 @@ public class ChargedAbility extends RangedAbility {
 
     protected Predicate<BlockPos> condition;
 
-    public ChargedAbility(String name, BendingNPC npc, String abilityName, int maxRange,Predicate<BlockPos> condition ) {
+    public ChargedAbility(String name, BendingNPC npc, String abilityName, double maxRange,Predicate<BlockPos> condition ) {
         super(name, npc, abilityName, maxRange);
 
         this.condition = condition;
@@ -21,6 +21,8 @@ public class ChargedAbility extends RangedAbility {
         super.tick();
         if (condition != null && condition.test(npc.blockPosition())) {
             finished = true;
+        } else {
+
         }
 
     }

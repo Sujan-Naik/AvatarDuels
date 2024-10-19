@@ -19,16 +19,14 @@ import java.util.stream.Collectors;
 
 public class SourcedAbility extends RangedAbility {
 
-    private Element element;
-    private int maxSourceRange;
+    private double maxSourceRange;
 
 
-    public SourcedAbility(String name, BendingNPC npc, String abilityName, int maxRange, int maxSourceRange, Element element) {
+    public SourcedAbility(String name, BendingNPC npc, String abilityName, double maxRange, double maxSourceRange, Element element) {
         super(name, npc, abilityName, maxRange);
 
-        this.element = element;
+
         this.maxSourceRange = maxSourceRange;
-        npc.setBusyBending(true);
 
     }
 
@@ -51,7 +49,8 @@ public class SourcedAbility extends RangedAbility {
         Set<Block> nearbyBlocks = GeneralMethods.getBlocksAroundPoint(player.getLocation(), maxSourceRange).stream().filter(block -> block.getRelative(BlockFace.NORTH).isPassable()).collect(Collectors.toSet());
 
         Block source = null;
-        switch (element.getName()){
+
+        switch (CoreAbility.getAbility(getAbilityName()).getElement().getName()){
             case "Earth" ->
                     source = nearbyBlocks.stream().filter(block -> EarthAbility.isEarth(block.getType())).min(getBestSource(player, bukkitTarget)).orElse(null);
             case "Water" ->

@@ -6,8 +6,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class RangedAbility extends BendingUseAbility {
 
-    private int maxRange;
-    public RangedAbility(String name, BendingNPC npc, String abilityName, int maxRange) {
+    private double maxRange;
+    public RangedAbility(String name, BendingNPC npc, String abilityName, double maxRange) {
         super(name, npc, abilityName);
         this.maxRange = maxRange;
     }

@@ -14,6 +14,8 @@ import com.serene.avatarduels.npc.entity.BendingNPC;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.embedded.EmbeddedChannel;
 import net.datafaker.Faker;
 import net.minecraft.ChatFormatting;
@@ -23,6 +25,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.protocol.status.ServerStatus;
@@ -92,7 +95,12 @@ public class NPCUtils {
         Connection serverPlayerConnection = new Connection(PacketFlow.SERVERBOUND);
 
 //        serverPlayerConnection.channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
-        serverPlayerConnection.channel = new EmbeddedChannel();
+        serverPlayerConnection.channel = new EmbeddedChannel(new SimpleChannelInboundHandler<Packet<?>>() {
+            @Override
+            protected void messageReceived(ChannelHandlerContext ctx, Packet msg) throws Exception {
+
+            }
+        });
 
 
         CommonListenerCookie commonListenerCookie = CommonListenerCookie.createInitial(gameProfile, true);
