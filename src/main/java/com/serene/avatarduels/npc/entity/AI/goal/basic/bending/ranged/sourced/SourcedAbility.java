@@ -27,7 +27,6 @@ public class SourcedAbility extends RangedAbility {
 
 
         this.maxSourceRange = maxSourceRange;
-        start();
     }
 
     @Override

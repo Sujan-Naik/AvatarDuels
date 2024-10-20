@@ -18,9 +18,10 @@ public class BendingKillEntity extends MasterCombat {
     private NPC_STATES state;
     private int lastChangedState;
 
-    private static final int VERY_CLOSE = 5, CLOSE = 10, MEDIUM = 15, FAR = 25;
-
     private static final int STATE_CHANGE_TICK_COOLDOWN = 60;
+
+    private int lastAttemptedAbility;
+    private static final int ABILITY_ATTEMPT_COOLDOWN = 1;
 
     public BendingKillEntity(String name, BendingNPC npc, LivingEntity target) {
         super(name, npc);
@@ -32,51 +33,47 @@ public class BendingKillEntity extends MasterCombat {
 //        lookGoalSelector.addGoal(new LookAtEntity("Look", npc, 1, entity));
 
         this.lastChangedState = npc.tickCount - STATE_CHANGE_TICK_COOLDOWN + 1;
+        this.lastAttemptedAbility = npc.tickCount;
         npc.getTargetSelector().setCurrentTarget(target);
     }
 
-    private static final List<AbilityUsages> POINT_BLANK_ABILITIES = List.of(AbilityUsages.BLAZE, AbilityUsages.EARTHLINE, AbilityUsages.ACCRETION, AbilityUsages.WALLOFFIRE);
-    private static final List<AbilityUsages> RUSHDOWN_ABILITIES = List.of(AbilityUsages.GALEGUST, AbilityUsages.SONICBLAST, AbilityUsages.SHOCKWAVE, AbilityUsages.AIRSWIPE);
-    private static final List<AbilityUsages> NEUTRAL_ABILITIES = List.of(AbilityUsages.FIREBURST, AbilityUsages.LIGHTNING);
-    private static final List<AbilityUsages> KEEPAWAY_ABILITIES = List.of(AbilityUsages.MUDSURGE, AbilityUsages.FIREBALL, AbilityUsages.FIRECOMET);
+
+
 
     @Override
     public void tick() {
         super.tick();
 
         double distance = Math.sqrt(npc.distanceToSqr(entity));
+        double health = npc.getHealth();
 
         boolean canChangeState = npc.tickCount - lastChangedState > STATE_CHANGE_TICK_COOLDOWN;
-            switch (state) {
-                case POINT_BLANK -> {
-                    bendingGoalSelector.addGoal(getRandom(POINT_BLANK_ABILITIES).makeGoal(npc));
 
-
-                }
-                case RUSHDOWN -> {
-                    bendingGoalSelector.addGoal(getRandom(RUSHDOWN_ABILITIES).makeGoal(npc));
-//                    bendingGoalSelector.addGoal(new SourcedAbility("Accretion", npc, "Accretion", 10, 10, Element.EARTH));
-
-                }
-
-                case NEUTRAL -> {
-                    bendingGoalSelector.addGoal(getRandom(NEUTRAL_ABILITIES).makeGoal(npc));
-
-
-
-                }
-                case KEEP_AWAY -> {
-                    bendingGoalSelector.addGoal(getRandom(KEEPAWAY_ABILITIES).makeGoal(npc));
-
-
-                }
+        if (canChangeState){
+            state = NPC_STATES.getBestState(distance, health);
+            if (state.getIdealRange() < distance){
+                closeTheGap(state.getIdealRange());
+            } else {
+                widenTheGap(state.getIdealRange());
             }
+            lastChangedState = npc.tickCount;
+        }
+
+        if (npc.tickCount - lastAttemptedAbility > ABILITY_ATTEMPT_COOLDOWN){
+            bendingGoalSelector.addGoal(getRandom(state.getAbilityUsagesList()).makeGoal(npc));
+            this.lastAttemptedAbility = npc.tickCount;
+
+
+        }
+
+
+
     }
 
 
 
 
-    private void closeTheGap(int requiredDistance){
+    private void closeTheGap(double requiredDistance){
         if (movementGoalSelector.doingGoal("Chase")) {
             movementGoalSelector.removeCurrentGoal();
         }
@@ -84,7 +81,7 @@ public class BendingKillEntity extends MasterCombat {
 
     }
 
-    private void widenTheGap(int requiredDistance){
+    private void widenTheGap(double requiredDistance){
         if (movementGoalSelector.doingGoal("Chase")) {
             movementGoalSelector.removeCurrentGoal();
         }

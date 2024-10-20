@@ -50,7 +50,7 @@ import oshi.util.tuples.Pair;
 public class AvatarDuels extends JavaPlugin {
 	
 	public static AvatarDuels instance;
-	public static final FileConfiguration PK_CONFIG = ProjectKorra.plugin.getConfig();
+	public static FileConfiguration PK_CONFIG ;
 	public static FileConfiguration JC_CONFIG;
 
 	private HashMap<String, Config> abilityNameConfigHashMap = new HashMap<>();
@@ -71,7 +71,7 @@ public class AvatarDuels extends JavaPlugin {
 		instance = this;
 		plugin = this;
 
-
+		PK_CONFIG = ProjectKorra.plugin.getConfig();
 		this.setupConfig();
 		soundElement = new SubElement("Sound", Element.AIR, ElementType.BENDING, this);
 

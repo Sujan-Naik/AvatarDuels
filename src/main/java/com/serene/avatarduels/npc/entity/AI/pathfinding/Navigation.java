@@ -1,6 +1,7 @@
 package com.serene.avatarduels.npc.entity.AI.pathfinding;
 
 import com.serene.avatarduels.npc.entity.AI.control.MoveControl;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -57,7 +58,7 @@ public class Navigation {
     }
 
     public void tick(){
-        if (!isStuck && goalPos != null) {
+        if (!isStuck && goalPos != null && !(humanEntity instanceof BendingNPC bendingNPC && bendingNPC.isBusyBending())) {
                 directions.stream().filter(this::isAcceptableDirection)
                         .min(Comparator.comparingDouble(value -> humanEntity.getPosition(0).relative(value, 1).distanceToSqr(goalPos)))
                         .ifPresentOrElse(direction -> {
@@ -71,7 +72,6 @@ public class Navigation {
                             }
                         }, () -> {
                             isStuck = true;
-                            Bukkit.broadcastMessage("Stuck");
                         });
 
         }

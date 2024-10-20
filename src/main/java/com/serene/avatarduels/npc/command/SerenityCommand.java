@@ -54,9 +54,38 @@ public class SerenityCommand implements CommandExecutor {
                         }, 60L);
                         NPCHandler.addNPC(npc);
                     }
+                    case "duel" -> {
+                        BendingNPC npc = NPCUtils.spawnNPC(player.getLocation(), player, "Aang");
+                        BendingNPC npc2 = NPCUtils.spawnNPC(player.getLocation(), player, "Korra");
+
+                        NPCHandler.addNPC(npc);
+                        NPCHandler.addNPC(npc2);
+
+                        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                            Bukkit.getPlayer(npc.getUUID()).teleport(player.getLocation().add(-5,0,0));
+                            Bukkit.getPlayer(npc2.getUUID()).teleport(player.getLocation().add(5,0,0));
+
+
+                            for (int i = 0; i < 60; i+=20)
+                            {
+                                int finalI = i;
+                                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                                    player.sendTitle("AI DUEL", "The duel will commence in " + (3 - finalI / 20) + "!", 0, 20, 0);
+                                }, i);
+                            }
+                            Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                                player.sendTitle("GO!!", "The duel is starting");
+
+                                npc.startDuel(npc2);
+                                npc2.startDuel(npc);
+                            }, 80L);
+                        }, 60L);
+
+                    }
                     case "bend" -> {
                         NPCHandler.getNpcs().forEach(bendingNPC -> {
 //                            bendingNPC.getSourceManager().useAbility(CoreAbility.getAbility(strings[1]));
+                            bendingNPC.getTargetSelector().setCurrentTarget(((CraftPlayer)player).getHandle());
                             if (strings.length == 1) {
 
                                 bendingNPC.useAbility(getRandom(Arrays.stream(AbilityUsages.values()).collect(Collectors.toSet())));

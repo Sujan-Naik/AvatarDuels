@@ -11,7 +11,7 @@ public class RangedAbility extends BendingUseAbility {
     public RangedAbility(String name, BendingNPC npc, String abilityName, double maxRange) {
         super(name, npc, abilityName);
         this.maxRange = maxRange;
-        start();
+
     }
 
     @Override
@@ -19,8 +19,5 @@ public class RangedAbility extends BendingUseAbility {
         return npc.hasLineOfSight(target) && target.distanceToSqr(npc) < maxRange * maxRange;
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-    }
+
 }

@@ -9,11 +9,14 @@ import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.NPCHandler;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.channel.embedded.EmbeddedChannel;
+import io.netty.handler.flow.FlowControlHandler;
 import net.datafaker.Faker;
 import net.minecraft.network.Connection;
+import net.minecraft.network.PacketDecoder;
+import net.minecraft.network.PacketEncoder;
+import net.minecraft.network.UnconfiguredPipelineHandler;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
@@ -32,6 +35,7 @@ import org.bukkit.Location;
 
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.javatuples.Triplet;
@@ -44,6 +48,7 @@ import java.util.*;
 public class NPCUtils {
 
     private static final Stack<Triplet<String, String, String>> NAME_VALUE_SIGNATURE = new Stack<>();
+
 
 
     public static BendingNPC spawnNPC(Location location, Player player, String name) {
@@ -71,13 +76,18 @@ public class NPCUtils {
         Connection serverPlayerConnection = new Connection(PacketFlow.SERVERBOUND);
 
 //        serverPlayerConnection.channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
-        serverPlayerConnection.channel = new EmbeddedChannel(new SimpleChannelInboundHandler<Packet<?>>() {
+        serverPlayerConnection.channel = new EmbeddedChannel(new ChannelInboundHandlerAdapter() {
             @Override
-            protected void messageReceived(ChannelHandlerContext ctx, Packet msg) throws Exception {
-
+            public void channelRead(ChannelHandlerContext ctx, Object msg) {
+                // Ignore the incoming message
             }
-        });
 
+            @Override
+            public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+                // Handle exceptions here to avoid them getting suppressed
+            }
+
+        });
 
         CommonListenerCookie commonListenerCookie = CommonListenerCookie.createInitial(gameProfile, true);
         ServerGamePacketListenerImpl serverGamePacketListener = new ServerGamePacketListenerImpl(minecraftServer, serverPlayerConnection, serverPlayer, commonListenerCookie);

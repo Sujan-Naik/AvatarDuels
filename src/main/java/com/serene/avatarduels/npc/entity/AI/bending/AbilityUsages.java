@@ -89,7 +89,7 @@ public enum AbilityUsages {
 
     AIRSWIPE("AirSwipe", (player) -> {
         player.getBlastManager().useAbility(CoreAbility.getAbility("AirSwipe"));
-    }, (npc) -> new RangedAbility("AirBlade", npc, "AirBlade", JC_CONFIG.getDouble("Abilities.Air.AirBlade.Range"))),
+    }, (npc) -> new RangedAbility("AirSwipe", npc, "AirSwipe", JC_CONFIG.getDouble("Abilities.Air.AirSwipe.Range"))),
 
     GALEGUST("GaleGust", (player) -> {
         player.getBlastManager().useAbility(CoreAbility.getAbility("GaleGust"));

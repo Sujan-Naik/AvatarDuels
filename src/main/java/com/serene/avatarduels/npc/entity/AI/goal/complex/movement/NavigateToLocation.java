@@ -27,7 +27,6 @@ public class NavigateToLocation extends MasterMovement {
     public void tick() {
         super.tick();
         if (moveToBlock.isFinished()) {
-            Bukkit.broadcastMessage("finished");
             this.setFinished(true);
         }
     }

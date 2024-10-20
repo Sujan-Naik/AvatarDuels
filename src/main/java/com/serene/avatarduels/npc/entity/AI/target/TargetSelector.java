@@ -73,7 +73,7 @@ public class TargetSelector {
     }
 
     public void tick() {
-        if (System.currentTimeMillis() - time > 1000) {
+        if (System.currentTimeMillis() - time > 500) {
             time = System.currentTimeMillis();
             for (Entity entity : npc.level().getEntities(npc, new AABB(npc.getOnPos()).inflate(100))) {
 

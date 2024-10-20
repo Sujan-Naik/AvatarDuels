@@ -2,6 +2,7 @@ package com.serene.avatarduels.npc.entity.AI.goal.basic.bending;
 
 import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.ability.CoreAbility;
+import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
 import com.serene.avatarduels.npc.entity.AI.goal.BaseGoal;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.BasicGoal;
@@ -26,6 +27,8 @@ public abstract class BendingUseAbility extends BasicGoal {
 
     protected BendingPlayer bPlayer;
 
+    protected boolean hasStarted = false;
+
     public BendingUseAbility(String name, BendingNPC npc, String abilityName) {
         super(name, npc, 1);
         this.abilityName = abilityName;
@@ -39,11 +42,12 @@ public abstract class BendingUseAbility extends BasicGoal {
         }
     }
 
-    public void start(){
-        if (!isFinished() && shouldStart()){
-            Bukkit.broadcastMessage("used " + abilityName);
+    private void start(){
+        if (shouldStart()){
             npc.useAbility(AbilityUsages.fromName(abilityName));
             npc.setBusyBending(true);
+        } else {
+            setFinished(true);
         }
     }
 
@@ -56,12 +60,19 @@ public abstract class BendingUseAbility extends BasicGoal {
     @Override
     public void tick() {
         if (!finished) {
+            if (!hasStarted){
+                start();
+                hasStarted = true;
+            }
+
             if (bPlayer.getBoundAbility() != null) {
                 if (!CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass())) {
                     setFinished(true);
-                    npc.setBusyBending(false);
+//                    Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                        npc.setBusyBending(false);
+//                    }, 5L);
                 } else {
-                    npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.EYES);
+//                    npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.EYES);
                 }
             }
         }

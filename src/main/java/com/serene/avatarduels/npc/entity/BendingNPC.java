@@ -65,17 +65,21 @@ public class BendingNPC extends HumanEntity {
         });
     }
 
+    public void startDuel(LivingEntity target){
+        masterGoalSelector.addMasterGoal(new BendingKillEntity("kill entity", this, target));
+    }
+
     @Override
     public void tick() {
         super.tick();
 
-        if (!masterGoalSelector.doingGoal("kill hostile entity")) {
-            if (targetSelector.retrieveTopHostile() instanceof LivingEntity hostile && (!Vec3Utils.isObstructed(this.getPosition(0), hostile.getPosition(0), this.level()))) {
-//                masterGoalSelector.addMasterGoal(new KillTargetEntity("kill hostile entity", this, hostile));
-
-                masterGoalSelector.addMasterGoal(new BendingKillEntity("kill hostile entity", this, hostile));
-            }
-        }
+//        if (!masterGoalSelector.doingGoal("kill hostile entity")) {
+//            if (targetSelector.retrieveTopHostile() instanceof LivingEntity hostile && (!Vec3Utils.isObstructed(this.getPosition(0), hostile.getPosition(0), this.level()))) {
+////                masterGoalSelector.addMasterGoal(new KillTargetEntity("kill hostile entity", this, hostile));
+//
+//                masterGoalSelector.addMasterGoal(new BendingKillEntity("kill hostile entity", this, hostile));
+//            }
+//        }
     }
 
     public void useAbility(AbilityUsages abilityUsage){
