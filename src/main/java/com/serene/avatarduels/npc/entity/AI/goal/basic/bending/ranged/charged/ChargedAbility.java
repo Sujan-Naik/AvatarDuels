@@ -14,6 +14,7 @@ public class ChargedAbility extends RangedAbility {
         super(name, npc, abilityName, maxRange);
 
         this.condition = condition;
+
     }
 
     @Override

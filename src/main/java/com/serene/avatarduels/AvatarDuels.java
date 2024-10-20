@@ -14,6 +14,7 @@ import com.serene.avatarduels.configuration.AvatarDuelsConfig;
 import com.serene.avatarduels.listener.AbilityListener;
 import com.serene.avatarduels.listener.CommandListener;
 import com.serene.avatarduels.listener.JCListener;
+import com.serene.avatarduels.npc.NPCHandler;
 import com.serene.avatarduels.npc.command.SerenityCommand;
 import com.serene.avatarduels.npc.listeners.SereneNPCsListener;
 import com.serene.avatarduels.npc.utils.NPCUtils;
@@ -23,6 +24,8 @@ import com.serene.avatarduels.util.versionadapter.ParticleAdapter;
 import com.serene.avatarduels.util.versionadapter.ParticleAdapterFactory;
 import com.serene.avatarduels.util.versionadapter.PotionEffectAdapter;
 import com.serene.avatarduels.util.versionadapter.PotionEffectAdapterFactory;
+import net.minecraft.world.entity.Entity;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -179,7 +182,9 @@ public class AvatarDuels extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		listener.revertSwappedBinds();
-		
+
+		NPCHandler.getNpcs().forEach(bendingNPC -> Bukkit.getPlayer(bendingNPC.getUUID()).kickPlayer("Suck less"));
+
 		if (CoreAbility.getAbility(Crumble.class) != null) {
 			for (Crumble c : CoreAbility.getAbilities(Crumble.class)) {
 				c.revert();
@@ -189,6 +194,7 @@ public class AvatarDuels extends JavaPlugin {
 		RegenTempBlock.revertAll();
 
 	}
+
 	
 	public String prefix() {
 		return ChatColor.GRAY + "[" + ChatColor.GREEN + "AvatarDuels" + ChatColor.GRAY + "]";

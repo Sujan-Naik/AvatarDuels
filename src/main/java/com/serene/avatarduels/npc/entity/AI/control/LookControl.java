@@ -2,7 +2,7 @@ package com.serene.avatarduels.npc.entity.AI.control;
 
 import java.util.Optional;
 
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,7 +10,7 @@ import net.minecraft.world.entity.ai.control.Control;
 import net.minecraft.world.phys.Vec3;
 
 public class LookControl implements Control {
-    protected final SereneHumanEntity mob;
+    protected final HumanEntity mob;
     protected float yMaxRotSpeed;
     protected float xMaxRotAngle;
     protected int lookAtCooldown;
@@ -18,7 +18,7 @@ public class LookControl implements Control {
     protected double wantedY;
     protected double wantedZ;
 
-    public LookControl(SereneHumanEntity entity) {
+    public LookControl(HumanEntity entity) {
         this.mob = entity;
     }
 

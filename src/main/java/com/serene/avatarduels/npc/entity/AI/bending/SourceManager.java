@@ -2,16 +2,12 @@ package com.serene.avatarduels.npc.entity.AI.bending;
 
 
 import com.projectkorra.projectkorra.BendingPlayer;
-import com.projectkorra.projectkorra.Element;
 import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.ability.EarthAbility;
 import com.projectkorra.projectkorra.ability.WaterAbility;
-import com.projectkorra.projectkorra.attribute.Attribute;
-import com.projectkorra.projectkorra.attribute.AttributeModifier;
 import com.serene.avatarduels.AvatarDuels;
-import com.serene.avatarduels.ability.earth.MudSurge;
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -30,11 +26,11 @@ import java.util.stream.Collectors;
 public class SourceManager {
 
     private static final int maxSourceRange = 10;
-    private SereneHumanEntity NMSPlayer;
+    private HumanEntity NMSPlayer;
 
 //    private Set<Block> nearbyBlocks = new HashSet<>();
 
-    public SourceManager(SereneHumanEntity NMSPlayer){
+    public SourceManager(HumanEntity NMSPlayer){
         this.NMSPlayer = NMSPlayer;
     }
 

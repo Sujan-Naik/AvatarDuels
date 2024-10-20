@@ -1,22 +1,20 @@
 package com.serene.avatarduels.npc.entity.AI.inventory;
 
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class InventoryTracker {
 
-    private final SereneHumanEntity npc;
+    private final HumanEntity npc;
     private Inventory inventory;
 
-    public InventoryTracker(Inventory inventory, SereneHumanEntity humanEntity) {
+    public InventoryTracker(Inventory inventory, HumanEntity humanEntity) {
 
         this.inventory = inventory;
         this.npc = humanEntity;

@@ -1,6 +1,6 @@
 package com.serene.avatarduels.npc.utils;
 
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.world.level.ClipContext;
@@ -47,7 +47,7 @@ public class Vec3Utils {
         return obstructed;
     }
 
-    public static boolean isClearForMovementBetween(SereneHumanEntity entity, Vec3 startPos, Vec3 entityPos, boolean includeFluids) {
+    public static boolean isClearForMovementBetween(HumanEntity entity, Vec3 startPos, Vec3 entityPos, boolean includeFluids) {
         Vec3 vec3 = new Vec3(entityPos.x, entityPos.y + (double) entity.getBbHeight() * 0.5, entityPos.z);
         return entity.level().clip(new ClipContext(startPos, vec3, ClipContext.Block.COLLIDER, includeFluids ? ClipContext.Fluid.ANY : ClipContext.Fluid.NONE, entity)).getType() == HitResult.Type.MISS;
     }

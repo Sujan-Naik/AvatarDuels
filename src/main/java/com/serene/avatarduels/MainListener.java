@@ -15,13 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
-import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -93,7 +88,12 @@ public class MainListener implements Listener {
 		this.swapped = new HashMap<>();
 		this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
 	}
-	
+
+//	@EventHandler
+//	public void onPlayerDeath(PlayerDeathEvent event){
+//		event.getEntity().spigot().respawn();
+//	}
+//
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onLeftClick(final PlayerInteractEvent event) {

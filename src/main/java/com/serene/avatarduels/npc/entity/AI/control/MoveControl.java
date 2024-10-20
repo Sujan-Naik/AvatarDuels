@@ -5,7 +5,7 @@
 
 package com.serene.avatarduels.npc.entity.AI.control;
 
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.tags.BlockTags;
@@ -14,13 +14,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.Control;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.bukkit.Bukkit;
 
 public class MoveControl implements Control {
     public static final float MIN_SPEED = 5.0E-4F;
     public static final float MIN_SPEED_SQR = 2.5000003E-7F;
     protected static final int MAX_TURN = 360;
-    protected final SereneHumanEntity mob;
+    protected final HumanEntity mob;
     protected double wantedX;
     protected double wantedY;
     protected double wantedZ;
@@ -29,7 +28,7 @@ public class MoveControl implements Control {
     protected float strafeRight;
     protected Operation operation;
 
-    public MoveControl(SereneHumanEntity entity) {
+    public MoveControl(HumanEntity entity) {
         this.operation = Operation.WAIT;
 
         this.mob = entity;

@@ -5,20 +5,19 @@
 
 package com.serene.avatarduels.npc.entity.AI.control;
 
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.control.Control;
-import org.bukkit.Bukkit;
 
 public class BodyRotationControl implements Control {
     private static final int HEAD_STABLE_ANGLE = 15;
     private static final int DELAY_UNTIL_STARTING_TO_FACE_FORWARD = 10;
     private static final int HOW_LONG_IT_TAKES_TO_FACE_FORWARD = 10;
-    private final SereneHumanEntity mob;
+    private final HumanEntity mob;
     private int headStableTime;
     private float lastStableYHeadRot;
 
-    public BodyRotationControl(SereneHumanEntity entity) {
+    public BodyRotationControl(HumanEntity entity) {
         this.mob = entity;
     }
 
@@ -62,7 +61,7 @@ public class BodyRotationControl implements Control {
     }
 
     private boolean notCarryingHumanEntityPassengers() {
-        return !(this.mob.getFirstPassenger() instanceof SereneHumanEntity);
+        return !(this.mob.getFirstPassenger() instanceof HumanEntity);
     }
 
     private boolean isMoving() {

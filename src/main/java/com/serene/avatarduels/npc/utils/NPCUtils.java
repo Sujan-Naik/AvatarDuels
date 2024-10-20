@@ -1,64 +1,40 @@
 package com.serene.avatarduels.npc.utils;
-import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.Dynamic;
 import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.NPCHandler;
 import com.serene.avatarduels.npc.entity.BendingNPC;
-import com.serene.avatarduels.npc.entity.BendingNPC;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.embedded.EmbeddedChannel;
 import net.datafaker.Faker;
-import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.Connection;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.network.protocol.status.ServerStatus;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import net.minecraft.server.players.GameProfileCache;
-import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraft.world.level.storage.LevelData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-import org.bukkit.craftbukkit.CraftOfflinePlayer;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.javatuples.Triplet;
-import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.net.URL;
@@ -85,7 +61,7 @@ public class NPCUtils {
 
         BendingNPC serverPlayer = new BendingNPC(minecraftServer, serverLevel, skinGameProfile, ClientInformation.createDefault());
 
-        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {serverPlayer.bend();}, 100L);
+        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {serverPlayer.enableBending();}, 100L);
 
         serverPlayer.setPos(location.getX(), location.getY(), location.getZ());
 
@@ -462,11 +438,5 @@ public class NPCUtils {
         PacketUtils.sendPacket(playerInfoUpdatePacket, player);
     }
 
-    public static void toggleOff(BendingNPC BendingNPC) {
-        BendingNPC.toggleOff();
-    }
 
-    public static void toggleOn(BendingNPC BendingNPC) {
-        BendingNPC.toggleOn();
-    }
 }

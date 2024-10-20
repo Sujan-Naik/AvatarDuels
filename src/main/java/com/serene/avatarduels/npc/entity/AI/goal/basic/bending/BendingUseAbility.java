@@ -34,9 +34,13 @@ public abstract class BendingUseAbility extends BasicGoal {
         this.player = Bukkit.getPlayer(npc.getUUID());
         this.bPlayer = BendingPlayer.getBendingPlayer(player);
 
-        if (npc.isBusyBending() || bPlayer.isOnCooldown(abilityName) || target==null || !target.isAlive() || !shouldStart() ) {
+        if (npc.isBusyBending() || bPlayer.isOnCooldown(abilityName) || target==null || !target.isAlive()  ) {
             this.setFinished(true);
-        }else {
+        }
+    }
+
+    public void start(){
+        if (!isFinished() && shouldStart()){
             Bukkit.broadcastMessage("used " + abilityName);
             npc.useAbility(AbilityUsages.fromName(abilityName));
             npc.setBusyBending(true);

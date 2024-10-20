@@ -1,7 +1,7 @@
 package com.serene.avatarduels.npc.entity.AI.pathfinding;
 
 import com.serene.avatarduels.npc.entity.AI.control.MoveControl;
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Navigation {
 
-    private final SereneHumanEntity humanEntity;
+    private final HumanEntity humanEntity;
 
     private final MoveControl moveControl;
 
@@ -23,7 +23,7 @@ public class Navigation {
     private boolean isStuck = false;
     
 
-    public Navigation(SereneHumanEntity humanEntity){
+    public Navigation(HumanEntity humanEntity){
         this.humanEntity = humanEntity;
         this.moveControl = humanEntity.getMoveControl();
     }

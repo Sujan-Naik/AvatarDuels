@@ -9,6 +9,7 @@ import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.ability.earth.MudSurge;
 import com.serene.avatarduels.npc.NPCHandler;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 import com.serene.avatarduels.npc.utils.NPCUtils;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -47,7 +48,11 @@ public class SerenityCommand implements CommandExecutor {
             } else {
                 switch (strings[0]) {
                     case "spawn" -> {
-                        NPCHandler.addNPC(NPCUtils.spawnNPC(player.getLocation(), player, strings[1]));
+                        BendingNPC npc = NPCUtils.spawnNPC(player.getLocation(), player, strings[1]);
+                        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                            Bukkit.getPlayer(npc.getUUID()).teleport(player);
+                        }, 60L);
+                        NPCHandler.addNPC(npc);
                     }
                     case "bend" -> {
                         NPCHandler.getNpcs().forEach(bendingNPC -> {
@@ -60,6 +65,14 @@ public class SerenityCommand implements CommandExecutor {
                             }
                         });
                     }
+//                    case "respawn" -> {
+//                        NPCHandler.getNpcs().forEach(bendingNPC -> {
+//                            if (bendingNPC.isDeadOrDying()) {
+//                                bendingNPC.respawn();
+//                                bendingNPC.isRespawnForced()
+//                            }
+//                        });
+//                    }
                     case "jump" -> {
                         NPCHandler.getNpcs().forEach(bendingNPC -> {
 

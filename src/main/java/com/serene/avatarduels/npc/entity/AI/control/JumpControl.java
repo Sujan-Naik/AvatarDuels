@@ -6,15 +6,15 @@
 package com.serene.avatarduels.npc.entity.AI.control;
 
 
-import com.serene.avatarduels.npc.entity.SereneHumanEntity;
+import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.world.entity.ai.control.Control;
 import org.bukkit.event.entity.EntityExhaustionEvent;
 
 public class JumpControl implements Control {
-    private final SereneHumanEntity mob;
+    private final HumanEntity mob;
     protected boolean jump;
 
-    public JumpControl(SereneHumanEntity entity) {
+    public JumpControl(HumanEntity entity) {
         this.mob = entity;
     }
 
