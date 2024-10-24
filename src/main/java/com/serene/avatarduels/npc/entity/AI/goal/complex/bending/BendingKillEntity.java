@@ -3,6 +3,7 @@ package com.serene.avatarduels.npc.entity.AI.goal.complex.bending;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.BendingUseAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.RangedAbility;
+import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.CircleEntity;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.MoveToEntity;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.RunFromEntity;
 import com.serene.avatarduels.npc.entity.AI.goal.complex.combat.MasterCombat;
@@ -38,6 +39,7 @@ public class BendingKillEntity extends MasterCombat {
     }
 
 
+    private static final double DISTANCE_TOLERANCE = 3; // Tolerance value to account for floating point precision
 
 
     @Override
@@ -51,12 +53,18 @@ public class BendingKillEntity extends MasterCombat {
 
         if (canChangeState){
             state = NPC_STATES.getBestState(distance, health);
-            if (state.getIdealRange() < distance){
-                closeTheGap(state.getIdealRange());
+            double idealRange = state.getIdealRange();
+
+            if (distance > idealRange + DISTANCE_TOLERANCE) {
+                // Too far from the target
+                closeTheGap(idealRange);
+            } else if (distance < idealRange - DISTANCE_TOLERANCE) {
+                // Too close to the target
+                widenTheGap(idealRange);
             } else {
-                widenTheGap(state.getIdealRange());
+                // Within the tolerance range of the ideal distance, switch to circling
+                circleTarget(idealRange);
             }
-            lastChangedState = npc.tickCount;
         }
 
         if (npc.tickCount - lastAttemptedAbility > ABILITY_ATTEMPT_COOLDOWN){
@@ -89,6 +97,20 @@ public class BendingKillEntity extends MasterCombat {
 
     }
 
+    private void circleTarget(double requiredDistance) {
+
+        Bukkit.broadcastMessage("circling");
+        // Remove any existing movement goals if the NPC is currently chasing
+        if (movementGoalSelector.doingGoal("Chase")) {
+            movementGoalSelector.removeCurrentGoal();
+        }
+
+        // Define an angular speed (you can adjust this value as needed)
+        double angularSpeed = 1.0; // Adjust this value based on desired circling speed
+
+        // Add the CircleEntity goal to the movement goal selector
+        movementGoalSelector.addGoal(new CircleEntity("CircleTarget", npc, 1, requiredDistance, angularSpeed, entity));
+    }
 
     public static <E> E getRandom (Collection<E> e) {
 

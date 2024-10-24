@@ -77,7 +77,7 @@ public class BendingNPC extends HumanEntity {
 //            if (targetSelector.retrieveTopHostile() instanceof LivingEntity hostile && (!Vec3Utils.isObstructed(this.getPosition(0), hostile.getPosition(0), this.level()))) {
 ////                masterGoalSelector.addMasterGoal(new KillTargetEntity("kill hostile entity", this, hostile));
 //
-//                masterGoalSelector.addMasterGoal(new BendingKillEntity("kill hostile entity", this, hostile));
+//                masterGoalSelector.addMasterGoal(new BendingKillEntity("kll hostile entity", this, hostile));
 //            }
 //        }
     }

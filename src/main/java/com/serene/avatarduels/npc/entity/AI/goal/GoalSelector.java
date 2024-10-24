@@ -43,6 +43,8 @@ public class GoalSelector {
         return false;
     }
 
+
+
     public void removeCurrentGoal() {
         goals.remove();
     }
