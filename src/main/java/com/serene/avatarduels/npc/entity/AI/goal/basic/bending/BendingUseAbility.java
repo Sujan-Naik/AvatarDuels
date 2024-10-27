@@ -74,6 +74,12 @@ public abstract class BendingUseAbility extends BasicGoal {
                         npc.setBusyBending(false);
 //                    }, 5L);
                 } else {
+                    if (bPlayer.getBoundAbility().isSneakAbility() && !player.isSneaking()){
+                        setFinished(true);
+                        npc.setBusyBending(false);
+
+
+                    }
 //                    npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.EYES);
                 }
             }

@@ -52,7 +52,7 @@ public class BendingNPC extends HumanEntity {
         super(server, world, profile, clientOptions);
         this.sourceManager = new SourceManager(this);
         this.blastManager = new BlastManager(this);
-
+        this.breathManager = new BreathManager(this);
 
     }
 

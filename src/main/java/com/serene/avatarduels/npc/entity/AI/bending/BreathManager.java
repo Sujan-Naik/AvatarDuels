@@ -7,7 +7,10 @@ import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
 import org.bukkit.Bukkit;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import java.util.UUID;
 
@@ -15,11 +18,9 @@ public class BreathManager {
 
     private static final long DEFAULT_HOLD_TIME_MS = 3000; // 3 seconds hold time
     private HumanEntity NMSPlayer;
-    private Player player;
 
     public BreathManager(HumanEntity NMSPlayer) {
         this.NMSPlayer = NMSPlayer;
-        this.player = Bukkit.getServer().getPlayer(NMSPlayer.getUUID());
     }
 
     public void useAbility(CoreAbility coreAbility) {
@@ -27,37 +28,43 @@ public class BreathManager {
     }
 
     public void useAbility(CoreAbility coreAbility, long holdTimeMS) {
+        if (holdTimeMS == 0){
+            holdTimeMS = 2000;
+        }
+        useAbility(coreAbility, holdTimeMS, false);
+    }
+
+    public void useAbility(CoreAbility coreAbility, long holdTimeMS, boolean spamLeftClick) {
         LivingEntity nmsTarget = NMSPlayer.getTargetSelector().getCurrentTarget();
         if (nmsTarget == null) {
             return;
         }
+        Player player = Bukkit.getServer().getPlayer(NMSPlayer.getUUID());
 
         BendingPlayer.getBendingPlayer(player).bindAbility(coreAbility.getName());
 
-        // Make the player look at the target
-        NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.EYES);
 
-        // Start sneaking
-        startSneaking(holdTimeMS);
-    }
+        if (spamLeftClick) {
+            int ticks = (int) Math.floorDiv(holdTimeMS, 50);
 
-    private void startSneaking(long holdTimeMS) {
-        // Trigger the sneaking event
+            for (int i = 0 ; i < ticks; i ++ ) {
+                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                    Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                    player.swingMainHand();
+                }, i);
+            }
+        }
+
         Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, true));
         player.setSneaking(true);
 
-        // Schedule releasing the sneak state after the hold time
         Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-            releaseSneak();
+            Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+            player.setSneaking(false);
+
         }, Math.ceilDiv(holdTimeMS, 50));
     }
 
-    private void releaseSneak() {
-        // Release the sneak state
-        Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
-        player.setSneaking(false);
 
-        // Here you can trigger any other effects or actions after releasing the sneak
-        // For example, you could invoke a method to apply the ability effects
-    }
+
 }

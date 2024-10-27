@@ -2,9 +2,7 @@ package com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.sourced;
 
 import com.projectkorra.projectkorra.Element;
 import com.projectkorra.projectkorra.GeneralMethods;
-import com.projectkorra.projectkorra.ability.CoreAbility;
-import com.projectkorra.projectkorra.ability.EarthAbility;
-import com.projectkorra.projectkorra.ability.WaterAbility;
+import com.projectkorra.projectkorra.ability.*;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.RangedAbility;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,14 +13,16 @@ import org.bukkit.entity.Player;
 
 import java.util.Comparator;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SourcedAbility extends RangedAbility {
 
     private double maxSourceRange;
 
 
-    public SourcedAbility(String name, BendingNPC npc, String abilityName, double maxRange, double maxSourceRange, Element element) {
+    public SourcedAbility(String name, BendingNPC npc, String abilityName, double maxRange, double maxSourceRange) {
         super(name, npc, abilityName, maxRange);
 
 
@@ -49,15 +49,105 @@ public class SourcedAbility extends RangedAbility {
 
         Block source = null;
 
-        switch (CoreAbility.getAbility(getAbilityName()).getElement().getName()){
-            case "Earth" ->
-                    source = nearbyBlocks.stream().filter(block -> EarthAbility.isEarth(block.getType())).min(getBestSource(player, bukkitTarget)).orElse(null);
-            case "Water" ->
-                    source = nearbyBlocks.stream().filter(block -> WaterAbility.isWater(block.getType())).min(getBestSource(player, bukkitTarget)).orElse(null);
+
+        switch (CoreAbility.getAbility(getAbilityName()).getElement().toString()) {
+            // Main Elements
+//            case "Air" -> source = fetchSource(nearbyBlocks.stream(), AirAbility::isAir, bukkitTarget);
+            case "Water" -> source = fetchSource(nearbyBlocks.stream(), WaterAbility::isWater, bukkitTarget);
+            case "Earth" -> source = fetchSource(nearbyBlocks.stream(), EarthAbility::isEarth, bukkitTarget);
+            case "Fire" -> source = fetchSource(nearbyBlocks.stream(), FireAbility::isFire, bukkitTarget);
+
+            // Subelements for Air
+            case "Flight" -> {
+//                source = fetchSource(nearbyBlocks.stream(), FlightAbility::isFlight, bukkitTarget);
+                if (source == null) {
+//                    source = fetchSource(nearbyBlocks.stream(), AirAbility::isAir, bukkitTarget);
+                }
+            }
+            case "Spiritual" -> {
+//                source = fetchSource(nearbyBlocks.stream(), SpiritualAbility::isSpiritual, bukkitTarget);
+                if (source == null) {
+//                    source = fetchSource(nearbyBlocks.stream(), AirAbility::isAir, bukkitTarget);
+                }
+            }
+
+            // Subelements for Water
+            case "Blood" -> {
+//                source = fetchSource(nearbyBlocks.stream(), BloodAbility::isBlood, bukkitTarget);
+                if (source == null) {
+                    source = fetchSource(nearbyBlocks.stream(), WaterAbility::isWater, bukkitTarget);
+                }
+            }
+            case "Healing" -> {
+//                source = fetchSource(nearbyBlocks.stream(), HealingAbility::isHealing, bukkitTarget);
+                if (source == null) {
+                    source = fetchSource(nearbyBlocks.stream(), WaterAbility::isWater, bukkitTarget);
+                }
+            }
+            case "Ice" -> {
+                source = fetchSource(nearbyBlocks.stream(), IceAbility::isIce, bukkitTarget);
+                if (source == null) {
+                    source = fetchSource(nearbyBlocks.stream(), WaterAbility::isWater, bukkitTarget);
+                }
+            }
+            case "Plant" -> {
+                source = fetchSource(nearbyBlocks.stream(), PlantAbility::isPlant, bukkitTarget);
+                if (source == null) {
+                    source = fetchSource(nearbyBlocks.stream(), WaterAbility::isWater, bukkitTarget);
+                }
+            }
+
+            // Subelements for Earth
+            case "Lava" -> {
+                source = fetchSource(nearbyBlocks.stream(), LavaAbility::isLava, bukkitTarget);
+                if (source == null) {
+                    source = fetchSource(nearbyBlocks.stream(), EarthAbility::isEarth, bukkitTarget);
+                }
+            }
+            case "Metal" -> {
+                source = fetchSource(nearbyBlocks.stream(), MetalAbility::isMetal, bukkitTarget);
+                if (source == null) {
+                    source = fetchSource(nearbyBlocks.stream(), EarthAbility::isEarth, bukkitTarget);
+                }
+            }
+            case "Sand" -> {
+                source = fetchSource(nearbyBlocks.stream(), SandAbility::isSand, bukkitTarget);
+                if (source == null) {
+                    source = fetchSource(nearbyBlocks.stream(), EarthAbility::isEarth, bukkitTarget);
+                }
+            }
+
+            // Subelements for Fire
+            case "Lightning" -> {
+//                source = fetchSource(nearbyBlocks.stream(), LightningAbility::isLightning, bukkitTarget);
+                if (source == null) {
+                    source = fetchSource(nearbyBlocks.stream(), FireAbility::isFire, bukkitTarget);
+                }
+            }
+            case "Combustion" -> {
+//                source = fetchSource(nearbyBlocks.stream(), CombustionAbility::isCombustion, bukkitTarget);
+                if (source == null) {
+                    source = fetchSource(nearbyBlocks.stream(), FireAbility::isFire, bukkitTarget);
+                }
+            }
+            case "BlueFire" -> {
+//                source = fetchSource(nearbyBlocks.stream(), BlueFireAbility::isBlueFire, bukkitTarget);
+                if (source == null) {
+                    source = fetchSource(nearbyBlocks.stream(), FireAbility::isFire, bukkitTarget);
+                }
+            }
+
+            default -> source = null; // Handle unexpected cases
         }
 
         return source;
     }
 
+    private Block fetchSource(Stream<Block> nearbyBlocks, Predicate<Block> predicate, org.bukkit.entity.LivingEntity bukkitTarget) {
+        return nearbyBlocks
+                .filter(predicate)
+                .min(getBestSource(player, bukkitTarget))
+                .orElse(null);
+    }
 
 }
