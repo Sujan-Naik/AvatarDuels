@@ -9,13 +9,13 @@ import java.util.List;
 public enum NPC_STATES {
 
 
-    KEEP_AWAY(20, 0, List.of(AbilityUsages.MUDSURGE, AbilityUsages.FIREBALL, AbilityUsages.FIRECOMET)),
+    KEEP_AWAY(20, 0, List.of(AbilityUsages.FIREBALL )),
 
-    NEUTRAL(10, 10,  List.of(AbilityUsages.FIREBURST, AbilityUsages.LIGHTNING)),
+    NEUTRAL(10, 10,  List.of(AbilityUsages.FIREBURST, AbilityUsages.LIGHTNING, AbilityUsages.FIRECOMET)),
 
     RUSHDOWN(5, 15, List.of(AbilityUsages.GALEGUST, AbilityUsages.SONICBLAST, AbilityUsages.SHOCKWAVE, AbilityUsages.AIRSWIPE)),
 
-    POINT_BLANK(2, 20, List.of(AbilityUsages.BLAZE, AbilityUsages.EARTHLINE, AbilityUsages.ACCRETION, AbilityUsages.WALLOFFIRE));
+    POINT_BLANK(2, 20, List.of(AbilityUsages.BLAZE, AbilityUsages.EARTHLINE, AbilityUsages.ACCRETION, AbilityUsages.WALLOFFIRE, AbilityUsages.MUDSURGE));
 
     private double idealRange;
 
@@ -42,7 +42,7 @@ public enum NPC_STATES {
         return abilityUsagesList;
     }
 
-    private static final double RANGE_WEIGHT = 1, HEALTH_WEIGHT = 1;
+    private static final double RANGE_WEIGHT = 2, HEALTH_WEIGHT = 1;
 
     public static NPC_STATES getBestState(double currentRange, double currentHealth){
         return Arrays.stream(NPC_STATES.values()).min(Comparator.comparingDouble(npcStates -> {

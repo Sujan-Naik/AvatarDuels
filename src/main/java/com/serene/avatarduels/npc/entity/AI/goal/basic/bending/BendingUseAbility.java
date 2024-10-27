@@ -45,7 +45,9 @@ public abstract class BendingUseAbility extends BasicGoal {
     private void start(){
         if (shouldStart()){
             npc.useAbility(AbilityUsages.fromName(abilityName));
-            npc.setBusyBending(true);
+            if (bPlayer.getBoundAbility().isSneakAbility()) {
+                npc.setBusyBending(true);
+            }
         } else {
             setFinished(true);
         }
@@ -66,7 +68,7 @@ public abstract class BendingUseAbility extends BasicGoal {
             }
 
             if (bPlayer.getBoundAbility() != null) {
-                if (!CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass())) {
+                if (!CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass()) ) {
                     setFinished(true);
 //                    Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
                         npc.setBusyBending(false);

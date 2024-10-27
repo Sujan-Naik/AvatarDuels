@@ -63,7 +63,7 @@ public class BendingKillEntity extends MasterCombat {
                 widenTheGap(idealRange);
             } else {
                 // Within the tolerance range of the ideal distance, switch to circling
-                circleTarget(idealRange);
+                circleTarget(idealRange + 2);
             }
         }
 

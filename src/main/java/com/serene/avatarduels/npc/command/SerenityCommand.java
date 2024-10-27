@@ -62,8 +62,8 @@ public class SerenityCommand implements CommandExecutor {
                         NPCHandler.addNPC(npc2);
 
                         Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-                            Bukkit.getPlayer(npc.getUUID()).teleport(player.getLocation().add(-5,0,0));
-                            Bukkit.getPlayer(npc2.getUUID()).teleport(player.getLocation().add(5,0,0));
+                            Bukkit.getPlayer(npc.getUUID()).teleport(player.getLocation().add(-20,0,0));
+                            Bukkit.getPlayer(npc2.getUUID()).teleport(player.getLocation().add(20,0,0));
 
 
                             for (int i = 0; i < 60; i+=20)
