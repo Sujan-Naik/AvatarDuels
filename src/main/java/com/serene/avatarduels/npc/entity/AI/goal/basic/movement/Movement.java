@@ -8,11 +8,11 @@ import net.minecraft.world.phys.Vec3;
 
 public abstract class Movement extends BasicGoal {
 
-    private Vec3 goalPos;
+    protected Vec3 goalPos;
 
     protected double requiredDistance;
 
-    private Navigation navigation;
+    protected Navigation navigation;
 
     public Movement(String name, BendingNPC npc, int priority, Vec3 goalPos, double requiredDistance) {
         super(name, npc, priority);

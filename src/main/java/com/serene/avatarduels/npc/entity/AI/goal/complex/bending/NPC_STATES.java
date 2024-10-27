@@ -16,13 +16,13 @@ public enum NPC_STATES {
 
 
 
-    KEEP_AWAY(20, 0, mergeCategories(SNIPER, DOOM)),
+    KEEP_AWAY(25, 0, mergeCategories(SNIPER, DOOM)),
 
-    NEUTRAL(10, 10, mergeCategories(CHUNKY, DOOM, SNIPER) ),
+    NEUTRAL(20, 10, mergeCategories(CHUNKY, DOOM, SNIPER) ),
 
-    RUSHDOWN(5, 15, mergeCategories(SHIELD, SHREDDER, YEETER, PUNCH_PROJECTILE, HARMLESS) ),
+    RUSHDOWN(15, 15, mergeCategories(SHIELD, SHREDDER, YEETER, PUNCH_PROJECTILE, HARMLESS) ),
 
-    POINT_BLANK(2, 20, mergeCategories(SHOTGUN, PUNCH_PROJECTILE, CLOSE_ONLY));
+    POINT_BLANK(5, 20, mergeCategories(SHOTGUN, PUNCH_PROJECTILE, CLOSE_ONLY));
 
     private double idealRange;
 

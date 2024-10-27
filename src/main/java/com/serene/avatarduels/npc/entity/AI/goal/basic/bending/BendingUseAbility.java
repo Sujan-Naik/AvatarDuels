@@ -6,6 +6,7 @@ import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
 import com.serene.avatarduels.npc.entity.AI.goal.BaseGoal;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.BasicGoal;
+import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.sourced.SourcedAbility;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -61,28 +62,30 @@ public abstract class BendingUseAbility extends BasicGoal {
 
     @Override
     public void tick() {
-        if (!finished) {
-            if (!hasStarted){
-                start();
-                hasStarted = true;
-            }
+        if (!hasStarted){
+            start();
+            hasStarted = true;
+        }
 
-            if (bPlayer.getBoundAbility() != null) {
-                if (!CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass()) ) {
-                    setFinished(true);
-//                    Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-                        npc.setBusyBending(false);
-//                    }, 5L);
-                } else {
-                    if (bPlayer.getBoundAbility().isSneakAbility() && !player.isSneaking()){
-                        setFinished(true);
-                        npc.setBusyBending(false);
-
-
-                    }
-//                    npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.EYES);
+        if (bPlayer.getBoundAbility() != null) {
+            // Ability is finished using
+            if (!CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass()) ) {
+                remove();
+            } else {
+                // Ability is finished but still needs to be disabled, the players part is done
+                if (!(this instanceof SourcedAbility) && bPlayer.getBoundAbility().isSneakAbility() && !player.isSneaking()){
+                    remove();
                 }
             }
         }
     }
+
+    protected void remove(){
+        if (hasStarted){
+            npc.setBusyBending(false);
+        }
+        setFinished(true);
+    }
+
+
 }

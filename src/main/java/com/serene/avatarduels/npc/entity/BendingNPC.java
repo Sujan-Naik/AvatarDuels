@@ -12,7 +12,10 @@ import com.serene.avatarduels.npc.utils.Vec3Utils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -55,6 +58,8 @@ public class BendingNPC extends HumanEntity {
         this.breathManager = new BreathManager(this);
 
     }
+
+
 
     public void enableBending(){
         Player player = Bukkit.getPlayer(this.getUUID());

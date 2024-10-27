@@ -57,7 +57,7 @@ public enum AbilityUsages {
 
 
     SUFFOCATE("Suffocate", (player) -> {
-        player.getBreathManager().useAbility(CoreAbility.getAbility("Suffocate"), PK_CONFIG.getLong("Abilities.Air.Suffocate.ChargeTime"));
+        player.getBreathManager().useAbility(CoreAbility.getAbility("Suffocate"), PK_CONFIG.getLong("Abilities.Air.Suffocate.ChargeTime") + 5000);
     }, (npc) -> new ChargedAbility("Suffocate", npc, "Suffocate", PK_CONFIG.getDouble("Abilities.Air.Suffocate.Range"))),
 
     TORNADO("Tornado", (player) -> {

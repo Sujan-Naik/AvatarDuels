@@ -75,7 +75,7 @@ public class SourceManager {
                 Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
 
 
-                    NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.EYES);
+                    NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
 //                player.swingMainHand();
                     Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
                     player.swingMainHand();

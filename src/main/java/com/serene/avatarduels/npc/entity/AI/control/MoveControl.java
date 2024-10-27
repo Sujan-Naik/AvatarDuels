@@ -5,6 +5,7 @@
 
 package com.serene.avatarduels.npc.entity.AI.control;
 
+import com.serene.avatarduels.npc.entity.BendingNPC;
 import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
@@ -100,7 +101,12 @@ public class MoveControl implements Control {
             }
 
             q = (float) (Mth.atan2(e, d) * 57.2957763671875) - 90.0F;
-            this.mob.setYRot(this.rotlerp(this.mob.getYRot(), q, 90.0F));
+            if (mob instanceof BendingNPC bendingNPC && !bendingNPC.isBusyBending()) {
+                this.mob.setYRot(this.rotlerp(this.mob.getYRot(), q, 90.0F));
+            } else {
+                this.mob.setYRot(this.rotlerp(this.mob.getYRot(), q, 90.0F));
+
+            }
             this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
             mob.zza = ((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
 
