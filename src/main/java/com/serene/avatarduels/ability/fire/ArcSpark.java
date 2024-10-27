@@ -42,13 +42,13 @@ public class ArcSpark extends LightningAbility implements AddonAbility {
 	public ArcSpark(Player player) {
 		super(player);
 		
-		this.speed = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Fire.ArcSpark.Speed");
-		this.length = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Fire.ArcSpark.Length");
-		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.ArcSpark.Damage");
-		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.ArcSpark.Cooldown");
-		this.duration = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.ArcSpark.Duration");
-		this.charge = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.ArcSpark.ChargeTime");
-		this.attractive = AvatarDuels.instance.getConfig(getName()).getStringList("Properties.MetallicBlocks");
+		this.speed = AvatarDuels.getConfig(getName()).getInt("Abilities.Fire.ArcSpark.Speed");
+		this.length = AvatarDuels.getConfig(getName()).getInt("Abilities.Fire.ArcSpark.Length");
+		this.damage = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.ArcSpark.Damage");
+		this.cooldown = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.ArcSpark.Cooldown");
+		this.duration = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.ArcSpark.Duration");
+		this.charge = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.ArcSpark.ChargeTime");
+		this.attractive = AvatarDuels.getConfig(getName()).getStringList("Properties.MetallicBlocks");
 		this.charged = false;
 		this.shoot = false;
 		this.chargedTill = System.currentTimeMillis();
@@ -225,7 +225,7 @@ public class ArcSpark extends LightningAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Fire.ArcSpark.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Fire.ArcSpark.Enabled");
 	}
 	
 	@Override

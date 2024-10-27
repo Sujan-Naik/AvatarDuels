@@ -94,9 +94,9 @@ public class SourceManager {
         Block source = null;
         switch (coreAbility.getElement().getName()){
             case "Earth" ->
-                    source = nearbyBlocks.stream().filter(block -> EarthAbility.isEarth(block.getType())).min(getBestSource(player, target)).orElse(null);
+                    source = nearbyBlocks.stream().filter(block -> EarthAbility.isEarthbendable(block.getType(), true, true, true)).min(getBestSource(player, target)).orElse(null);
             case "Water" ->
-                    source = nearbyBlocks.stream().filter(block -> WaterAbility.isWater(block.getType())).min(getBestSource(player, target)).orElse(null);
+                    source = nearbyBlocks.stream().filter(block -> WaterAbility.isWaterbendable(block.getType())).min(getBestSource(player, target)).orElse(null);
         }
 
         return source;

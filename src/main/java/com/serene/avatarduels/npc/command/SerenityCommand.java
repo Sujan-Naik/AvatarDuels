@@ -87,8 +87,9 @@ public class SerenityCommand implements CommandExecutor {
 //                            bendingNPC.getSourceManager().useAbility(CoreAbility.getAbility(strings[1]));
                             bendingNPC.getTargetSelector().setCurrentTarget(((CraftPlayer)player).getHandle());
                             if (strings.length == 1) {
-
-                                bendingNPC.useAbility(getRandom(Arrays.stream(AbilityUsages.values()).collect(Collectors.toSet())));
+                                AbilityUsages ability = getRandom(Arrays.stream(AbilityUsages.values()).collect(Collectors.toSet()));
+                                bendingNPC.useAbility(ability);
+                                Bukkit.broadcastMessage(ability.getName());
                             } else {
                                 bendingNPC.useAbility(AbilityUsages.valueOf(strings[1]));
                             }

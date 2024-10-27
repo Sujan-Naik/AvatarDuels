@@ -55,7 +55,7 @@ public class SpiritBeam extends AvatarAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		duration = config.getInt("Abilities.Avatar.SpiritBeam.Duration");
 		cooldown = config.getInt("Abilities.Avatar.SpiritBeam.Cooldown");
@@ -172,7 +172,7 @@ public class SpiritBeam extends AvatarAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Avatar.SpiritBeam.Description");
 	}
 
@@ -248,7 +248,7 @@ public class SpiritBeam extends AvatarAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Avatar.SpiritBeam.Enabled");
 	}
 }

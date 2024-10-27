@@ -17,7 +17,7 @@ public class Dodging extends ChiAbility implements AddonAbility, PassiveAbility 
 	public Dodging(Player player) {
 		super(player);
 		
-		chance = AvatarDuels.instance.getConfig(getName()).getDouble("Passives.Chi.Dodging.Chance") / 100;
+		chance = AvatarDuels.getConfig(getName()).getDouble("Passives.Chi.Dodging.Chance") / 100;
 	}
 	
 	public boolean check() {
@@ -83,7 +83,7 @@ public class Dodging extends ChiAbility implements AddonAbility, PassiveAbility 
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Passives.Chi.Dodging.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Passives.Chi.Dodging.Enabled");
 	}
 	
 	@Override

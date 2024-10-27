@@ -1,0 +1,190 @@
+this is the table, make the code with it in a similar style to the following and do what i said with regards to integrating it into your code
+
+E.g. Breath abilities like AirBreath use player.getBreathManager().useAbility(etc)
+
+Charged abilities like AirBreath should use ChargedAbility
+A Ranged ability needs to use RangedAbility
+A Sourced ability needs to use SourcedAbility
+
+Where the method header is public void useAbility(CoreAbility coreAbility, long holdTimeMS)
+
+A PK ability needs to use PK_CONFIG whereas non-PK use AvatarDuels.getConfig(<name>)
+
+
+INCLUDE ALL ABILITIES IN THE TABLE and make sure everything is correct, I want everything beginning with Air in order etc. Make it follow the table and have all abilities.
+
+DO THIS FOR ALL ROWS IN THE TABLE
+
+The code should look like this
+
+ TORRENT("Torrent", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("Torrent"), 1000, true);
+    }, (npc) -> new SourcedAbility("Torrent", npc, "Torrent", PK_CONFIG.getDouble("Abilities.Water.Torrent.Range"),
+            PK_CONFIG.getDouble("Abilities.Water.Torrent.SelectRange"), Element.WATER)),
+
+    ICESPIKE("IceSpike", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("IceSpike"));
+    }, (npc) -> new SourcedAbility("IceSpike", npc, "IceSpike", PK_CONFIG.getDouble("Abilities.Water.IceSpike.Range"),
+            PK_CONFIG.getDouble("Abilities.Water.IceSpike.Range")/2, Element.WATER)),
+
+    SURGE("Surge", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("Surge"));
+    }, (npc) -> new SourcedAbility("Surge", npc, "Surge", PK_CONFIG.getDouble("Abilities.Water.Surge.Wave.Range"),
+            PK_CONFIG.getDouble("Abilities.Water.Surge.Wave.SelectRange"), Element.WATER)),
+
+    WATERMANIPULATION("WaterManipulation", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("WaterManipulation"));
+    }, (npc) -> new SourcedAbility("WaterManipulation", npc, "WaterManipulation", PK_CONFIG.getDouble("Abilities.Water.WaterManipulation.Range"),
+            PK_CONFIG.getDouble("Abilities.Water.WaterManipulation.SelectRange"), Element.WATER)),
+
+
+    EARTHBLAST("EarthBlast", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthBlast"));
+    }, (npc) -> new SourcedAbility("EarthBlast", npc, "EarthBlast", PK_CONFIG.getDouble("Abilities.Earth.EarthBlast.Range"),
+            PK_CONFIG.getDouble("Abilities.Earth.EarthBlast.SelectRange"), Element.EARTH)),
+
+    EARTHSHARD("EarthShard", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthShard"));
+    }, (npc) -> new SourcedAbility("EarthShard", npc, "EarthShard", AvatarDuels.getConfig("EarthShard").getDouble("Abilities.Earth.EarthShard.AbilityRange"),
+            AvatarDuels.getConfig("EarthShard").getDouble("Abilities.Earth.EarthShard.PrepareRange"), Element.EARTH)),
+
+    MUDSURGE("MudSurge", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("MudSurge"));
+    }, (npc) -> new SourcedAbility("MudSurge", npc, "MudSurge", 40,
+            AvatarDuels.getConfig("MudSurge").getDouble("Abilities.Earth.MudSurge.SourceRange"), Element.EARTH)),
+
+    EARTHLINE("EarthLine", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthLine"));
+    }, (npc) -> new SourcedAbility("EarthLine", npc, "EarthLine", AvatarDuels.getConfig("EarthLine").getDouble("Abilities.Earth.EarthLine.Range"),
+            AvatarDuels.getConfig("EarthLine").getDouble("Abilities.Earth.EarthLine.PrepareRange"), Element.EARTH)),
+
+    SHOCKWAVE("Shockwave", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("Shockwave"), ProjectKorra.plugin.getConfig().getLong("Abilities.Earth.Shockwave.ChargeTime"));
+    }, (npc) -> new ChargedAbility("Shockwave", npc, "Shockwave", PK_CONFIG.getDouble("Abilities.Earth.Shockwave.Range"),
+            null)),
+
+    ACCRETION("Accretion", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("Accretion"));
+    }, (npc) -> new SourcedAbility("Accretion", npc, "Accretion", 25,
+            AvatarDuels.getConfig("Accretion").getDouble("Abilities.Earth.Accretion.SelectRange"), Element.EARTH)),
+
+    AIRBLADE("AirBlade", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("AirBlade"));
+    }, (npc) -> new RangedAbility("AirBlade", npc, "AirBlade", AvatarDuels.getConfig("AirBlade").getDouble("Abilities.Air.AirBlade.Range"))),
+
+
+    AIRSWIPE("AirSwipe", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("AirSwipe"));
+    }, (npc) -> new RangedAbility("AirSwipe", npc, "AirSwipe", AvatarDuels.getConfig("AirSwipe").getDouble("Abilities.Air.AirSwipe.Range"))),
+
+    GALEGUST("GaleGust", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("GaleGust"));
+    }, (npc) -> new RangedAbility("GaleGust", npc, "GaleGust", AvatarDuels.getConfig("GaleGust").getDouble("Abilities.Air.GaleGust.Range"))),
+
+    SONICBLAST("SonicBlast", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("SonicBlast"),  ProjectKorra.plugin.getConfig().getLong("Abilities.Air.SonicBlast.ChargeTime"));
+    }, (npc) -> new ChargedAbility("SonicBlast", npc, "SonicBlast", PK_CONFIG.getDouble("Abilities.Air.SonicBlast.Range"),
+            null)),
+
+    BLAZE("Blaze", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("Blaze"));
+    }, (npc) -> new RangedAbility("Blaze", npc, "Blaze", PK_CONFIG.getDouble("Abilities.Fire.Blaze.Range"))),
+
+    FIREBLAST("FireBlast", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("FireBlast"));
+    }, (npc) -> new RangedAbility("FireBlast", npc, "FireBlast", PK_CONFIG.getDouble("Abilities.Fire.FireBlast.Range"))),
+
+Ability Name 	PK Ability 	Manager Type 	Usage Type
+Air Abilities
+AirBreath 	false 	BreathManager 	Charged
+AirBlast 	true 	BlastManager 	Charged
+AirBurst 	true 	BlastManager 	Charged
+AirGlide 	false 	BreathManager 	Charged
+AirPunch 	false 	BlastManager 	Ranged
+AirScooter 	true 	SourceManager 	Sourced
+AirShield 	true 	BlastManager 	Charged
+AirSpout 	true 	SourceManager 	Sourced
+AirSuction 	true 	BlastManager 	Charged
+AirSwipe 	false 	BlastManager 	Ranged
+Deafen 	false 	BreathManager 	Charged
+FlightPassive 	false 	BreathManager 	Charged
+Tailwind 	false 	BreathManager 	Charged
+VocalMimicry 	false 	BreathManager 	Charged
+Zephyr 	false 	BreathManager 	Charged
+Suffocate 	true 	BreathManager 	Charged
+Tornado 	true 	BlastManager 	Charged
+Earth Abilities
+Crumble 	false 	SourceManager 	Sourced
+Catapult 	true 	BlastManager 	Charged
+Dig 	false 	SourceManager 	Sourced
+EarthArmor 	true 	SourceManager 	Sourced
+EarthBlast 	true 	SourceManager 	Sourced
+EarthKick 	false 	SourceManager 	Sourced
+Fissure 	false 	SourceManager 	Sourced
+LandLaunch 	false 	BlastManager 	Ranged
+LavaDisc 	false 	BlastManager 	Ranged
+LavaFlux 	false 	SourceManager 	Sourced
+LavaSurge 	false 	BlastManager 	Ranged
+LavaThrow 	false 	BlastManager 	Ranged
+MagmaSlap 	false 	SourceManager 	Sourced
+MagnetShield 	false 	SourceManager 	Sourced
+MetalArmor 	false 	SourceManager 	Sourced
+MetalFragments 	false 	BlastManager 	Ranged
+MetalHook 	false 	SourceManager 	Sourced
+Metallokinesis 	false 	SourceManager 	Sourced
+MetalShred 	false 	BlastManager 	Ranged
+QuickWeld 	false 	SourceManager 	Sourced
+RockSlide 	false 	BlastManager 	Ranged
+SandBlast 	false 	BlastManager 	Ranged
+ShrapnelBlast 	false 	BlastManager 	Ranged
+ShrapnelShot 	false 	BlastManager 	Ranged
+Collapse 	true 	SourceManager 	Sourced
+CollapseWall 	true 	SourceManager 	Sourced
+EarthDome 	true 	SourceManager 	Sourced
+EarthGrab 	true 	SourceManager 	Sourced
+EarthSmash 	true 	BlastManager 	Charged
+EarthTunnel 	true 	SourceManager 	Sourced
+RaiseEarth 	true 	SourceManager 	Sourced
+RaiseEarthWall 	true 	SourceManager 	Sourced
+Ripple 	true 	SourceManager 	Sourced
+Shockwave 	true 	BlastManager 	Charged
+Tremorsense 	true 	BreathManager 	Charged
+Fire Abilities
+ArcSpark 	false 	BlastManager 	Ranged
+Blaze 	true 	BlastManager 	Charged
+BlazeArc 	true 	BlastManager 	Charged
+BlazeRing 	true 	BlastManager 	Charged
+FireBlast 	true 	BlastManager 	Charged
+FireBlastCharged 	true 	BlastManager 	Charged
+FireBurst 	true 	BlastManager 	Charged
+FireJet 	false 	BlastManager 	Ranged
+FireManipulation 	true 	SourceManager 	Sourced
+FireShield 	true 	BlastManager 	Charged
+HeatControl 	false 	SourceManager 	Sourced
+Illumination 	false 	SourceManager 	Ranged
+WallOfFire 	true 	SourceManager 	Sourced
+CombustBeam 	false 	BlastManager 	Ranged
+Combustion 	false 	BlastManager 	Ranged
+Discharge 	false 	BlastManager 	Ranged
+Explode 	false 	BlastManager 	Ranged
+Water Abilities
+FrostBreath 	false 	BlastManager 	Ranged
+HealingWaters 	false 	SourceManager 	Sourced
+Hydrojet 	false 	BlastManager 	Ranged
+IceClaws 	false 	SourceManager 	Sourced
+IcePassive 	false 	SourceManager 	Charged
+IceWall 	false 	BlastManager 	Ranged
+LeafStorm 	false 	SourceManager 	Sourced
+MistShards 	false 	SourceManager 	Sourced
+PlantArmor 	false 	SourceManager 	Sourced
+RazorLeaf 	false 	BlastManager 	Ranged
+WakeFishing 	false 	SourceManager 	Sourced
+OctopusForm 	true 	SourceManager 	Sourced
+SurgeWall 	true 	SourceManager 	Sourced
+SurgeWave 	true 	SourceManager 	Sourced
+Torrent 	true 	SourceManager 	Sourced
+TorrentWave 	true 	SourceManager 	Sourced
+WaterBubble 	true 	SourceManager 	Sourced
+WaterManipulation 	true 	SourceManager 	Sourced
+WaterSpout 	true 	SourceManager 	Sourced
+WaterSpoutWave 	true 	SourceManager 	Sourced

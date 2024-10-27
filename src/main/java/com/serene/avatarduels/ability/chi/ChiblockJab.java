@@ -38,8 +38,8 @@ public class ChiblockJab extends ChiAbility implements ComboAbility, AddonAbilit
 			return;
 		}
 		
-		duration = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Chi.ChiblockJab.Duration");
-		cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Chi.ChiblockJab.Cooldown");
+		duration = AvatarDuels.getConfig(getName()).getLong("Combos.Chi.ChiblockJab.Duration");
+		cooldown = AvatarDuels.getConfig(getName()).getLong("Combos.Chi.ChiblockJab.Cooldown");
 		
 		if (attacked != null) {
 			bp = BendingPlayer.getBendingPlayer(attacked);
@@ -133,6 +133,6 @@ public class ChiblockJab extends ChiAbility implements ComboAbility, AddonAbilit
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Chi.ChiblockJab.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Combos.Chi.ChiblockJab.Enabled");
 	}
 }

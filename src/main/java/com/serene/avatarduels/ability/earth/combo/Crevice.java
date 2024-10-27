@@ -61,7 +61,7 @@ public class Crevice extends EarthAbility implements AddonAbility, ComboAbility 
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		range = config.getDouble("Abilities.Earth.EarthCombo.Crevice.Range");
 		regenDelay = config.getLong("Abilities.Earth.EarthCombo.Crevice.RevertDelay");
@@ -281,7 +281,7 @@ public class Crevice extends EarthAbility implements AddonAbility, ComboAbility 
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 	   return "* AvatarDuels Addon *\n" + config.getString("Abilities.Earth.EarthCombo.Crevice.Description");
 	}
 	
@@ -363,7 +363,7 @@ public class Crevice extends EarthAbility implements AddonAbility, ComboAbility 
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Earth.EarthCombo.Crevice.Enabled");
 	}
 }

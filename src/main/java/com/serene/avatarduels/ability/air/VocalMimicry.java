@@ -25,8 +25,8 @@ public class VocalMimicry extends SoundAbility implements AddonAbility {
 	public VocalMimicry(Player player) {
 		super(player);
 		
-		volume = (float) AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Air.VocalMimicry.Volume");
-		pitch = (float) AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Air.VocalMimicry.Pitch");
+		volume = (float) AvatarDuels.getConfig(getName()).getDouble("Abilities.Air.VocalMimicry.Volume");
+		pitch = (float) AvatarDuels.getConfig(getName()).getDouble("Abilities.Air.VocalMimicry.Pitch");
 		sound = (selected.containsKey(player) ? selected.get(player) : Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO);
 		
 		start();
@@ -81,7 +81,7 @@ public class VocalMimicry extends SoundAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Air.VocalMimicry.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Air.VocalMimicry.Enabled");
 	}
 	
 	@Override

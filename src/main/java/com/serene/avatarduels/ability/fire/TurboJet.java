@@ -35,9 +35,9 @@ public class TurboJet extends FireAbility implements AddonAbility, ComboAbility 
 			return;
 		}
 		
-		this.speed = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Fire.TurboJet.Speed");
-		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Fire.TurboJet.Cooldown");
-		this.normal = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.Jets.FlySpeed");
+		this.speed = AvatarDuels.getConfig(getName()).getDouble("Combos.Fire.TurboJet.Speed");
+		this.cooldown = AvatarDuels.getConfig(getName()).getLong("Combos.Fire.TurboJet.Cooldown");
+		this.normal = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.Jets.FlySpeed");
 		
 		if (!hasAbility(player, Jets.class)) {
 			jets = new Jets(player, this);
@@ -127,6 +127,6 @@ public class TurboJet extends FireAbility implements AddonAbility, ComboAbility 
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Fire.TurboJet.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Combos.Fire.TurboJet.Enabled");
 	}
 }

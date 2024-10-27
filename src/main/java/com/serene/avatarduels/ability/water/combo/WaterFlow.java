@@ -135,7 +135,7 @@ public class WaterFlow extends WaterAbility implements AddonAbility, ComboAbilit
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		sourceRange = config.getInt("Abilities.Water.WaterCombo.WaterFlow.SourceRange");
 		maxRange = config.getInt("Abilities.Water.WaterCombo.WaterFlow.MaxRange");
@@ -448,7 +448,7 @@ public class WaterFlow extends WaterAbility implements AddonAbility, ComboAbilit
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 	   return "* AvatarDuels Addon *\n" + config.getString("Abilities.Water.WaterCombo.WaterFlow.Description");
 	}
 	
@@ -722,7 +722,7 @@ public class WaterFlow extends WaterAbility implements AddonAbility, ComboAbilit
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Water.WaterCombo.WaterFlow.Enabled");
 	}
 }

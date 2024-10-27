@@ -72,7 +72,7 @@ public class DaggerThrow extends ChiAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		cooldown = config.getLong("Abilities.Chi.DaggerThrow.Cooldown");
 		limitEnabled = config.getBoolean("Abilities.Chi.DaggerThrow.MaxDaggers.Enabled");
@@ -88,7 +88,7 @@ public class DaggerThrow extends ChiAbility implements AddonAbility {
 
 		String path = "Abilities.Chi.DaggerThrow.Interactions";
 
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		ConfigurationSection section = config.getConfigurationSection(path);
 		for (String abilityName : section.getKeys(false)) {
 			INTERACTIONS.add(new AbilityInteraction(abilityName));
@@ -201,7 +201,7 @@ public class DaggerThrow extends ChiAbility implements AddonAbility {
 
 	@Override
 	public double getCollisionRadius() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getDouble("Abilities.Chi.DaggerThrow.AbilityCollisionRadius");
 	}
 
@@ -246,7 +246,7 @@ public class DaggerThrow extends ChiAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Chi.DaggerThrow.Description");
 	}
 
@@ -314,7 +314,7 @@ public class DaggerThrow extends ChiAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Chi.DaggerThrow.Enabled");
 	}
 	

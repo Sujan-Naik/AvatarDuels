@@ -68,7 +68,7 @@ public class FireShots extends FireAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		cooldown = config.getLong("Abilities.Fire.FireShots.Cooldown");
 		startAmount = config.getInt("Abilities.Fire.FireShots.FireBalls");
@@ -296,7 +296,7 @@ public class FireShots extends FireAbility implements AddonAbility {
 		} else {
 			CoreAbility second = collision.getAbilitySecond();
 			if (second instanceof AirShield) {
-				ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+				ConfigurationSection config = AvatarDuels.getConfig(getName());
 				boolean reflect = config.getBoolean("Abilities.Fire.FireShots.Collisions.AirShield.Reflect", true);
 
 				if (reflect) {
@@ -341,7 +341,7 @@ public class FireShots extends FireAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Fire.FireShots.Description");
 	}
 
@@ -410,7 +410,7 @@ public class FireShots extends FireAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Fire.FireShots.Enabled");
 	}
 }

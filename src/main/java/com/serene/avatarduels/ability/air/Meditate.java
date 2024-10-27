@@ -42,7 +42,7 @@ public class Meditate extends SpiritualAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		unfocusMsg = config.getString("Abilities.Air.Meditate.UnfocusMessage");
 		lossFocusMessage = config.getBoolean("Abilities.Air.Meditate.LossFocusMessage");
@@ -140,7 +140,7 @@ public class Meditate extends SpiritualAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Air.Meditate.Description");
 	}
 
@@ -224,7 +224,7 @@ public class Meditate extends SpiritualAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Air.Meditate.Enabled");
 	}
 }

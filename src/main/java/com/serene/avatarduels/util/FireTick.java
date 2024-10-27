@@ -21,7 +21,7 @@ public class FireTick {
     }
 
     public static void loadMethod() {
-        String methodName = AvatarDuels.plugin.getConfig().getString("Properties.FireTickMethod");
+        String methodName = AvatarDuels.instance.getConfig().getString("Properties.FireTickMethod");
 
         FireTickMethod newMethod = methods.get(methodName.toLowerCase());
         if (newMethod != null) {

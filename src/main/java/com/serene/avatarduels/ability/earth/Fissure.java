@@ -79,7 +79,7 @@ public class Fissure extends LavaAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		slapRange = config.getInt("Abilities.Earth.Fissure.SlapRange");
 		maxWidth = config.getInt("Abilities.Earth.Fissure.MaxWidth");
@@ -319,7 +319,7 @@ public class Fissure extends LavaAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Earth.Fissure.Description");
 	}
 
@@ -435,7 +435,7 @@ public class Fissure extends LavaAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Earth.Fissure.Enabled");
 	}
 }

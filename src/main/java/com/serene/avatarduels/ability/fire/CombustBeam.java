@@ -64,17 +64,17 @@ public class CombustBeam extends CombustionAbility implements AddonAbility {
 			return;
 		}
 		
-		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.CombustBeam.Cooldown");
-		this.minChargeTime = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.CombustBeam.Minimum.ChargeTime");
-		this.maxChargeTime = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.CombustBeam.Maximum.ChargeTime");
-		this.minAngle = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Minimum.Angle");
-		this.maxAngle = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Maximum.Angle");
-		this.minPower = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Minimum.Power");
-		this.maxPower = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Maximum.Power");
-		this.minDamage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Minimum.Damage");
-		this.maxDamage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Maximum.Damage");
-		this.range = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Range");
-		this.revertTime = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.CombustBeam.RevertTime");
+		this.cooldown = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.CombustBeam.Cooldown");
+		this.minChargeTime = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.CombustBeam.Minimum.ChargeTime");
+		this.maxChargeTime = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.CombustBeam.Maximum.ChargeTime");
+		this.minAngle = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Minimum.Angle");
+		this.maxAngle = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Maximum.Angle");
+		this.minPower = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Minimum.Power");
+		this.maxPower = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Maximum.Power");
+		this.minDamage = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Minimum.Damage");
+		this.maxDamage = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Maximum.Damage");
+		this.range = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.Range");
+		this.revertTime = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.CombustBeam.RevertTime");
 		this.health = player.getHealth();
 		this.charging = true;
 		this.charged = false;
@@ -105,7 +105,7 @@ public class CombustBeam extends CombustionAbility implements AddonAbility {
 				direction = player.getEyeLocation().getDirection().clone().normalize();
 				
 				if (player.getHealth() < health) {
-					DamageHandler.damageEntity(player, AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.InterruptedDamage"), this);
+					DamageHandler.damageEntity(player, AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.CombustBeam.InterruptedDamage"), this);
 					explode();
 					return;
 				}
@@ -284,7 +284,7 @@ public class CombustBeam extends CombustionAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Fire.CombustBeam.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Fire.CombustBeam.Enabled");
 	}
 	
 	@Override

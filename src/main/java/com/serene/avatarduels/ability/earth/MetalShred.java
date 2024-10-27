@@ -72,7 +72,7 @@ public class MetalShred extends MetalAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		selectRange = config.getInt("Abilities.Earth.MetalShred.SourceRange");
 		extendTick = config.getInt("Abilities.Earth.MetalShred.ExtendTick");
@@ -356,7 +356,7 @@ public class MetalShred extends MetalAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Earth.MetalShred.Description");
 	}
 
@@ -477,7 +477,7 @@ public class MetalShred extends MetalAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Earth.MetalShred.Enabled");
 	}
 }

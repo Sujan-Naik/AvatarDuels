@@ -46,7 +46,7 @@ public class SwiftStream extends FlightAbility implements AddonAbility, ComboAbi
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		cooldown = config.getLong("Abilities.Air.AirCombo.SwiftStream.Cooldown");
 		dragFactor = config.getDouble("Abilities.Air.AirCombo.SwiftStream.DragFactor");
@@ -148,7 +148,7 @@ public class SwiftStream extends FlightAbility implements AddonAbility, ComboAbi
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 	   return "* AvatarDuels Addon *\n" + config.getString("Abilities.Air.AirCombo.SwiftStream.Description");
 	}
 	
@@ -190,7 +190,7 @@ public class SwiftStream extends FlightAbility implements AddonAbility, ComboAbi
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Air.AirCombo.SwiftStream.Enabled");
 	}
 }

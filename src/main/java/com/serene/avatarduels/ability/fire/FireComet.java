@@ -81,7 +81,7 @@ public class FireComet extends FireAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		if (JCMethods.isSozinsComet(player.getWorld()) || bPlayer.isAvatarState()) {
 			cooldown = config.getLong("Abilities.Fire.FireComet.SozinsComet.Cooldown");
@@ -447,7 +447,7 @@ public class FireComet extends FireAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Fire.FireComet.Description");
 	}
 
@@ -459,7 +459,7 @@ public class FireComet extends FireAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Fire.FireComet.Enabled");
 	}
 }

@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ThrownEntityTracker {
 
 	public static ConcurrentHashMap<Entity, ThrownEntityTracker> instances = new ConcurrentHashMap<Entity, ThrownEntityTracker>();
-	public static boolean collisions = AvatarDuels.plugin.getConfig().getBoolean("Properties.MobCollisions.Enabled");
+	public static boolean collisions = AvatarDuels.instance.getConfig().getBoolean("Properties.MobCollisions.Enabled");
 	private long delay;
 	private long fireTime;
 	private Entity entity;

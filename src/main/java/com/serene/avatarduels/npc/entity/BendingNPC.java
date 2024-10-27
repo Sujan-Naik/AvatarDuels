@@ -5,6 +5,7 @@ import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.Element;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
 import com.serene.avatarduels.npc.entity.AI.bending.BlastManager;
+import com.serene.avatarduels.npc.entity.AI.bending.BreathManager;
 import com.serene.avatarduels.npc.entity.AI.bending.SourceManager;
 import com.serene.avatarduels.npc.entity.AI.goal.complex.bending.BendingKillEntity;
 import com.serene.avatarduels.npc.utils.Vec3Utils;
@@ -18,6 +19,12 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 public class BendingNPC extends HumanEntity {
+
+    private BreathManager breathManager;
+
+    public BreathManager getBreathManager() {
+        return breathManager;
+    }
 
     private SourceManager sourceManager;
 

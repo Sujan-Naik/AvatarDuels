@@ -17,6 +17,13 @@ public class ChargedAbility extends RangedAbility {
 
     }
 
+    public ChargedAbility(String name, BendingNPC npc, String abilityName, double maxRange ) {
+        super(name, npc, abilityName, maxRange);
+
+        this.condition = condition;
+
+    }
+
     @Override
     public void tick() {
         super.tick();

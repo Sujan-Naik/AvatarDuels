@@ -21,7 +21,7 @@ public class LandLaunch extends EarthAbility implements AddonAbility, PassiveAbi
 	public LandLaunch(Player player) {
 		super(player);
 		
-		amp = AvatarDuels.instance.getConfig(getName()).getInt("Passives.Earth.LandLaunch.Power");
+		amp = AvatarDuels.getConfig(getName()).getInt("Passives.Earth.LandLaunch.Power");
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class LandLaunch extends EarthAbility implements AddonAbility, PassiveAbi
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Passives.Earth.LandLaunch.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Passives.Earth.LandLaunch.Enabled");
 	}
 	
 	@Override

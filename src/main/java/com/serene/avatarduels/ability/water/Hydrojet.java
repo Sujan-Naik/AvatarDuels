@@ -20,7 +20,7 @@ public class Hydrojet extends WaterAbility implements AddonAbility, PassiveAbili
 	public Hydrojet(Player player) {
 		super(player);
 		
-		amp = AvatarDuels.instance.getConfig(getName()).getInt("Passives.Water.Hydrojet.Speed");
+		amp = AvatarDuels.getConfig(getName()).getInt("Passives.Water.Hydrojet.Speed");
 		
 		start();
 	}
@@ -87,7 +87,7 @@ public class Hydrojet extends WaterAbility implements AddonAbility, PassiveAbili
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Passives.Water.Hydrojet.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Passives.Water.Hydrojet.Enabled");
 	}
 	
 	@Override

@@ -53,7 +53,7 @@ public class SonicBlast extends AirAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		damage = config.getDouble("Abilities.Air.SonicBlast.Damage");
 		range = config.getDouble("Abilities.Air.SonicBlast.Range");
@@ -156,7 +156,7 @@ public class SonicBlast extends AirAbility implements AddonAbility {
 
 	@Override
 	public double getCollisionRadius() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getDouble("Abilities.Air.SonicBlast.AbilityCollisionRadius");
 	}
 
@@ -192,7 +192,7 @@ public class SonicBlast extends AirAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Air.SonicBlast.Description");
 	}
 
@@ -204,7 +204,7 @@ public class SonicBlast extends AirAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Air.SonicBlast.Enabled");
 	}
 }

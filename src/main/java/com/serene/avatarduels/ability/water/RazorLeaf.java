@@ -54,12 +54,12 @@ public class RazorLeaf extends PlantAbility implements AddonAbility {
 			this.center = player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(1.5));
 		}
 		
-		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Water.RazorLeaf.Cooldown");
-		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.RazorLeaf.Damage");
-		this.radius = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.RazorLeaf.Radius");
-		this.range = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Water.RazorLeaf.Range");
-		this.particles = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.RazorLeaf.Particles");
-		this.maxUses = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Water.RazorLeaf.MaxRecalls");
+		this.cooldown = AvatarDuels.getConfig(getName()).getLong("Abilities.Water.RazorLeaf.Cooldown");
+		this.damage = AvatarDuels.getConfig(getName()).getDouble("Abilities.Water.RazorLeaf.Damage");
+		this.radius = AvatarDuels.getConfig(getName()).getDouble("Abilities.Water.RazorLeaf.Radius");
+		this.range = AvatarDuels.getConfig(getName()).getDouble("Abilities.Water.RazorLeaf.Range");
+		this.particles = AvatarDuels.getConfig(getName()).getInt("Abilities.Water.RazorLeaf.Particles");
+		this.maxUses = AvatarDuels.getConfig(getName()).getInt("Abilities.Water.RazorLeaf.MaxRecalls");
 		
 		start();
 	}
@@ -203,6 +203,6 @@ public class RazorLeaf extends PlantAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Water.RazorLeaf.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Water.RazorLeaf.Enabled");
 	}
 }

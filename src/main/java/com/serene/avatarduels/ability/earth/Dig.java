@@ -34,10 +34,10 @@ public class Dig extends EarthAbility implements AddonAbility {
 			return;
 		}
 		
-		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.Dig.Cooldown");
-		this.duration = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.Dig.Duration");
-		this.revertTime = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.Dig.RevertTime");
-		this.speed = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.Dig.Speed");
+		this.cooldown = AvatarDuels.getConfig(getName()).getLong("Abilities.Earth.Dig.Cooldown");
+		this.duration = AvatarDuels.getConfig(getName()).getLong("Abilities.Earth.Dig.Duration");
+		this.revertTime = AvatarDuels.getConfig(getName()).getLong("Abilities.Earth.Dig.RevertTime");
+		this.speed = AvatarDuels.getConfig(getName()).getDouble("Abilities.Earth.Dig.Speed");
 		
 		start();
 	}
@@ -124,7 +124,7 @@ public class Dig extends EarthAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Earth.Dig.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Earth.Dig.Enabled");
 	}
 	
 	@Override

@@ -58,7 +58,7 @@ public class AirSlam extends AirAbility implements AddonAbility, ComboAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		cooldown = config.getLong("Abilities.Air.AirCombo.AirSlam.Cooldown");
 		power = config.getDouble("Abilities.Air.AirCombo.AirSlam.Power");
@@ -132,7 +132,7 @@ public class AirSlam extends AirAbility implements AddonAbility, ComboAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Air.AirCombo.AirSlam.Description");
 	}
 	
@@ -178,7 +178,7 @@ public class AirSlam extends AirAbility implements AddonAbility, ComboAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Air.AirCombo.AirSlam.Enabled");
 	}
 }

@@ -65,14 +65,14 @@ public class LavaSurge extends LavaAbility implements AddonAbility {
 			return;
 		}
 		
-		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.LavaSurge.Cooldown");
-		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.LavaSurge.Damage");
-		this.burn = AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Earth.LavaSurge.Burn.Enabled");
-		this.burnTime = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.LavaSurge.Burn.Duration");
-		this.speed = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.LavaSurge.Speed");
-		this.sourceRadius = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.LavaSurge.SourceRadius");
-		this.selectRange = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.LavaSurge.SelectRange");
-		this.maxBlocks = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.LavaSurge.MaxBlocks");
+		this.cooldown = AvatarDuels.getConfig(getName()).getLong("Abilities.Earth.LavaSurge.Cooldown");
+		this.damage = AvatarDuels.getConfig(getName()).getDouble("Abilities.Earth.LavaSurge.Damage");
+		this.burn = AvatarDuels.getConfig(getName()).getBoolean("Abilities.Earth.LavaSurge.Burn.Enabled");
+		this.burnTime = AvatarDuels.getConfig(getName()).getLong("Abilities.Earth.LavaSurge.Burn.Duration");
+		this.speed = AvatarDuels.getConfig(getName()).getDouble("Abilities.Earth.LavaSurge.Speed");
+		this.sourceRadius = AvatarDuels.getConfig(getName()).getDouble("Abilities.Earth.LavaSurge.SourceRadius");
+		this.selectRange = AvatarDuels.getConfig(getName()).getInt("Abilities.Earth.LavaSurge.SelectRange");
+		this.maxBlocks = AvatarDuels.getConfig(getName()).getInt("Abilities.Earth.LavaSurge.MaxBlocks");
 		this.shot = false;
 		this.shotBlocks = 0;
 		this.launchedAll = false;
@@ -300,7 +300,7 @@ public class LavaSurge extends LavaAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Earth.LavaSurge.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Earth.LavaSurge.Enabled");
 	}
 	
 	@Override

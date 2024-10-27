@@ -54,7 +54,7 @@ public class WakeFishing extends WaterAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		cooldown = config.getLong("Abilities.Water.WakeFishing.Cooldown");
 		duration = config.getLong("Abilities.Water.WakeFishing.Duration");
@@ -179,7 +179,7 @@ public class WakeFishing extends WaterAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Water.WakeFishing.Description");
 	}
 
@@ -231,7 +231,7 @@ public class WakeFishing extends WaterAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Water.WakeFishing.Enabled");
 	}
 }

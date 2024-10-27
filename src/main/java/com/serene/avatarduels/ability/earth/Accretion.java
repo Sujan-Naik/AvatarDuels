@@ -67,12 +67,12 @@ public class Accretion extends EarthAbility implements AddonAbility {
 		}
 		
 		this.shot = false;
-		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.Accretion.Damage");
-		this.blocks = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.Accretion.Blocks");
-		this.selectRange = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.Accretion.SelectRange");
-		this.revertTime = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.Accretion.RevertTime");
-		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.Accretion.Cooldown");
-		this.throwSpeed = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.Accretion.ThrowSpeed");
+		this.damage = AvatarDuels.getConfig(getName()).getDouble("Abilities.Earth.Accretion.Damage");
+		this.blocks = AvatarDuels.getConfig(getName()).getInt("Abilities.Earth.Accretion.Blocks");
+		this.selectRange = AvatarDuels.getConfig(getName()).getInt("Abilities.Earth.Accretion.SelectRange");
+		this.revertTime = AvatarDuels.getConfig(getName()).getLong("Abilities.Earth.Accretion.RevertTime");
+		this.cooldown = AvatarDuels.getConfig(getName()).getLong("Abilities.Earth.Accretion.Cooldown");
+		this.throwSpeed = AvatarDuels.getConfig(getName()).getDouble("Abilities.Earth.Accretion.ThrowSpeed");
 		
 		this.tracker = new HashSet<>();
 		this.temps = new HashSet<>();
@@ -274,7 +274,7 @@ public class Accretion extends EarthAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Earth.Accretion.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Earth.Accretion.Enabled");
 	}
 	
 	@Override

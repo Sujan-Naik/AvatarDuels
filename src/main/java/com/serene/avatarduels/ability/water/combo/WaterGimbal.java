@@ -105,7 +105,7 @@ public class WaterGimbal extends WaterAbility implements AddonAbility, ComboAbil
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		sourceRange = config.getInt("Abilities.Water.WaterCombo.WaterGimbal.SourceRange");
 		cooldown = config.getLong("Abilities.Water.WaterCombo.WaterGimbal.Cooldown");
@@ -425,7 +425,7 @@ public class WaterGimbal extends WaterAbility implements AddonAbility, ComboAbil
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 	   return "* AvatarDuels Addon *\n" + config.getString("Abilities.Water.WaterCombo.WaterGimbal.Description");
 	}
 	
@@ -643,7 +643,7 @@ public class WaterGimbal extends WaterAbility implements AddonAbility, ComboAbil
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Water.WaterCombo.WaterGimbal.Enabled");
 	}
 }

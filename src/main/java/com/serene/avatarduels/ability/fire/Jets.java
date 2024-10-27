@@ -39,7 +39,7 @@ public class Jets extends FireAbility implements AddonAbility {
 			return;
 		}
 		
-		this.maxHeight = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Fire.Jets.MaxHeight");
+		this.maxHeight = AvatarDuels.getConfig(getName()).getInt("Abilities.Fire.Jets.MaxHeight");
 		
 		if (!checkHeight()) {
 			return;
@@ -47,13 +47,13 @@ public class Jets extends FireAbility implements AddonAbility {
 		
 		this.source = source;
 		this.oSpeed = player.getFlySpeed();
-		this.flySpeed = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.Jets.FlySpeed");
-		this.hoverSpeed = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.Jets.HoverSpeed");
-		this.duration = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.Jets.Duration");
-		this.maxCooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.Jets.Cooldown.Maximum");
-		this.minCooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.Jets.Cooldown.Minimum");
-		this.dmgThreshold = player.getHealth() - AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.Jets.DamageThreshold");
-		double speedThreshold = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.Jets.SpeedThreshold");
+		this.flySpeed = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.Jets.FlySpeed");
+		this.hoverSpeed = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.Jets.HoverSpeed");
+		this.duration = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.Jets.Duration");
+		this.maxCooldown = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.Jets.Cooldown.Maximum");
+		this.minCooldown = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.Jets.Cooldown.Minimum");
+		this.dmgThreshold = player.getHealth() - AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.Jets.DamageThreshold");
+		double speedThreshold = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.Jets.SpeedThreshold");
 		
 		if (source != null) {
 			this.gliding = true;
@@ -212,7 +212,7 @@ public class Jets extends FireAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Fire.Jets.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Fire.Jets.Enabled");
 	}
 	
 	@Override

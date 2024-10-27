@@ -66,7 +66,7 @@ public class Discharge extends LightningAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		damage = config.getDouble("Abilities.Fire.Discharge.Damage");
 		cooldown = config.getLong("Abilities.Fire.Discharge.Cooldown");
@@ -208,7 +208,7 @@ public class Discharge extends LightningAbility implements AddonAbility {
 
 	@Override
 	public double getCollisionRadius() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getDouble("Abilities.Fire.Discharge.AbilityCollisionRadius");
 	}
 
@@ -239,7 +239,7 @@ public class Discharge extends LightningAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Fire.Discharge.Description");
 	}
 
@@ -335,7 +335,7 @@ public class Discharge extends LightningAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Fire.Discharge.Enabled");
 	}
 }

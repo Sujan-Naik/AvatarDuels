@@ -81,7 +81,7 @@ public class LavaDisc extends LavaAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		damage = config.getDouble("Abilities.Earth.LavaDisc.Damage");
 		cooldown = config.getLong("Abilities.Earth.LavaDisc.Cooldown");
@@ -100,7 +100,7 @@ public class LavaDisc extends LavaAbility implements AddonAbility {
 	}
 
 	private boolean prepare() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		long sourceRegen = config.getLong("Abilities.Earth.LavaDisc.Source.RegenTime");
 		boolean lavaOnly = config.getBoolean("Abilities.Earth.LavaDisc.Source.LavaOnly");
@@ -223,7 +223,7 @@ public class LavaDisc extends LavaAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Earth.LavaDisc.Description");
 	}
 
@@ -311,7 +311,7 @@ public class LavaDisc extends LavaAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Earth.LavaDisc.Enabled");
 	}
 
@@ -497,7 +497,7 @@ public class LavaDisc extends LavaAbility implements AddonAbility {
 			this.player = player;
 			this.angle = 0;
 
-			ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+			ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 			damageBlocks = config.getBoolean("Abilities.Earth.LavaDisc.Destroy.BlockDamage");
 			meltable = config.getStringList("Abilities.Earth.LavaDisc.Destroy.AdditionalMeltableBlocks");

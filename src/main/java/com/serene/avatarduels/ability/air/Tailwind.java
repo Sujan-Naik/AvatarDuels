@@ -33,9 +33,9 @@ public class Tailwind extends AirAbility implements ComboAbility, AddonAbility {
 			return;
 		}
 		
-		cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Air.Tailwind.Cooldown");
-		duration = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Air.Tailwind.Duration");
-		speed = AvatarDuels.instance.getConfig(getName()).getInt("Combos.Air.Tailwind.Speed") - 1;
+		cooldown = AvatarDuels.getConfig(getName()).getLong("Combos.Air.Tailwind.Cooldown");
+		duration = AvatarDuels.getConfig(getName()).getLong("Combos.Air.Tailwind.Duration");
+		speed = AvatarDuels.getConfig(getName()).getInt("Combos.Air.Tailwind.Speed") - 1;
 		
 		start();
 	}
@@ -126,7 +126,7 @@ public class Tailwind extends AirAbility implements ComboAbility, AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Air.Tailwind.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Combos.Air.Tailwind.Enabled");
 	}
 	
 	@Override

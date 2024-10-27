@@ -66,7 +66,7 @@ public class EarthPillar extends EarthAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		height = config.getInt("Abilities.Earth.EarthPillar.Height");
 		range = config.getInt("Abilities.Earth.EarthPillar.Range");
@@ -154,7 +154,7 @@ public class EarthPillar extends EarthAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Earth.EarthPillar.Description");
 	}
 
@@ -210,7 +210,7 @@ public class EarthPillar extends EarthAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Earth.EarthPillar.Enabled");
 	}
 }

@@ -60,7 +60,7 @@ public class Backstab extends ChiAbility implements AddonAbility {
 	
 	@Override
 	public long getCooldown() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getLong("Abilities.Chi.Backstab.Cooldown");
 	}
 
@@ -96,7 +96,7 @@ public class Backstab extends ChiAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Chi.Backstab.Description");
 	}
 
@@ -108,7 +108,7 @@ public class Backstab extends ChiAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Chi.Backstab.Enabled");
 	}
 }

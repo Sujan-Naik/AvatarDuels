@@ -40,8 +40,8 @@ public class WeakeningJab extends ChiAbility implements ComboAbility, AddonAbili
 			return;
 		}
 		
-		duration = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Chi.WeakeningJab.Duration");
-		cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Chi.WeakeningJab.Cooldown");
+		duration = AvatarDuels.getConfig(getName()).getLong("Combos.Chi.WeakeningJab.Duration");
+		cooldown = AvatarDuels.getConfig(getName()).getLong("Combos.Chi.WeakeningJab.Cooldown");
 		
 		if (entity != null && !entities.contains(entity.getEntityId())) {
 			entities.add(entity.getEntityId());
@@ -131,7 +131,7 @@ public class WeakeningJab extends ChiAbility implements ComboAbility, AddonAbili
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Chi.WeakeningJab.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Combos.Chi.WeakeningJab.Enabled");
 	}
 	
 	public static boolean isAffected(Entity e) {
@@ -139,6 +139,6 @@ public class WeakeningJab extends ChiAbility implements ComboAbility, AddonAbili
 	}
 	
 	public static double getModifier() {
-		return AvatarDuels.instance.getConfig("WeakeningJab").getDouble("Combos.Chi.WeakeningJab.Modifier");
+		return AvatarDuels.getConfig("WeakeningJab").getDouble("Combos.Chi.WeakeningJab.Modifier");
 	}
 }

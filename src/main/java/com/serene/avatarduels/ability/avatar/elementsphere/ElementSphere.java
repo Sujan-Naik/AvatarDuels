@@ -135,7 +135,7 @@ public class ElementSphere extends AvatarAbility implements AddonAbility, MultiA
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("ElementSphere");
 		
 		airUses = config.getInt("Abilities.Avatar.ElementSphere.Air.Uses");
 		fireUses = config.getInt("Abilities.Avatar.ElementSphere.Fire.Uses");
@@ -388,7 +388,7 @@ public class ElementSphere extends AvatarAbility implements AddonAbility, MultiA
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("ElementSphere");
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Avatar.ElementSphere.Description");
 	}
 
@@ -400,7 +400,7 @@ public class ElementSphere extends AvatarAbility implements AddonAbility, MultiA
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("ElementSphere");
 		return config.getBoolean("Abilities.Avatar.ElementSphere.Enabled");
 	}
 
