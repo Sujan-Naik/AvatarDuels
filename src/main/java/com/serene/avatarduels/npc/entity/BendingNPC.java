@@ -3,10 +3,7 @@ package com.serene.avatarduels.npc.entity;
 import com.mojang.authlib.GameProfile;
 import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.Element;
-import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
-import com.serene.avatarduels.npc.entity.AI.bending.BlastManager;
-import com.serene.avatarduels.npc.entity.AI.bending.BreathManager;
-import com.serene.avatarduels.npc.entity.AI.bending.SourceManager;
+import com.serene.avatarduels.npc.entity.AI.bending.*;
 import com.serene.avatarduels.npc.entity.AI.goal.complex.bending.BendingKillEntity;
 import com.serene.avatarduels.npc.utils.Vec3Utils;
 import net.minecraft.server.MinecraftServer;
@@ -22,6 +19,12 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 public class BendingNPC extends HumanEntity {
+
+    private MobilityManager mobilityManager;
+
+    public MobilityManager getMobilityManager() {
+        return mobilityManager;
+    }
 
     private BreathManager breathManager;
 
@@ -56,7 +59,7 @@ public class BendingNPC extends HumanEntity {
         this.sourceManager = new SourceManager(this);
         this.blastManager = new BlastManager(this);
         this.breathManager = new BreathManager(this);
-
+        this.mobilityManager = new MobilityManager(this);
     }
 
 

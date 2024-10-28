@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
 
 public class MobilityManager {
 
-    private HumanEntity NMSPlayer;
+    private final HumanEntity NMSPlayer;
 
     public MobilityManager(HumanEntity NMSPlayer) {
         this.NMSPlayer = NMSPlayer;
@@ -56,35 +56,70 @@ public class MobilityManager {
 
         // Handle shift before movement
         if (shiftBefore) {
-            Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, true));
-            player.setSneaking(true);
 
             // Optionally look at the ground while shifting
             if (shouldLookAtGroundWhileShifting) {
-                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, NMSPlayer.getOnPos().getCenter());
-            }
+                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, NMSPlayer.getOnPos().getCenter().subtract(0,2,0));
 
-            // If click should happen before releasing shift, schedule that
-            if (shouldReleaseShiftBeforeClick) {
                 Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-                    if (shouldClick) {
-                        Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
-                        player.swingMainHand();
+                    NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, NMSPlayer.getOnPos().getCenter().subtract(0,2,0));
+
+                    Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, true));
+                    player.setSneaking(true);
+
+                    // If click should happen before releasing shift, schedule that
+                    if (shouldReleaseShiftBeforeClick) {
+                        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                            Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+                            player.setSneaking(false);
+
+                            if (shouldClick) {
+                                Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                                player.swingMainHand();
+                            }
+
+                        }, shiftDuration/50);
+                    } else {
+                        // Just release shift after duration
+                        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+
+                            if (shouldClick) {
+                                Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                                player.swingMainHand();
+                            }
+
+                            Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+                            player.setSneaking(false);
+                        }, shiftDuration/50);
                     }
-                    // Release shift after click
-                    Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
-                    player.setSneaking(false);
-                }, shiftDuration);
+                }, 5L);
             } else {
-                // Just release shift after duration
-                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-                    if (shouldClick) {
-                        Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
-                        player.swingMainHand();
-                    }
-                    Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
-                    player.setSneaking(false);
-                }, shiftDuration);
+                // If click should happen before releasing shift, schedule that
+                if (shouldReleaseShiftBeforeClick) {
+                    Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+
+                        // Release shift after click
+                        Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+                        player.setSneaking(false);
+
+
+                        if (shouldClick) {
+                            Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                            player.swingMainHand();
+                        }
+
+                    }, shiftDuration/50);
+                } else {
+                    // Just release shift after duration
+                    Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                        if (shouldClick) {
+                            Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                            player.swingMainHand();
+                        }
+                        Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+                        player.setSneaking(false);
+                    }, shiftDuration/50);
+                }
             }
         } else {
             // If shiftBefore is false, we can perform actions immediately

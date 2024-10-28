@@ -8,6 +8,7 @@ import com.projectkorra.projectkorra.configuration.ConfigManager;
 import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.configuration.AvatarDuelsConfig;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.BendingUseAbility;
+import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility.SourcedMovementAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.RangedAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.charged.ChargedAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.sourced.SourcedAbility;
@@ -28,6 +29,13 @@ import static com.projectkorra.projectkorra.object.Preset.config;
 import static com.serene.avatarduels.AvatarDuels.PK_CONFIG;
 
 public enum AbilityUsages {
+
+    //Mobility
+    AIRBLAST("AirBlast", (player) -> {
+        player.getMobilityManager().useAbility(CoreAbility.getAbility("AirBlast"), true, 500, true, true, false, true);
+    }, (npc) -> new SourcedMovementAbility("AirBlast", npc, "AirBlast", PK_CONFIG.getDouble("Abilities.Air.AirBlast.Range"))),
+
+
 
 
     // AIR ABILITIES
