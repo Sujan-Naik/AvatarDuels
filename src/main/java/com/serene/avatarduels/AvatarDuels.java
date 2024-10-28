@@ -11,6 +11,8 @@ import com.projectkorra.projectkorra.airbending.AirShield;
 import com.projectkorra.projectkorra.firebending.FireShield;
 import com.serene.avatarduels.command.Commands;
 import com.serene.avatarduels.configuration.AvatarDuelsConfig;
+import com.serene.avatarduels.duel.DuelManager;
+import com.serene.avatarduels.duel.command.DuelCommand;
 import com.serene.avatarduels.listener.AbilityListener;
 import com.serene.avatarduels.listener.CommandListener;
 import com.serene.avatarduels.listener.JCListener;
@@ -66,6 +68,12 @@ public class AvatarDuels extends JavaPlugin {
 	private ParticleAdapter particleAdapter;
 	private PotionEffectAdapter potionEffectAdapter;
 
+	private DuelManager duelManager;
+
+	public DuelManager getDuelManager() {
+		return duelManager;
+	}
+
 	@Override
 	public void onEnable() {
 		instance = this;
@@ -73,6 +81,7 @@ public class AvatarDuels extends JavaPlugin {
 
 		PK_CONFIG = ProjectKorra.plugin.getConfig();
 		this.setupConfig();
+		this.duelManager= new DuelManager();
 
 
 		soundElement = new SubElement("Sound", Element.AIR, ElementType.BENDING, this);
@@ -130,8 +139,10 @@ public class AvatarDuels extends JavaPlugin {
 			log.info("Failed to submit statistics for MetricsLite.");
 		}
 
+
 		this.getServer().getPluginManager().registerEvents(new SereneNPCsListener(), this);
 		this.getCommand("SereneNPCs").setExecutor(new SerenityCommand());
+		this.getCommand("duel").setExecutor(new DuelCommand());
 
 		NPCUtils.initUUID(0, this);
 

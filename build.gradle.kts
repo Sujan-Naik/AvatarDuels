@@ -23,6 +23,9 @@ repositories {
     maven {
         url = uri("https://repo1.maven.org/maven2/")
     }
+
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://repo.onarandombox.com/content/groups/public/")
 }
 
 
@@ -36,7 +39,8 @@ dependencies {
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 // https://mvnrepository.com/artifact/io.netty/netty-all
     implementation("io.netty:netty-all:5.0.0.Alpha2")
-
+    compileOnly("me.moros:gaia-api:2.0.0-SNAPSHOT")
+    compileOnly("com.onarandombox.multiversecore:Multiverse-Core:4.3.1")
 }
 
 group = "com.avatarduels"
