@@ -89,7 +89,7 @@ public class SerenityCommand implements CommandExecutor {
                             if (strings.length == 1) {
                                 AbilityUsages ability = getRandom(Arrays.stream(AbilityUsages.values()).collect(Collectors.toSet()));
                                 bendingNPC.useAbility(ability);
-                                Bukkit.broadcastMessage(ability.getName());
+                                // Bukkit.broadcastMessage(ability.getName());
                             } else {
                                 bendingNPC.useAbility(AbilityUsages.valueOf(strings[1]));
                             }

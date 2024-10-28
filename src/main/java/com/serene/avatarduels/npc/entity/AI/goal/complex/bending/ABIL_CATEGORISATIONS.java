@@ -22,6 +22,7 @@ public class ABIL_CATEGORISATIONS {
     public static final List<AbilityUsages> CHUNKY = List.of(SONICBLAST, FIREBLASTCHARGED );
     public static final List<AbilityUsages> SHREDDER = List.of(ARCSPARK);
     public static final List<AbilityUsages> SHIELD = List.of(FIRESHIELD, WALLOFFIRE);
+    public static final List<AbilityUsages> MOVEMENT = List.of(AIRBLAST, CATAPULT, FIREJET, EARTHSURF, AIRSCOOTER);
 
 
     public static List<AbilityUsages> mergeCategories(List<AbilityUsages>... categories) {

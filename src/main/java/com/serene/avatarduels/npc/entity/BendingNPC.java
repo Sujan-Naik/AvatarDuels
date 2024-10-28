@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -54,6 +55,20 @@ public class BendingNPC extends HumanEntity {
         isBusyBending = busyBending;
     }
 
+    public boolean hasCompleteLineOfSight(Entity entity) {
+        if (entity.level() != this.level()) {
+            return false;
+        } else {
+            return hasClearRay(new Vec3(this.getX(), this.getEyeY(), this.getZ()),  new Vec3(entity.getX(), entity.getEyeY(), entity.getZ()), entity)
+            && hasClearRay(new Vec3(this.getX(), this.getY(), this.getZ()),  new Vec3(entity.getX(), entity.getY(), entity.getZ()), entity);
+
+        }
+    }
+
+    private boolean hasClearRay(Vec3 vec3d, Vec3 vec3d1, Entity entity){
+        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+    }
+
     public BendingNPC(MinecraftServer server, ServerLevel world, GameProfile profile, ClientInformation clientOptions) {
         super(server, world, profile, clientOptions);
         this.sourceManager = new SourceManager(this);
@@ -66,7 +81,6 @@ public class BendingNPC extends HumanEntity {
 
     public void enableBending(){
         Player player = Bukkit.getPlayer(this.getUUID());
-
         BendingPlayer.getOrLoadOfflineAsync(player).thenRun(() -> {
             BendingPlayer bPlayer =  BendingPlayer.getBendingPlayer(player);
             Arrays.stream(Element.getAllElements()).forEach(element -> {
@@ -76,8 +90,13 @@ public class BendingNPC extends HumanEntity {
             Arrays.stream(Element.getAllSubElements()).forEach(subElement -> {
                 bPlayer.addSubElement(subElement);
             });
+            bPlayer.togglePassive(Element.CHI);
+            player.setGlowing(true);
+            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(100);
+            player.setHealth(100);
 
         });
+
     }
 
     public void startDuel(LivingEntity target){

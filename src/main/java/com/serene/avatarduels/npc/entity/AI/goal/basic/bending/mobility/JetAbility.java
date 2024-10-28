@@ -1,8 +1,10 @@
 package com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility;
 
 import com.serene.avatarduels.npc.entity.BendingNPC;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import com.projectkorra.projectkorra.ability.CoreAbility;
 
 public class JetAbility extends MovementAbility {
 
@@ -14,8 +16,10 @@ public class JetAbility extends MovementAbility {
     @Override
     public void tick() {
         super.tick();
-        if (bPlayer.getBoundAbility() == null){
+        if ( !CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass())){
             remove();
+        } else {
+            npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.FEET);
         }
     }
 

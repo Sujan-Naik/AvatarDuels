@@ -76,6 +76,8 @@ public class MobilityManager {
                             player.setSneaking(false);
 
                             if (shouldClick) {
+                                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
+
                                 Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
                                 player.swingMainHand();
                             }
@@ -86,6 +88,9 @@ public class MobilityManager {
                         Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
 
                             if (shouldClick) {
+                                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
+
+
                                 Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
                                 player.swingMainHand();
                             }
@@ -106,6 +111,8 @@ public class MobilityManager {
 
 
                         if (shouldClick) {
+                            NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
+
                             Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
                             player.swingMainHand();
                         }
@@ -115,6 +122,8 @@ public class MobilityManager {
                     // Just release shift after duration
                     Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
                         if (shouldClick) {
+                            NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
+
                             Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
                             player.swingMainHand();
                         }

@@ -19,10 +19,16 @@ public class BendingKillEntity extends MasterCombat {
     private NPC_STATES state;
     private int lastChangedState;
 
-    private static final int STATE_CHANGE_TICK_COOLDOWN = 60;
+    private static final int STATE_CHANGE_TICK_COOLDOWN = 80;
 
     private int lastAttemptedAbility;
-    private static final int ABILITY_ATTEMPT_COOLDOWN = 5;
+    private static final int ABILITY_ATTEMPT_COOLDOWN = 3;
+
+    private int lastSeen;
+    private static final int ENTITY_MUST_SEE_COOLDOWN = 20;
+
+    private int lastStrafed;
+    private static final int STRAFE_COOLDOWN = 2;
 
     public BendingKillEntity(String name, BendingNPC npc, LivingEntity target) {
         super(name, npc);
@@ -35,29 +41,45 @@ public class BendingKillEntity extends MasterCombat {
 
         this.lastChangedState = npc.tickCount - STATE_CHANGE_TICK_COOLDOWN + 1;
         this.lastAttemptedAbility = npc.tickCount;
+        this.lastSeen = npc.tickCount;
+        this.lastStrafed = npc.tickCount;
         npc.getTargetSelector().setCurrentTarget(target);
     }
 
 
-    private static final double DISTANCE_TOLERANCE = 3; // Tolerance value to account for floating point precision
+    private static final double DISTANCE_TOLERANCE = 2; // Tolerance value to account for floating point precision
 
 
     @Override
     public void tick() {
         super.tick();
 
+        if (entity == null){
+            this.setFinished(true);
+            return;
+        }
         double distance = Math.sqrt(npc.distanceToSqr(entity));
         double health = npc.getHealth();
 
         boolean canChangeState = npc.tickCount - lastChangedState > STATE_CHANGE_TICK_COOLDOWN;
 
-        if (!npc.hasLineOfSight(entity) ) {
+        if ( npc.tickCount - lastStrafed > STRAFE_COOLDOWN){
+            lastStrafed = npc.tickCount;
+            npc.getMoveControl().strafe(0,0.1f);
+        }
+
+        if (!npc.hasCompleteLineOfSight(entity) && npc.tickCount - lastSeen > ENTITY_MUST_SEE_COOLDOWN) {
             if (!movementGoalSelector.doingGoal("Enter LOS")) {
                 movementGoalSelector.removeAllGoals();
                 movementGoalSelector.addGoal(new MoveToEntity("Enter LOS", npc, 1, 5, entity));
+                // Bukkit.broadcastMessage("Attempting to enter LOS");
+
             }
         } else {
+            lastSeen = npc.tickCount;
             if (movementGoalSelector.doingGoal("Enter LOS")) {
+                // Bukkit.broadcastMessage("Removed defunt LOS goal");
+
                 movementGoalSelector.removeCurrentGoal();
             }
         }
@@ -74,19 +96,21 @@ public class BendingKillEntity extends MasterCombat {
                 widenTheGap(idealRange);
             } else {
                     // Within the tolerance range of the ideal distance, switch to circling
-                circleTarget(idealRange + 2);
+                // Bukkit.broadcastMessage("circling");
+                circleTarget(idealRange);
             }
 
             lastChangedState = npc.tickCount;
-            Bukkit.broadcastMessage(npc.displayName + ": " + state.name());
+            // Bukkit.broadcastMessage(npc.displayName + ": " + state.name());
             if (npc.isBusyBending()){
-                Bukkit.broadcastMessage("Busy");
+                // Bukkit.broadcastMessage("Busy");
             }
         }
 
 
-        if (npc.tickCount - lastAttemptedAbility > ABILITY_ATTEMPT_COOLDOWN){
-            bendingGoalSelector.addGoal(getRandom(state.getAbilityUsagesList()).makeGoal(npc));
+        if (npc.tickCount - lastAttemptedAbility > ABILITY_ATTEMPT_COOLDOWN && !npc.isBusyBending()){
+            AbilityUsages usage = getRandom(state.getAbilityUsagesList());
+            bendingGoalSelector.addGoal(usage.makeGoal(npc));
             this.lastAttemptedAbility = npc.tickCount;
 
 
@@ -122,12 +146,12 @@ public class BendingKillEntity extends MasterCombat {
 
 
         // Remove any existing movement goals if the NPC is currently chasing
-        if (movementGoalSelector.doingGoal("Chase")) {
+        if (movementGoalSelector.doingGoal("Chase") || movementGoalSelector.doingGoal("Run")) {
             movementGoalSelector.removeCurrentGoal();
         }
 
         // Define an angular speed (you can adjust this value as needed)
-        double angularSpeed = 60.0; // Adjust this value based on desired circling speed
+        double angularSpeed = Math.toRadians(60); // Adjust this value based on desired circling speed
 
         // Add the CircleEntity goal to the movement goal selector
         if (!movementGoalSelector.hasGoal()) {

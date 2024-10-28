@@ -32,6 +32,7 @@ public abstract class MovementAbility extends BendingUseAbility {
 
     @Override
     public void tick(){
+        super.tick();
         if (goalPos != null) {
             if (getDistance() > requiredDistance ) {
 //                npc.getNavigation().moveTo(goalPos.x, goalPos.y, goalPos.z, 10);

@@ -2,6 +2,7 @@ package com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility;
 
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.BendingUseAbility;
 import com.serene.avatarduels.npc.entity.BendingNPC;
+import com.projectkorra.projectkorra.ability.CoreAbility;
 
 public class SourcedMovementAbility extends MovementAbility {
 
@@ -16,7 +17,7 @@ public class SourcedMovementAbility extends MovementAbility {
     @Override
     public void tick() {
         super.tick();
-        if ( bPlayer.getBoundAbility() == null){
+        if (  !CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass())){
             remove();
         }
     }

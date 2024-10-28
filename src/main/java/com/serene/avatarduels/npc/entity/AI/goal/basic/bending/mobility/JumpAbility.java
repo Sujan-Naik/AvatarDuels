@@ -1,5 +1,6 @@
 package com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility;
 
+import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.BendingUseAbility;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 
@@ -16,7 +17,7 @@ public class JumpAbility extends MovementAbility {
     @Override
     public void tick() {
         super.tick();
-        if (npc.onGround() && bPlayer.getBoundAbility() == null){
+        if (npc.onGround() &&  !CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass())){
             remove();
         }
     }

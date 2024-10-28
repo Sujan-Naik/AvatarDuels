@@ -57,7 +57,7 @@ public class MoveForward extends Movement {
         BlockPos highestBottom = null;
         for (BlockPos bp : BlockPos.betweenClosed(BlockPos.containing(floorBlockLoc.add(0, 1, 0)), BlockPos.containing(floorBlockLoc.subtract(0, 3, 0)))) {
             if (Vec3Utils.isBlockSolid(bp.getCenter(), npc.level())) {
-//                Bukkit.broadcastMessage("there is a floor");
+//                // Bukkit.broadcastMessage("there is a floor");
                 if (highestBottom == null || bp.getY() > highestBottom.getY()) {
                     highestBottom = bp;
                 }
