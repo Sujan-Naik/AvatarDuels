@@ -55,7 +55,7 @@ public class Bloodbending extends BloodAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("Blood");
 
 		nightOnly = config.getBoolean("Abilities.Water.Blood.NightOnly");
 		fullMoonOnly = config.getBoolean("Abilities.Water.Blood.FullMoonOnly");
@@ -267,7 +267,7 @@ public class Bloodbending extends BloodAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Water.Blood.Description");
 	}
 
@@ -371,7 +371,7 @@ public class Bloodbending extends BloodAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("Blood");
 		return config.getBoolean("Abilities.Water.Blood.Enabled");
 	}
 }

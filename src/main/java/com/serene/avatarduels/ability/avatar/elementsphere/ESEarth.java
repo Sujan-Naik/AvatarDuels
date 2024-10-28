@@ -69,7 +69,7 @@ public class ESEarth extends AvatarAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("ElementSphere");
 		revertDelay = config.getLong("Abilities.Avatar.ElementSphere.Earth.ImpactRevert");
 		damage = config.getDouble("Abilities.Avatar.ElementSphere.Earth.Damage");
 		impactSize = config.getInt("Abilities.Avatar.ElementSphere.Earth.ImpactCraterSize");
@@ -218,7 +218,7 @@ public class ESEarth extends AvatarAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("ElementSphere");
 		return config.getBoolean("Abilities.Avatar.ElementSphere.Enabled");
 	}
 }

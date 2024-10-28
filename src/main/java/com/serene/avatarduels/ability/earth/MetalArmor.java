@@ -48,7 +48,7 @@ public class MetalArmor extends EarthAbility implements AddonAbility {
 	}
 
 	private void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("EarthArmor");
 
 		useIronArmor = config.getBoolean("Abilities.Earth.EarthArmor.UseIronArmor");
 		resistStrength = config.getInt("Abilities.Earth.EarthArmor.Resistance.Strength");
@@ -206,7 +206,7 @@ public class MetalArmor extends EarthAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("EarthArmor");
 		return config.getBoolean("Abilities.Earth.EarthArmor.Enabled");
 	}
 }

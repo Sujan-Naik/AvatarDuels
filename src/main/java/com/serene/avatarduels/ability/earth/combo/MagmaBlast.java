@@ -86,7 +86,7 @@ public class MagmaBlast extends LavaAbility implements AddonAbility, ComboAbilit
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		maxSources = config.getInt("Abilities.Earth.EarthCombo.MagmaBlast.MaxShots");
 		sourceRange = config.getInt("Abilities.Earth.EarthCombo.MagmaBlast.SearchRange");
@@ -443,7 +443,7 @@ public class MagmaBlast extends LavaAbility implements AddonAbility, ComboAbilit
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Earth.EarthCombo.MagmaBlast.Description");
 	}
 
@@ -589,7 +589,7 @@ public class MagmaBlast extends LavaAbility implements AddonAbility, ComboAbilit
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Earth.EarthCombo.MagmaBlast.Enabled");
 	}
 }

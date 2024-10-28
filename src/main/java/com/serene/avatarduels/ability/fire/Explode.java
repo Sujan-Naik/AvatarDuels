@@ -34,11 +34,11 @@ public class Explode extends CombustionAbility implements AddonAbility {
 	public Explode(Player player) {
 		super(player);
 		
-		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.Explode.Cooldown");
-		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.Explode.Damage");
-		this.radius = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.Explode.Radius");
-		this.knockback = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.Explode.Knockback");
-		this.range = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.Explode.Range");
+		this.cooldown = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.Explode.Cooldown");
+		this.damage = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.Explode.Damage");
+		this.radius = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.Explode.Radius");
+		this.knockback = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.Explode.Knockback");
+		this.range = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.Explode.Range");
 		
 		start();
 	}
@@ -125,7 +125,7 @@ public class Explode extends CombustionAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Fire.Explode.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Fire.Explode.Enabled");
 	}
 
 	@Override

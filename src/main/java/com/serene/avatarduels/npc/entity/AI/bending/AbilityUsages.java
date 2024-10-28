@@ -25,106 +25,197 @@ import java.util.HashMap;
 
 import static com.projectkorra.projectkorra.ability.CoreAbility.getConfig;
 import static com.projectkorra.projectkorra.object.Preset.config;
-import static com.serene.avatarduels.AvatarDuels.JC_CONFIG;
 import static com.serene.avatarduels.AvatarDuels.PK_CONFIG;
 
 public enum AbilityUsages {
 
 
-    TORRENT("Torrent", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("Torrent"), 1000, true);
-    }, (npc) -> new SourcedAbility("Torrent", npc, "Torrent", PK_CONFIG.getDouble("Abilities.Water.Torrent.Range"),
-            PK_CONFIG.getDouble("Abilities.Water.Torrent.SelectRange"), Element.WATER)),
+    // AIR ABILITIES
+    AIRBREATH("AirBreath", (player) -> {
+        player.getBreathManager().useAbility(CoreAbility.getAbility("AirBreath"), AvatarDuels.getConfig("AirBreath").getLong("Abilities.Air.AirBreath.Duration"));
+    }, (npc) -> new ChargedAbility("AirBreath", npc, "AirBreath", AvatarDuels.getConfig("AirBreath").getDouble("Abilities.Air.AirBreath.Range"), null)),
 
-    ICESPIKE("IceSpike", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("IceSpike"));
-    }, (npc) -> new SourcedAbility("IceSpike", npc, "IceSpike", PK_CONFIG.getDouble("Abilities.Water.IceSpike.Range"),
-            PK_CONFIG.getDouble("Abilities.Water.IceSpike.Range")/2, Element.WATER)),
 
-    SURGE("Surge", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("Surge"));
-    }, (npc) -> new SourcedAbility("Surge", npc, "Surge", PK_CONFIG.getDouble("Abilities.Water.Surge.Wave.Range"),
-            PK_CONFIG.getDouble("Abilities.Water.Surge.Wave.SelectRange"), Element.WATER)),
 
-    WATERMANIPULATION("WaterManipulation", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("WaterManipulation"));
-    }, (npc) -> new SourcedAbility("WaterManipulation", npc, "WaterManipulation", PK_CONFIG.getDouble("Abilities.Water.WaterManipulation.Range"),
-            PK_CONFIG.getDouble("Abilities.Water.WaterManipulation.SelectRange"), Element.WATER)),
+    AIRBURST("AirBurst", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("AirBurst"), PK_CONFIG.getLong("Abilities.Air.AirBurst.ChargeTime"));
+    }, (npc) -> new ChargedAbility("AirBurst", npc, "AirBurst", PK_CONFIG.getDouble("Abilities.Air.AirBurst.Range"))),
 
+
+    AIRPUNCH("AirPunch", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("AirPunch"), AvatarDuels.getConfig("AirPunch").getInt("Abilities.Air.AirPunch.Shots"));
+    }, (npc) -> new RangedAbility("AirPunch", npc, "AirPunch", AvatarDuels.getConfig("AirPunch").getDouble("Abilities.Air.AirPunch.Range"))),
+
+    AIRSHIELD("AirShield", (player) -> {
+        player.getBreathManager().useAbility(CoreAbility.getAbility("AirShield"), (PK_CONFIG.getLong("Abilities.Air.AirShield.Duration") == 0) ? 2000 : PK_CONFIG.getLong("Abilities.Air.AirShield.Duration") );
+    }, (npc) -> new ChargedAbility("AirShield", npc, "AirShield", 20)),
+
+
+    AIRSUCTION("AirSuction", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("AirSuction"), PK_CONFIG.getLong("Abilities.Air.AirSuction.ChargeTime"));
+    }, (npc) -> new ChargedAbility("AirSuction", npc, "AirSuction", PK_CONFIG.getDouble("Abilities.Air.AirSuction.Range"))),
+
+
+    SUFFOCATE("Suffocate", (player) -> {
+        player.getBreathManager().useAbility(CoreAbility.getAbility("Suffocate"), PK_CONFIG.getLong("Abilities.Air.Suffocate.ChargeTime") + 5000);
+    }, (npc) -> new ChargedAbility("Suffocate", npc, "Suffocate", PK_CONFIG.getDouble("Abilities.Air.Suffocate.Range"))),
+
+    TORNADO("Tornado", (player) -> {
+        player.getBreathManager().useAbility(CoreAbility.getAbility("Tornado"), PK_CONFIG.getLong("Abilities.Air.Tornado.Duration"));
+    }, (npc) -> new ChargedAbility("Tornado", npc, "Tornado", PK_CONFIG.getDouble("Abilities.Air.Tornado.Range"))),
+
+
+    // EARTH ABILITIES
+
+
+
+
+//    EARTHARMOR("EarthArmor", (player) -> {
+//        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthArmor"));
+//    }, (npc) -> new SourcedAbility("EarthArmor", npc, "EarthArmor", PK_CONFIG.getDouble("Abilities.Earth.EarthArmor.Range"),
+//            PK_CONFIG.getDouble("Abilities.Earth.EarthArmor.SelectRange"))),
 
     EARTHBLAST("EarthBlast", (player) -> {
         player.getSourceManager().useAbility(CoreAbility.getAbility("EarthBlast"));
     }, (npc) -> new SourcedAbility("EarthBlast", npc, "EarthBlast", PK_CONFIG.getDouble("Abilities.Earth.EarthBlast.Range"),
-            PK_CONFIG.getDouble("Abilities.Earth.EarthBlast.SelectRange"), Element.EARTH)),
+            PK_CONFIG.getDouble("Abilities.Earth.EarthBlast.SelectRange"))),
 
-    EARTHSHARD("EarthShard", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthShard"));
-    }, (npc) -> new SourcedAbility("EarthShard", npc, "EarthShard", JC_CONFIG.getDouble("Abilities.Earth.EarthShard.AbilityRange"),
-            JC_CONFIG.getDouble("Abilities.Earth.EarthShard.PrepareRange"), Element.EARTH)),
+    EARTHKICK("EarthKick", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthKick"));
+    }, (npc) -> new SourcedAbility("EarthKick", npc, "EarthKick", AvatarDuels.getConfig("EarthKick").getDouble("Abilities.Earth.EarthKick.Range"),
+            AvatarDuels.getConfig("EarthKick").getDouble("Abilities.Earth.EarthKick.SelectRange"))),
 
-    MUDSURGE("MudSurge", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("MudSurge"));
-    }, (npc) -> new SourcedAbility("MudSurge", npc, "MudSurge", 40,
-            JC_CONFIG.getDouble("Abilities.Earth.MudSurge.SourceRange"), Element.EARTH)),
+//    FISSURE("Fissure", (player) -> {
+//        player.getBlastManager().useAbility(CoreAbility.getAbility("Fissure"));
+//    }, (npc) -> new RangedAbility("Fissure", npc, "Fissure", AvatarDuels.getConfig("Fissure").getDouble("Abilities.Earth.Fissure.Range"))),
 
-    EARTHLINE("EarthLine", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthLine"));
-    }, (npc) -> new SourcedAbility("EarthLine", npc, "EarthLine", JC_CONFIG.getDouble("Abilities.Earth.EarthLine.Range"),
-            JC_CONFIG.getDouble("Abilities.Earth.EarthLine.PrepareRange"), Element.EARTH)),
+//    LAVADISC("LavaDisc", (player) -> {
+//        player.getSourceManager().useAbility(CoreAbility.getAbility("LavaDisc"));
+//    }, (npc) -> new SourcedAbility("LavaDisc", npc, "LavaDisc", 30,
+//            AvatarDuels.getConfig("LavaDisc").getDouble("Abilities.Earth.LavaDisc.Source.Range"))),
+
+    LAVAFLUX("LavaFlux", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("LavaFlux"));
+    }, (npc) -> new RangedAbility("LavaFlux", npc, "LavaFlux", AvatarDuels.getConfig("LavaFlux").getDouble("Abilities.Earth.LavaFlux.Range"))),
+
+    LAVASURGE("LavaSurge", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("LavaSurge"));
+    }, (npc) -> new SourcedAbility("LavaSurge", npc, "LavaSurge", 30,
+            AvatarDuels.getConfig("LavaSurge").getInt("Abilities.Earth.LavaSurge.SelectRange")) ),
+
+//    LAVATHROW("LavaThrow", (player) -> {
+//        player.getSourceManager().useAbility(CoreAbility.getAbility("LavaThrow"));
+//    }, (npc) -> new SourcedAbility("LavaThrow", npc, "LavaThrow", AvatarDuels.getConfig("LavaThrow").getDouble("Abilities.Earth.LavaThrow.Range"),
+//            AvatarDuels.getConfig("LavaThrow").getDouble("Abilities.Earth.LavaThrow.SelectRange")) ),
+
+    MAGMASLAP("MagmaSlap", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("MagmaSlap"));
+    }, (npc) -> new RangedAbility("MagmaSlap", npc, "MagmaSlap", AvatarDuels.getConfig("MagmaSlap").getDouble("Abilities.Earth.MagmaSlap.Range"))),
+
+
+    METALFRAGMENTS("MetalFragments", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("MetalFragments"), 1000L, true);
+    }, (npc) -> new SourcedAbility("MetalFragments", npc, "MetalFragments", 20,
+            AvatarDuels.getConfig("MetalFragments").getDouble("Abilities.Earth.MetalFragments.SourceRange")) ),
+
+    SANDBLAST("SandBlast", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("SandBlast"));
+    }, (npc) -> new SourcedAbility("SandBlast", npc, "SandBlast", AvatarDuels.getConfig("SandBlast").getDouble("Abilities.Earth.SandBlast.Range"),
+            AvatarDuels.getConfig("SandBlast").getDouble("Abilities.Earth.SandBlast.SourceRange"))),
 
     SHOCKWAVE("Shockwave", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("Shockwave"), ProjectKorra.plugin.getConfig().getLong("Abilities.Earth.Shockwave.ChargeTime"));
-    }, (npc) -> new ChargedAbility("Shockwave", npc, "Shockwave", PK_CONFIG.getDouble("Abilities.Earth.Shockwave.Range"),
-            null)),
+        player.getBlastManager().useAbility(CoreAbility.getAbility("Shockwave"), ProjectKorra.plugin.getConfig().getLong("Abilities.Earth.Shockwave.ChargeTime"));
+    }, (npc) -> new ChargedAbility("Shockwave", npc, "Shockwave", PK_CONFIG.getDouble("Abilities.Earth.Shockwave.Range"), null)),
 
     ACCRETION("Accretion", (player) -> {
         player.getSourceManager().useAbility(CoreAbility.getAbility("Accretion"));
     }, (npc) -> new SourcedAbility("Accretion", npc, "Accretion", 25,
-            AvatarDuels.plugin.getConfig("Accretion").getDouble("Abilities.Earth.Accretion.SelectRange"), Element.EARTH)),
+                                   AvatarDuels.getConfig("Accretion").getDouble("Abilities.Earth.Accretion.SelectRange"))),
+
+
+    EARTHSHARD("EarthShard", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthShard"));
+    }, (npc) -> new SourcedAbility("EarthShard", npc, "EarthShard", AvatarDuels.getConfig("EarthShard").getDouble("Abilities.Earth.EarthShard.AbilityRange"),
+            AvatarDuels.getConfig("EarthShard").getDouble("Abilities.Earth.EarthShard.PrepareRange"))),
+
+    MUDSURGE("MudSurge", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("MudSurge"));
+    }, (npc) -> new SourcedAbility("MudSurge", npc, "MudSurge", 40,
+            AvatarDuels.getConfig("MudSurge").getDouble("Abilities.Earth.MudSurge.SourceRange"))),
+
+    EARTHLINE("EarthLine", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthLine"));
+    }, (npc) -> new SourcedAbility("EarthLine", npc, "EarthLine", AvatarDuels.getConfig("EarthLine").getDouble("Abilities.Earth.EarthLine.Range"),
+            AvatarDuels.getConfig("EarthLine").getDouble("Abilities.Earth.EarthLine.PrepareRange"))),
+
 
     AIRBLADE("AirBlade", (player) -> {
         player.getBlastManager().useAbility(CoreAbility.getAbility("AirBlade"));
-    }, (npc) -> new RangedAbility("AirBlade", npc, "AirBlade", JC_CONFIG.getDouble("Abilities.Air.AirBlade.Range"))),
+    }, (npc) -> new RangedAbility("AirBlade", npc, "AirBlade", AvatarDuels.getConfig("AirBlade").getDouble("Abilities.Air.AirBlade.Range"))),
 
 
     AIRSWIPE("AirSwipe", (player) -> {
         player.getBlastManager().useAbility(CoreAbility.getAbility("AirSwipe"));
-    }, (npc) -> new RangedAbility("AirSwipe", npc, "AirSwipe", JC_CONFIG.getDouble("Abilities.Air.AirSwipe.Range"))),
+    }, (npc) -> new RangedAbility("AirSwipe", npc, "AirSwipe", PK_CONFIG.getDouble("Abilities.Air.AirSwipe.Range"))),
 
     GALEGUST("GaleGust", (player) -> {
         player.getBlastManager().useAbility(CoreAbility.getAbility("GaleGust"));
-    }, (npc) -> new RangedAbility("GaleGust", npc, "GaleGust", AvatarDuels.plugin.getConfig("GaleGust").getDouble("Abilities.Air.GaleGust.Range"))),
+    }, (npc) -> new RangedAbility("GaleGust", npc, "GaleGust", AvatarDuels.getConfig("GaleGust").getDouble("Abilities.Air.GaleGust.Range"))),
 
     SONICBLAST("SonicBlast", (player) -> {
-        player.getBlastManager().useAbility(CoreAbility.getAbility("SonicBlast"),  ProjectKorra.plugin.getConfig().getLong("Abilities.Air.SonicBlast.ChargeTime"));
-    }, (npc) -> new ChargedAbility("SonicBlast", npc, "SonicBlast", PK_CONFIG.getDouble("Abilities.Air.SonicBlast.Range"),
+        player.getBlastManager().useAbility(CoreAbility.getAbility("SonicBlast"),   AvatarDuels.getConfig("SonicBlast").getLong("Abilities.Air.SonicBlast.ChargeTime"));
+    }, (npc) -> new ChargedAbility("SonicBlast", npc, "SonicBlast", AvatarDuels.getConfig("SonicBlast").getDouble("Abilities.Air.SonicBlast.Range"),
             null)),
 
+
+    // FIRE ABILITIES
+    ARCSPARK("ArcSpark", (player) -> {
+        player.getBreathManager().useAbility(CoreAbility.getAbility("ArcSpark"), AvatarDuels.getConfig("ArcSpark").getLong("Abilities.Fire.ArcSpark.Duration"), true);
+    }, (npc) -> new ChargedAbility("ArcSpark", npc, "ArcSpark", AvatarDuels.getConfig("ArcSpark").getDouble("Abilities.Fire.ArcSpark.Length"), null)),
+
     BLAZE("Blaze", (player) -> {
-        player.getBlastManager().useAbility(CoreAbility.getAbility("Blaze"));
-    }, (npc) -> new RangedAbility("Blaze", npc, "Blaze", PK_CONFIG.getDouble("Abilities.Fire.Blaze.Range"))),
+        player.getBlastManager().useAbility(CoreAbility.getAbility("Blaze"), PK_CONFIG.getLong("Abilities.Fire.Blaze.ChargeTime"));
+    }, (npc) -> new ChargedAbility("Blaze", npc, "Blaze", PK_CONFIG.getDouble("Abilities.Fire.Blaze.Range"))),
+    
 
     FIREBLAST("FireBlast", (player) -> {
         player.getBlastManager().useAbility(CoreAbility.getAbility("FireBlast"));
     }, (npc) -> new RangedAbility("FireBlast", npc, "FireBlast", PK_CONFIG.getDouble("Abilities.Fire.FireBlast.Range"))),
 
-//    FIREBLASTCHARGED("FireBlast", (player) -> {
-//        player.getBlastManager().useAbility(CoreAbility.getAbility("FireBlast"), getConfig().getLong("Abilities.Fire.FireBlast.Charged.ChargeTime"));
-//    }),
-
-
-    FIRESHOTS("FireShots", (player) -> {
-        player.getBlastManager().useAbility(CoreAbility.getAbility("FireShots"), 0, true, AvatarDuelsConfig.getConfig(Bukkit.getPlayer(player.getUUID())).getInt("Abilities.Fire.FireShots.FireBalls"));
-    }, (npc) -> new RangedAbility("AirBlade", npc, "AirBlade", JC_CONFIG.getDouble("Abilities.Air.AirBlade.Range"))),
+    FIREBLASTCHARGED("FireBlastCharged", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("FireBlast"), PK_CONFIG.getLong("Abilities.Fire.FireBlast.Charged.ChargeTime"));
+    }, (npc) -> new ChargedAbility("FireBlastCharged", npc, "FireBlast", PK_CONFIG.getDouble("Abilities.Fire.FireBlast.Charged.Range"))),
+    
 
     FIREBURST("FireBurst", (player) -> {
-        player.getBlastManager().useAbility(CoreAbility.getAbility("FireBurst"),  ProjectKorra.plugin.getConfig().getLong("Abilities.Fire.FireBurst.ChargeTime") + 2000, true, true, 1);
-    }, (npc) -> new ChargedAbility("FireBurst", npc, "FireBurst", PK_CONFIG.getDouble("Abilities.Fire.FireBurst.Range"),
-            null)),
+        player.getBlastManager().useAbility(CoreAbility.getAbility("FireBurst"), PK_CONFIG.getLong("Abilities.Fire.FireBurst.ChargeTime"));
+    }, (npc) -> new ChargedAbility("FireBurst", npc, "FireBurst", PK_CONFIG.getDouble("Abilities.Fire.FireBurst.Range"))),
+
+
+    FIRESHIELD("FireShield", (player) -> {
+        player.getBreathManager().useAbility(CoreAbility.getAbility("FireShield"),(PK_CONFIG.getLong("Abilities.Fire.FireShield.Shield.Duration") == 0) ? 2000 : PK_CONFIG.getLong("Abilities.Fire.FireShield.Shield.Duration") );
+    }, (npc) -> new ChargedAbility("FireShield", npc, "FireShield", 20)),
+
+
     WALLOFFIRE("WallOfFire", (player) -> {
         player.getBlastManager().useAbility(CoreAbility.getAbility("WallOfFire"));
     }, (npc) -> new RangedAbility("WallOfFire", npc, "WallOfFire", PK_CONFIG.getDouble("Abilities.Fire.WallOfFire.Range"))),
 
+    COMBUSTBEAM("CombustBeam", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("CombustBeam"), AvatarDuels.getConfig("CombustBeam").getLong("Abilities.Fire.CombustBeam.Maximum.ChargeTime"));
+    }, (npc) -> new ChargedAbility("CombustBeam", npc, "CombustBeam", AvatarDuels.getConfig("CombustBeam").getDouble("Abilities.Fire.CombustBeam.Range"))),
+
+    COMBUSTION("Combustion", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("Combustion"), AvatarDuels.getConfig("Combustion").getLong("Abilities.Fire.Combustion.Warmup"));
+    }, (npc) -> new RangedAbility("Combustion", npc, "Combustion", AvatarDuels.getConfig("Combustion").getDouble("Abilities.Fire.Combustion.Range"))),
+
+    DISCHARGE("Discharge", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("Discharge"));
+    }, (npc) -> new RangedAbility("Discharge", npc, "Discharge", AvatarDuels.getConfig("Discharge").getDouble("Abilities.Fire.Discharge.Range"))),
+
+    EXPLODE("Explode", (player) -> {
+        player.getBreathManager().useAbility(CoreAbility.getAbility("Explode"), 50);
+    }, (npc) -> new RangedAbility("Explode", npc, "Explode", AvatarDuels.getConfig("Explode").getDouble("Abilities.Fire.Explode.Range"))),
 
     LIGHTNING("Lightning", (player) -> {
         player.getBlastManager().useAbility(CoreAbility.getAbility("Lightning"), ProjectKorra.plugin.getConfig().getLong("Abilities.Fire.Lightning.ChargeTime"));
@@ -133,20 +224,62 @@ public enum AbilityUsages {
 
     FIREDISC("FireDisc", (player) -> {
         player.getBlastManager().useAbility(CoreAbility.getAbility("FireDisc"));
-    }, (npc) -> new RangedAbility("FireDisc", npc, "FireDisc", AvatarDuels.plugin.getConfig("FireDisc").getDouble("Abilities.Fire.FireDisc.Range"))),
+    }, (npc) -> new RangedAbility("FireDisc", npc, "FireDisc", AvatarDuels.getConfig("FireDisc").getDouble("Abilities.Fire.FireDisc.Range"))),
 
     FIREBALL("FireBall", (player) -> {
         player.getBlastManager().useAbility(CoreAbility.getAbility("FireBall"));
-    }, (npc) -> new RangedAbility("FireBall", npc, "FireBall", JC_CONFIG.getDouble("Abilities.Fire.FireBall.Range"))),
+    }, (npc) -> new RangedAbility("FireBall", npc, "FireBall", AvatarDuels.getConfig("FireBall").getDouble("Abilities.Fire.FireBall.Range"))),
 
     FIRECOMET("FireComet", (player) -> {
-        player.getBlastManager().useAbility(CoreAbility.getAbility("FireComet"), JC_CONFIG.getLong("Abilities.Fire.FireComet.ChargeUp"));
-    }, (npc) -> new ChargedAbility("FireComet", npc, "FireComet", PK_CONFIG.getDouble("Abilities.Fire.FireComet.Range"),
-            null));
+        player.getBlastManager().useAbility(CoreAbility.getAbility("FireComet"), AvatarDuels.getConfig("FireComet").getLong("Abilities.Fire.FireComet.ChargeUp"));
+    }, (npc) -> new ChargedAbility("FireComet", npc, "FireComet", AvatarDuels.getConfig("FireComet").getDouble("Abilities.Fire.FireComet.Range"),
+            null)),
 
-//    CHARGEBOLT("ChargeBolt", (player) -> {
-//        player.getBlastManager().useAbility(CoreAbility.getAbility("ChargeBolt"), 0, true, AvatarDuels.instance.getConfig("ChargeBolt").getInt("Abilities.Fire.ChargeBolt.DischargeBoltCount"));
-//    });
+
+
+
+    // WATER ABILITIES
+
+
+
+    ICESPIKE("IceSpike", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("IceSpike"));
+    }, (npc) -> new SourcedAbility("IceSpike", npc, "IceSpike", PK_CONFIG.getDouble("Abilities.Water.IceSpike.Range"),
+            PK_CONFIG.getDouble("Abilities.Water.IceSpike.Range")/2)),
+
+    SURGE("Surge", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("Surge"));
+    }, (npc) -> new SourcedAbility("Surge", npc, "Surge", PK_CONFIG.getDouble("Abilities.Water.Surge.Wave.Range"),
+            PK_CONFIG.getDouble("Abilities.Water.Surge.Wave.SelectRange"))),
+
+
+    FROSTBREATH("FrostBreath", (player) -> {
+        player.getBreathManager().useAbility(CoreAbility.getAbility("FrostBreath"), AvatarDuels.getConfig("FrostBreath").getLong("Abilities.Water.FrostBreath.Slow.Duration"));
+    }, (npc) -> new RangedAbility("FrostBreath", npc, "FrostBreath", AvatarDuels.getConfig("FrostBreath").getDouble("Abilities.Water.FrostBreath.Range"))),
+
+
+    ICECLAWS("IceClaws", (player) -> {
+        player.getBlastManager().useAbility(CoreAbility.getAbility("IceClaws"), 0, true, 1);
+    }, (npc) -> new SourcedAbility("IceClaws", npc, "IceClaws", PK_CONFIG.getDouble("Abilities.Water.IceClaws.Range"),
+            PK_CONFIG.getDouble("Abilities.Water.IceClaws.SelectRange"))),
+
+
+    ICEWALL("IceWall", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("IceWall"));
+    }, (npc) -> new SourcedAbility("IceWall", npc, "IceWall", AvatarDuels.getConfig("IceWall").getInt("Abilities.Water.IceWall.Range")
+            , AvatarDuels.getConfig("IceWall").getInt("Abilities.Water.IceWall.Range"))),
+
+
+    TORRENT("Torrent", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("Torrent"), 1000, true);
+    }, (npc) -> new SourcedAbility("Torrent", npc, "Torrent", PK_CONFIG.getDouble("Abilities.Water.Torrent.Range"),
+            PK_CONFIG.getDouble("Abilities.Water.Torrent.SelectRange"))),
+
+    WATERMANIPULATION("WaterManipulation", (player) -> {
+        player.getSourceManager().useAbility(CoreAbility.getAbility("WaterManipulation"));
+    }, (npc) -> new SourcedAbility("WaterManipulation", npc, "WaterManipulation", PK_CONFIG.getDouble("Abilities.Water.WaterManipulation.Range"),
+            PK_CONFIG.getDouble("Abilities.Water.WaterManipulation.SelectRange")));
+
 
 
 

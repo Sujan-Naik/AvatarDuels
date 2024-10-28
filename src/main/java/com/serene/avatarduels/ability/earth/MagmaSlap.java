@@ -62,14 +62,14 @@ public class MagmaSlap extends LavaAbility implements AddonAbility {
 	}
 	
 	private void setFields() {
-		this.offset = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.MagmaSlap.Offset");
-		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Earth.MagmaSlap.Damage");
+		this.offset = AvatarDuels.getConfig(getName()).getDouble("Abilities.Earth.MagmaSlap.Offset");
+		this.damage = AvatarDuels.getConfig(getName()).getDouble("Abilities.Earth.MagmaSlap.Damage");
 		this.length = 0;
-		this.maxLength = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.MagmaSlap.Length");
-		this.width = AvatarDuels.instance.getConfig(getName()).getInt("Abilities.Earth.MagmaSlap.Width");
+		this.maxLength = AvatarDuels.getConfig(getName()).getInt("Abilities.Earth.MagmaSlap.Length");
+		this.width = AvatarDuels.getConfig(getName()).getInt("Abilities.Earth.MagmaSlap.Width");
 		this.next = 50;
 		this.last = 0;
-		this.revertTime = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.MagmaSlap.RevertTime");
+		this.revertTime = AvatarDuels.getConfig(getName()).getLong("Abilities.Earth.MagmaSlap.RevertTime");
 		this.start = player.getLocation().subtract(0, 1, 0);
 		this.start.setPitch(0);
 		this.start.add(start.getDirection().multiply(offset));
@@ -81,7 +81,7 @@ public class MagmaSlap extends LavaAbility implements AddonAbility {
 
 	@Override
 	public long getCooldown() {
-		return AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Earth.MagmaSlap.Cooldown");
+		return AvatarDuels.getConfig(getName()).getLong("Abilities.Earth.MagmaSlap.Cooldown");
 	}
 
 	@Override
@@ -211,6 +211,6 @@ public class MagmaSlap extends LavaAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Earth.MagmaSlap.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Earth.MagmaSlap.Enabled");
 	}
 }

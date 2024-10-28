@@ -5,19 +5,29 @@ import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.Element;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
 import com.serene.avatarduels.npc.entity.AI.bending.BlastManager;
+import com.serene.avatarduels.npc.entity.AI.bending.BreathManager;
 import com.serene.avatarduels.npc.entity.AI.bending.SourceManager;
 import com.serene.avatarduels.npc.entity.AI.goal.complex.bending.BendingKillEntity;
 import com.serene.avatarduels.npc.utils.Vec3Utils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
 public class BendingNPC extends HumanEntity {
+
+    private BreathManager breathManager;
+
+    public BreathManager getBreathManager() {
+        return breathManager;
+    }
 
     private SourceManager sourceManager;
 
@@ -45,9 +55,11 @@ public class BendingNPC extends HumanEntity {
         super(server, world, profile, clientOptions);
         this.sourceManager = new SourceManager(this);
         this.blastManager = new BlastManager(this);
-
+        this.breathManager = new BreathManager(this);
 
     }
+
+
 
     public void enableBending(){
         Player player = Bukkit.getPlayer(this.getUUID());

@@ -77,14 +77,14 @@ public class FlameBreath extends FireAbility implements AddonAbility, ComboAbili
 	}
 	
 	private void setFields() {
-		fireTick = AvatarDuels.instance.getConfig(getName()).getInt("Combos.Fire.FlameBreath.FireTick");
-		range = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Fire.FlameBreath.Range");
-		damage = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Fire.FlameBreath.Damage");
-		burnGround = AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Fire.FlameBreath.Burn.Ground");
-		burnEntities = AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Fire.FlameBreath.Burn.Entities");
-		rainbow = AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Fire.FlameBreath.Rainbow");
-		duration = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Fire.FlameBreath.Duration");
-		speed = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Fire.FlameBreath.Speed");
+		fireTick = AvatarDuels.getConfig(getName()).getInt("Combos.Fire.FlameBreath.FireTick");
+		range = AvatarDuels.getConfig(getName()).getDouble("Combos.Fire.FlameBreath.Range");
+		damage = AvatarDuels.getConfig(getName()).getDouble("Combos.Fire.FlameBreath.Damage");
+		burnGround = AvatarDuels.getConfig(getName()).getBoolean("Combos.Fire.FlameBreath.Burn.Ground");
+		burnEntities = AvatarDuels.getConfig(getName()).getBoolean("Combos.Fire.FlameBreath.Burn.Entities");
+		rainbow = AvatarDuels.getConfig(getName()).getBoolean("Combos.Fire.FlameBreath.Rainbow");
+		duration = AvatarDuels.getConfig(getName()).getLong("Combos.Fire.FlameBreath.Duration");
+		speed = AvatarDuels.getConfig(getName()).getDouble("Combos.Fire.FlameBreath.Speed");
 		
 		for (Color color : Color.values()) {
 			for (int i = 0; i < 8; ++i) {
@@ -95,7 +95,7 @@ public class FlameBreath extends FireAbility implements AddonAbility, ComboAbili
 
 	@Override
 	public long getCooldown() {
-		return AvatarDuels.instance.getConfig(getName()).getLong("Combos.Fire.FlameBreath.Cooldown");
+		return AvatarDuels.getConfig(getName()).getLong("Combos.Fire.FlameBreath.Cooldown");
 	}
 
 	@Override
@@ -224,7 +224,7 @@ public class FlameBreath extends FireAbility implements AddonAbility, ComboAbili
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Fire.FlameBreath.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Combos.Fire.FlameBreath.Enabled");
 	}
 	
 	@Override

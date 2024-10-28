@@ -66,7 +66,7 @@ public class Camouflage extends ChiAbility implements PassiveAbility {
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Passives.Chi.Camouflage.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Passives.Chi.Camouflage.Enabled");
 	}
 	
 	@Override

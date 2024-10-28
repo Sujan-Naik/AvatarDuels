@@ -65,7 +65,7 @@ public class BlastManager {
 
         BendingPlayer.getBendingPlayer(player).bindAbility(coreAbility.getName());
 
-        NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.EYES );
+        NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET );
 
         if (shiftBefore) {
             Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, true));

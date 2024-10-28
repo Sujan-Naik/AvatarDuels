@@ -69,7 +69,7 @@ public class FireSki extends FireAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		cooldown = config.getLong("Abilities.Fire.FireSki.Cooldown");
 		duration = config.getLong("Abilities.Fire.FireSki.Duration");
@@ -322,7 +322,7 @@ public class FireSki extends FireAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Fire.FireSki.Enabled");
 	}
 

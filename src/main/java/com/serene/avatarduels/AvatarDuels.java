@@ -53,7 +53,7 @@ public class AvatarDuels extends JavaPlugin {
 	public static FileConfiguration PK_CONFIG ;
 	public static FileConfiguration JC_CONFIG;
 
-	private HashMap<String, Config> abilityNameConfigHashMap = new HashMap<>();
+	public static final HashMap<String, Config> abilityNameConfigHashMap = new HashMap<>();
 	private MainListener listener;
 	private Element soundElement;
 
@@ -73,11 +73,12 @@ public class AvatarDuels extends JavaPlugin {
 
 		PK_CONFIG = ProjectKorra.plugin.getConfig();
 		this.setupConfig();
+
+
 		soundElement = new SubElement("Sound", Element.AIR, ElementType.BENDING, this);
 
 		AvatarDuels.log = this.getLogger();
 		new AvatarDuelsConfig(this);
-		JC_CONFIG = AvatarDuels.plugin.getConfig();
 
 		CoreAbility.registerPluginAbilities(this, "com.serene.avatarduels.ability");
 		
@@ -208,8 +209,8 @@ public class AvatarDuels extends JavaPlugin {
 		return soundElement;
 	}
 
-	private void createAbilityConfig(String abilityName, Pair<String, Object>... pathValuePairs){
-		Config newConfig = new Config(new File("project_addons/" + abilityName));
+	public static void createAbilityConfig(String abilityName, Pair<String, Object>... pathValuePairs){
+		Config newConfig = new Config(new File("abilities/" + abilityName));
 		FileConfiguration c = newConfig.get();
 		Arrays.stream(pathValuePairs).forEach(stringObjectPair -> {
 			c.addDefault(stringObjectPair.getA(), stringObjectPair.getB());
@@ -222,8 +223,7 @@ public class AvatarDuels extends JavaPlugin {
 		abilityNameConfigHashMap.values().forEach(Config::reload);
 	}
 
-	public FileConfiguration getConfig(String name){
-
+	public static FileConfiguration getConfig(String name){
 		return abilityNameConfigHashMap.get(name).get();
 	}
 	

@@ -52,7 +52,7 @@ public class AirBlade extends AirAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		cooldown = config.getLong("Abilities.Air.AirBlade.Cooldown");
 		range = config.getDouble("Abilities.Air.AirBlade.Range");
@@ -160,7 +160,7 @@ public class AirBlade extends AirAbility implements AddonAbility {
 
 	@Override
 	public double getCollisionRadius() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getDouble("Abilities.Air.AirBlade.AbilityCollisionRadius");
 	}
 
@@ -199,7 +199,7 @@ public class AirBlade extends AirAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Air.AirBlade.Description");
 	}
 
@@ -259,7 +259,7 @@ public class AirBlade extends AirAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Air.AirBlade.Enabled");
 	}
 }

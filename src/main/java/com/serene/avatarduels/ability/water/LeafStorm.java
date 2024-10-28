@@ -48,17 +48,17 @@ public class LeafStorm extends PlantAbility implements ComboAbility, AddonAbilit
 		}
 		
 		PlantArmor armor = getAbility(player, PlantArmor.class);
-		int cost = AvatarDuels.instance.getConfig(getName()).getInt("Combos.Water.LeafStorm.PlantArmorCost");
+		int cost = AvatarDuels.getConfig(getName()).getInt("Combos.Water.LeafStorm.PlantArmorCost");
 		
 		if (!armor.damage(cost)) {
 			return;
 		}
 		
-		radius = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Water.LeafStorm.Radius");
-		damage = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Water.LeafStorm.Damage");
-		leaves = AvatarDuels.instance.getConfig(getName()).getInt("Combos.Water.LeafStorm.LeafCount");
-		cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Combos.Water.LeafStorm.Cooldown");
-		angleSpeed = AvatarDuels.instance.getConfig(getName()).getDouble("Combos.Water.LeafStorm.LeafSpeed");
+		radius = AvatarDuels.getConfig(getName()).getDouble("Combos.Water.LeafStorm.Radius");
+		damage = AvatarDuels.getConfig(getName()).getDouble("Combos.Water.LeafStorm.Damage");
+		leaves = AvatarDuels.getConfig(getName()).getInt("Combos.Water.LeafStorm.LeafCount");
+		cooldown = AvatarDuels.getConfig(getName()).getLong("Combos.Water.LeafStorm.Cooldown");
+		angleSpeed = AvatarDuels.getConfig(getName()).getDouble("Combos.Water.LeafStorm.LeafSpeed");
 		leafTracker = new HashSet<>();
 		
 		for (int i = 0; i < leaves; i++) {
@@ -184,7 +184,7 @@ public class LeafStorm extends PlantAbility implements ComboAbility, AddonAbilit
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Combos.Water.LeafStorm.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Combos.Water.LeafStorm.Enabled");
 	}
 	
 	@Override

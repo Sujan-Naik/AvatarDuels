@@ -160,7 +160,7 @@ public class MagnetShield extends MetalAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Earth.MagnetShield.Description");
 	}
 
@@ -172,7 +172,7 @@ public class MagnetShield extends MetalAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Earth.MagnetShield.Enabled");
 	}
 
@@ -197,7 +197,7 @@ public class MagnetShield extends MetalAbility implements AddonAbility {
 	}
 
 	private void loadMaterialsFromConfig() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		List<String> materialNames = config.getStringList("Abilities.Earth.MagnetShield.Materials");
 		METAL_LIST = new ArrayList<>();
@@ -269,7 +269,7 @@ public class MagnetShield extends MetalAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		duration = config.getLong("Abilities.Earth.MagnetShield.Duration");
         shiftCooldown = config.getLong("Abilities.Earth.MagnetShield.Cooldowns.Shift");

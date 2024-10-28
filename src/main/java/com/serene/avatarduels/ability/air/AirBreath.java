@@ -72,7 +72,7 @@ public class AirBreath extends AirAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		cooldown = config.getLong("Abilities.Air.AirBreath.Cooldown");
 		duration = config.getLong("Abilities.Air.AirBreath.Duration");
@@ -231,7 +231,7 @@ public class AirBreath extends AirAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Air.AirBreath.Description");
 	}
 
@@ -363,7 +363,7 @@ public class AirBreath extends AirAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Air.AirBreath.Enabled");
 	}
 }

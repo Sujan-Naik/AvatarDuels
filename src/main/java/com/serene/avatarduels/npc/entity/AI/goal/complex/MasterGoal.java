@@ -27,9 +27,10 @@ public abstract class MasterGoal extends BaseGoal {
     public void tick() {
         if (!npc.isBusyBending()) {
             actionGoalSelector.tick();
-            movementGoalSelector.tick();
             lookGoalSelector.tick();
         }
+        movementGoalSelector.tick();
+
         bendingGoalSelector.tick();
     }
 }

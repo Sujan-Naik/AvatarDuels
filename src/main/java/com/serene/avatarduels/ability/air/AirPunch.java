@@ -59,7 +59,7 @@ public class AirPunch extends AirAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		cooldown = config.getLong("Abilities.Air.AirPunch.Cooldown");
 		threshold = config.getLong("Abilities.Air.AirPunch.Threshold");
@@ -148,7 +148,7 @@ public class AirPunch extends AirAbility implements AddonAbility {
 
 	@Override
 	public double getCollisionRadius() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getDouble("Abilities.Air.AirPunch.AbilityCollisionRadius");
 	}
 
@@ -198,7 +198,7 @@ public class AirPunch extends AirAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Air.AirPunch.Description");
 	}
 
@@ -258,7 +258,7 @@ public class AirPunch extends AirAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Air.AirPunch.Enabled");
 	}
 }

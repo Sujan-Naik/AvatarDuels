@@ -17,10 +17,10 @@ public class FlightPassive extends FlightAbility implements AddonAbility, Passiv
 	public FlightPassive(Player player) {
 		super(player);
 		
-		flySpeed = (float) AvatarDuels.instance.getConfig(getName()).getDouble("Passives.Air.Flying.FlySpeed");
-		speed = startSpeed = (float) AvatarDuels.instance.getConfig(getName()).getDouble("Passives.Air.Flying.Glide.StartSpeed");
-		maxSpeed = (float) AvatarDuels.instance.getConfig(getName()).getDouble("Passives.Air.Flying.Glide.MaxSpeed");
-		acceleration = (float) AvatarDuels.instance.getConfig(getName()).getDouble("Passives.Air.Flying.Acceleration");
+		flySpeed = (float) AvatarDuels.getConfig(getName()).getDouble("Passives.Air.Flying.FlySpeed");
+		speed = startSpeed = (float) AvatarDuels.getConfig(getName()).getDouble("Passives.Air.Flying.Glide.StartSpeed");
+		maxSpeed = (float) AvatarDuels.getConfig(getName()).getDouble("Passives.Air.Flying.Glide.MaxSpeed");
+		acceleration = (float) AvatarDuels.getConfig(getName()).getDouble("Passives.Air.Flying.Acceleration");
 		
 		flightHandler.createInstance(player, "FlightPassive");
 	}
@@ -156,7 +156,7 @@ public class FlightPassive extends FlightAbility implements AddonAbility, Passiv
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Passives.Air.Flying.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Passives.Air.Flying.Enabled");
 	}
 	
 	@Override

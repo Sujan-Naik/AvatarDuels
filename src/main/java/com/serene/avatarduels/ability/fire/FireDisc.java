@@ -42,13 +42,13 @@ public class FireDisc extends FireAbility implements AddonAbility {
 		
 		this.loc = player.getEyeLocation();
 		this.direction = player.getLocation().getDirection();
-		this.damage = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.FireDisc.Damage");
-		this.range = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.FireDisc.Range");
-		this.control = AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Fire.FireDisc.Controllable");
-		this.revert = AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Fire.FireDisc.RevertCutBlocks");
-		this.drop = AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Fire.FireDisc.DropCutBlocks");
-		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Fire.FireDisc.Cooldown");
-		this.knockback = AvatarDuels.instance.getConfig(getName()).getDouble("Abilities.Fire.FireDisc.Knockback");
+		this.damage = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.FireDisc.Damage");
+		this.range = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.FireDisc.Range");
+		this.control = AvatarDuels.getConfig(getName()).getBoolean("Abilities.Fire.FireDisc.Controllable");
+		this.revert = AvatarDuels.getConfig(getName()).getBoolean("Abilities.Fire.FireDisc.RevertCutBlocks");
+		this.drop = AvatarDuels.getConfig(getName()).getBoolean("Abilities.Fire.FireDisc.DropCutBlocks");
+		this.cooldown = AvatarDuels.getConfig(getName()).getLong("Abilities.Fire.FireDisc.Cooldown");
+		this.knockback = AvatarDuels.getConfig(getName()).getDouble("Abilities.Fire.FireDisc.Knockback");
 		
 		if (bPlayer.isAvatarState()) {
 			this.control = true;
@@ -152,7 +152,7 @@ public class FireDisc extends FireAbility implements AddonAbility {
 	}
 	
 	public boolean cutBlock(Block b) {
-		return AvatarDuels.instance.getConfig(getName()).getStringList("Abilities.Fire.FireDisc.CuttableBlocks").contains(b.getType().toString());
+		return AvatarDuels.getConfig(getName()).getStringList("Abilities.Fire.FireDisc.CuttableBlocks").contains(b.getType().toString());
 	}
 
 	@Override
@@ -173,7 +173,7 @@ public class FireDisc extends FireAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Fire.FireDisc.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Fire.FireDisc.Enabled");
 	}
 	
 	@Override

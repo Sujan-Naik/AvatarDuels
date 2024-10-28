@@ -80,7 +80,7 @@ public class SandBlast extends SandAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		cooldown = config.getLong("Abilities.Earth.SandBlast.Cooldown");
 		sourceRange = config.getDouble("Abilities.Earth.SandBlast.SourceRange");
@@ -269,7 +269,7 @@ public class SandBlast extends SandAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Earth.SandBlast.Description");
 	}
 
@@ -373,7 +373,7 @@ public class SandBlast extends SandAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Earth.SandBlast.Enabled");
 	}
 }

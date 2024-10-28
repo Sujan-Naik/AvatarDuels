@@ -74,7 +74,7 @@ public class MetalHook extends MetalAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		cooldown = config.getLong("Abilities.Earth.MetalHook.Cooldown");
 		range = config.getInt("Abilities.Earth.MetalHook.Range");
@@ -294,7 +294,7 @@ public class MetalHook extends MetalAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Earth.MetalHook.Description");
 	}
 
@@ -390,7 +390,7 @@ public class MetalHook extends MetalAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Earth.MetalHook.Enabled");
 	}
 }

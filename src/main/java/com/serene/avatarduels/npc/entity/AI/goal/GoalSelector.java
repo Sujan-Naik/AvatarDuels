@@ -28,11 +28,14 @@ public class GoalSelector {
     public void tick() {
         if (goals.peek() != null) {
             BasicGoal currentBasicGoal = goals.peek();
-            currentBasicGoal.tick();
-            //Bukkit.broadcastMessage(currentBasicGoal.getName());
+
             if (currentBasicGoal.isFinished()) {
                 removeCurrentGoal();
+            } else {
+                currentBasicGoal.tick();
             }
+            //Bukkit.broadcastMessage(currentBasicGoal.getName());
+
         }
     }
 

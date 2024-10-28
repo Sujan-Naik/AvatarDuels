@@ -49,8 +49,8 @@ public class CircleEntity extends Movement implements EntityInteraction {
     @Override
     public void tick() {
         this.updatePos(); // Update position continuously
-
-        // Call superclass tick to handle movement logic
-        super.tick(); // The superclass will manage the goal's persistence
+        if (navigation.getGoalPos() != goalPos) {
+            navigation.navigateToPos(goalPos);
+        }
     }
 }

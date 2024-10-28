@@ -54,7 +54,7 @@ public class LightningBurst extends LightningAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		cooldown = config.getLong("Abilities.Fire.LightningBurst.Cooldown");
 		chargeUp = config.getLong("Abilities.Fire.LightningBurst.ChargeUp");
@@ -177,7 +177,7 @@ public class LightningBurst extends LightningAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Fire.LightningBurst.Description");
 	}
 
@@ -241,7 +241,7 @@ public class LightningBurst extends LightningAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Fire.LightningBurst.Enabled");
 	}
 

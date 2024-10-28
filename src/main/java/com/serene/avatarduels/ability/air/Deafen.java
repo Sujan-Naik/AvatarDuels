@@ -32,8 +32,8 @@ public class Deafen extends SoundAbility implements AddonAbility {
 		}
 		
 		this.target = (Player) e;
-		this.duration = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Air.Deafen.Duration");
-		this.cooldown = AvatarDuels.instance.getConfig(getName()).getLong("Abilities.Air.Deafen.Cooldown");
+		this.duration = AvatarDuels.getConfig(getName()).getLong("Abilities.Air.Deafen.Duration");
+		this.cooldown = AvatarDuels.getConfig(getName()).getLong("Abilities.Air.Deafen.Cooldown");
 		
 		bPlayer.addCooldown(this);
 		start();
@@ -123,6 +123,6 @@ public class Deafen extends SoundAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig(getName()).getBoolean("Abilities.Air.Deafen.Enabled");
+		return AvatarDuels.getConfig(getName()).getBoolean("Abilities.Air.Deafen.Enabled");
 	}
 }

@@ -1,27 +1,37 @@
 package com.serene.avatarduels.npc.entity.AI.goal.complex.bending;
 
+import com.projectkorra.projectkorra.ability.CoreAbility;
+import com.projectkorra.projectkorra.ability.LavaAbility;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages.*;
+import static com.serene.avatarduels.npc.entity.AI.goal.complex.bending.ABIL_CATEGORISATIONS.*;
+
 public enum NPC_STATES {
 
 
-    KEEP_AWAY(20, 0, List.of(AbilityUsages.FIREBALL )),
 
-    NEUTRAL(10, 10,  List.of(AbilityUsages.FIREBURST, AbilityUsages.LIGHTNING, AbilityUsages.FIRECOMET)),
 
-    RUSHDOWN(5, 15, List.of(AbilityUsages.GALEGUST, AbilityUsages.SONICBLAST, AbilityUsages.SHOCKWAVE, AbilityUsages.AIRSWIPE)),
+    KEEP_AWAY(25, 0, mergeCategories(SNIPER, DOOM)),
 
-    POINT_BLANK(2, 20, List.of(AbilityUsages.BLAZE, AbilityUsages.EARTHLINE, AbilityUsages.ACCRETION, AbilityUsages.WALLOFFIRE, AbilityUsages.MUDSURGE));
+    NEUTRAL(20, 10, mergeCategories(CHUNKY, DOOM, SNIPER) ),
+
+    RUSHDOWN(15, 15, mergeCategories(SHIELD, SHREDDER, YEETER, PUNCH_PROJECTILE, HARMLESS) ),
+
+    POINT_BLANK(5, 20, mergeCategories(SHOTGUN, PUNCH_PROJECTILE, CLOSE_ONLY));
 
     private double idealRange;
 
     private double idealHealth;
 
     private List<AbilityUsages> abilityUsagesList;
+
+
+
 
     NPC_STATES(double idealRange, double idealHealth,  List<AbilityUsages> abilityUsagesList){
         this.idealRange = idealRange;
@@ -42,7 +52,7 @@ public enum NPC_STATES {
         return abilityUsagesList;
     }
 
-    private static final double RANGE_WEIGHT = 2, HEALTH_WEIGHT = 1;
+    private static final double RANGE_WEIGHT = 1.2, HEALTH_WEIGHT = 1;
 
     public static NPC_STATES getBestState(double currentRange, double currentHealth){
         return Arrays.stream(NPC_STATES.values()).min(Comparator.comparingDouble(npcStates -> {

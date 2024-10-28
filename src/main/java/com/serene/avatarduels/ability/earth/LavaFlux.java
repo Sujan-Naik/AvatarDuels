@@ -86,7 +86,7 @@ public class LavaFlux extends LavaAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		
 		speed = config.getInt("Abilities.Earth.LavaFlux.Speed");
 		if (speed < 1) speed = 1;
@@ -333,7 +333,7 @@ public class LavaFlux extends LavaAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Earth.LavaFlux.Description");
 	}
 
@@ -431,7 +431,7 @@ public class LavaFlux extends LavaAbility implements AddonAbility {
 
 	@Override
 	public void load() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		if (config.get("Abilities.Earth.LavaFlux.Speed") instanceof String) {
 			config.set("Abilities.Earth.LavaFlux.Speed", 1);
@@ -445,7 +445,7 @@ public class LavaFlux extends LavaAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Earth.LavaFlux.Enabled");
 	}
 }

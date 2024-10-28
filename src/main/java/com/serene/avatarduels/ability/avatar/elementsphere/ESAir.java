@@ -59,7 +59,7 @@ public class ESAir extends AvatarAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("ElementSphere");
 		
 		cooldown = config.getLong("Abilities.Avatar.ElementSphere.Air.Cooldown");
 		range = config.getDouble("Abilities.Avatar.ElementSphere.Air.Range");
@@ -202,7 +202,7 @@ public class ESAir extends AvatarAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("ElementSphere");
 		return config.getBoolean("Abilities.Avatar.ElementSphere.Enabled");
 	}
 }

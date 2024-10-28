@@ -41,7 +41,7 @@ public class CollisionInitializer<T extends CoreAbility> {
 
         String collisionPath = getCollisionPath(abilityName, element);
 
-        ConfigurationSection section = AvatarDuels.plugin.getConfig().getConfigurationSection(collisionPath);
+        ConfigurationSection section = AvatarDuels.instance.getConfig().getConfigurationSection(collisionPath);
         for (String key : section.getKeys(false)) {
             ConfigurationSection abilityConfig = section.getConfigurationSection(key);
 

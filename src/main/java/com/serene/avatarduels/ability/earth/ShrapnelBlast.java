@@ -18,10 +18,10 @@ public class ShrapnelBlast extends MetalAbility implements AddonAbility {
 			return;
 		}
 		
-		int shots = AvatarDuels.instance.getConfig("Shrapnel").getInt("Abilities.Earth.Shrapnel.Blast.Shots");
-		int spread = AvatarDuels.instance.getConfig("Shrapnel").getInt("Abilities.Earth.Shrapnel.Blast.Spread");
-		long cooldown = AvatarDuels.instance.getConfig("Shrapnel").getLong("Abilities.Earth.Shrapnel.Blast.Cooldown");
-		double speed = AvatarDuels.instance.getConfig("Shrapnel").getDouble("Abilities.Earth.Shrapnel.Blast.Speed");
+		int shots = AvatarDuels.getConfig("Shrapnel").getInt("Abilities.Earth.Shrapnel.Blast.Shots");
+		int spread = AvatarDuels.getConfig("Shrapnel").getInt("Abilities.Earth.Shrapnel.Blast.Spread");
+		long cooldown = AvatarDuels.getConfig("Shrapnel").getLong("Abilities.Earth.Shrapnel.Blast.Cooldown");
+		double speed = AvatarDuels.getConfig("Shrapnel").getDouble("Abilities.Earth.Shrapnel.Blast.Speed");
 		
 		for (int i = 0; i < shots; i++) {
 			Location loc = player.getLocation().clone();
@@ -89,6 +89,6 @@ public class ShrapnelBlast extends MetalAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.instance.getConfig("Shrapnel").getBoolean("Abilities.Earth.Shrapnel.Enabled");
+		return AvatarDuels.getConfig("Shrapnel").getBoolean("Abilities.Earth.Shrapnel.Enabled");
 	}
 }

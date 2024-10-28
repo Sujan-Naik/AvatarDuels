@@ -60,7 +60,7 @@ public class ESWater extends AvatarAbility implements AddonAbility {
 	}
 
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("ElementSphere");
 
 		cooldown = config.getLong("Abilities.Avatar.ElementSphere.Water.Cooldown");
 		range = config.getDouble("Abilities.Avatar.ElementSphere.Water.Range");
@@ -206,7 +206,7 @@ public class ESWater extends AvatarAbility implements AddonAbility {
 	
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig("ElementSphere");
 		return config.getBoolean("Abilities.Avatar.ElementSphere.Enabled");
 	}
 }

@@ -77,7 +77,7 @@ public class EarthLine extends EarthAbility implements AddonAbility {
 	}
 	
 	public void setFields() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 
 		this.removalPolicy = new CompositeRemovalPolicy(this,
 				new CannotBendRemovalPolicy(this.bPlayer, this, true, true),
@@ -351,7 +351,7 @@ public class EarthLine extends EarthAbility implements AddonAbility {
 
 	@Override
 	public String getDescription() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return "* AvatarDuels Addon *\n" + config.getString("Abilities.Earth.EarthLine.Description");
 	}
 
@@ -483,7 +483,7 @@ public class EarthLine extends EarthAbility implements AddonAbility {
 
 	@Override
 	public boolean isEnabled() {
-		ConfigurationSection config = AvatarDuelsConfig.getConfig(this.player);
+		ConfigurationSection config = AvatarDuels.getConfig(getName());
 		return config.getBoolean("Abilities.Earth.EarthLine.Enabled");
 	}
 }

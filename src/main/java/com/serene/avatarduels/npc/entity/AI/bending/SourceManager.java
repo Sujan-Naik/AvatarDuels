@@ -63,26 +63,29 @@ public class SourceManager {
             NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, locToVec3(source.getLocation()) );
 //            coreAbility.addAttributeModifier("Duration", 0, AttributeModifier.MULTIPLICATION);
 
-            if (clickBefore) {
-                Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
-                player.swingMainHand();
-            }
-
-            Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, true));
-            player.setSneaking(true);
             Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
 
+                if (clickBefore) {
+                    Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                    player.swingMainHand();
+                }
 
-                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.EYES);
+                Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, true));
+                player.setSneaking(true);
+                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+
+
+                    NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
 //                player.swingMainHand();
-                Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR,  null, null, BlockFace.SELF));
-                player.swingMainHand();
+                    Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                    player.swingMainHand();
 //                Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
-            }, Math.ceilDiv(chargeTimeMS,50) + 10L);
-            Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-                Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
-                player.setSneaking(false);
-            }, Math.ceilDiv(chargeTimeMS,50) + 20L);
+                }, Math.ceilDiv(chargeTimeMS, 50) + 10L);
+                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                    Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+                    player.setSneaking(false);
+                }, Math.ceilDiv(chargeTimeMS, 50) + 20L);
+            }, 20L);
 
         }
     }
@@ -94,9 +97,9 @@ public class SourceManager {
         Block source = null;
         switch (coreAbility.getElement().getName()){
             case "Earth" ->
-                    source = nearbyBlocks.stream().filter(block -> EarthAbility.isEarth(block.getType())).min(getBestSource(player, target)).orElse(null);
+                    source = nearbyBlocks.stream().filter(block -> EarthAbility.isEarthbendable(block.getType(), true, true, true)).min(getBestSource(player, target)).orElse(null);
             case "Water" ->
-                    source = nearbyBlocks.stream().filter(block -> WaterAbility.isWater(block.getType())).min(getBestSource(player, target)).orElse(null);
+                    source = nearbyBlocks.stream().filter(block -> WaterAbility.isWaterbendable(block.getType())).min(getBestSource(player, target)).orElse(null);
         }
 
         return source;
