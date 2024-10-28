@@ -8,6 +8,7 @@ import com.projectkorra.projectkorra.configuration.ConfigManager;
 import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.configuration.AvatarDuelsConfig;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.BendingUseAbility;
+import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility.ScooterAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility.SourcedMovementAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.RangedAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.charged.ChargedAbility;
@@ -35,7 +36,9 @@ public enum AbilityUsages {
         player.getMobilityManager().useAbility(CoreAbility.getAbility("AirBlast"), true, 500, true, true, false, true);
     }, (npc) -> new SourcedMovementAbility("AirBlast", npc, "AirBlast", PK_CONFIG.getDouble("Abilities.Air.AirBlast.Range"))),
 
-
+    AIRSCOOTER("AirScooter", (player) -> {
+        player.getMobilityManager().useAbility(CoreAbility.getAbility("AirScooter"), false, 0, false, false, true, false);
+    }, (npc) -> new ScooterAbility("AirScooter", npc, "AirScooter", 10)),
 
 
     // AIR ABILITIES

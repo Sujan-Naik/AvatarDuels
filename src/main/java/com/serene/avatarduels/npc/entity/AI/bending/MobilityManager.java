@@ -6,12 +6,14 @@ import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.util.Vector;
 
 public class MobilityManager {
@@ -132,10 +134,20 @@ public class MobilityManager {
         // Handle running and jumping logic if specified
         if (runJump) {
             // Add jumping logic here if needed; for example:
-            player.setVelocity(player.getVelocity().add(new Vector(0, 1, 0))); // Jump
-            player.setSprinting(true);
-            Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
-            player.swingMainHand();
+
+            Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSprintEvent(player, true));
+            NMSPlayer.setSprinting(true);
+
+            Vec3 currentFloorBlock = NMSPlayer.getPosition(0);
+            Vec3 dir = NMSPlayer.getForward().scale(1);
+            Vec3 wantedPosition = currentFloorBlock.add(dir);
+            NMSPlayer.getMoveControl().setWantedPosition(wantedPosition.x, wantedPosition.y, wantedPosition.z, 10);
+
+            NMSPlayer.jumpFromGround();
+            Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                player.swingMainHand();
+            },5L);
         }
     }
 }
