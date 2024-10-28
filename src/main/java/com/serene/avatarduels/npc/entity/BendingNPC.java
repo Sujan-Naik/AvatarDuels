@@ -3,10 +3,7 @@ package com.serene.avatarduels.npc.entity;
 import com.mojang.authlib.GameProfile;
 import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.Element;
-import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
-import com.serene.avatarduels.npc.entity.AI.bending.BlastManager;
-import com.serene.avatarduels.npc.entity.AI.bending.BreathManager;
-import com.serene.avatarduels.npc.entity.AI.bending.SourceManager;
+import com.serene.avatarduels.npc.entity.AI.bending.*;
 import com.serene.avatarduels.npc.entity.AI.goal.complex.bending.BendingKillEntity;
 import com.serene.avatarduels.npc.utils.Vec3Utils;
 import net.minecraft.server.MinecraftServer;
@@ -17,11 +14,19 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
 public class BendingNPC extends HumanEntity {
+
+    private MobilityManager mobilityManager;
+
+    public MobilityManager getMobilityManager() {
+        return mobilityManager;
+    }
 
     private BreathManager breathManager;
 
@@ -51,19 +56,41 @@ public class BendingNPC extends HumanEntity {
         isBusyBending = busyBending;
     }
 
+    public boolean hasCompleteLineOfSight(Entity entity) {
+        if (entity.level() != this.level()) {
+            return false;
+        } else {
+            return hasClearRay(new Vec3(this.getX(), this.getEyeY(), this.getZ()),  new Vec3(entity.getX(), entity.getEyeY(), entity.getZ()))
+            && hasClearRay(new Vec3(this.getX(), this.getY(), this.getZ()),  new Vec3(entity.getX(), entity.getY(), entity.getZ()));
+
+        }
+    }
+
+    public boolean hasClearRayForward(){
+        return hasClearRay(this.getPosition(0).add(this.getForward().scale(1)));
+    }
+
+    public boolean hasClearRay(Vec3 vec3d, Vec3 vec3d1){
+        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+    }
+
+    public boolean hasClearRay(Vec3 vec3d){
+        Vec3 vec3d1 = new Vec3(this.getX(), this.getY(), this.getZ());
+        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+    }
+
     public BendingNPC(MinecraftServer server, ServerLevel world, GameProfile profile, ClientInformation clientOptions) {
         super(server, world, profile, clientOptions);
         this.sourceManager = new SourceManager(this);
         this.blastManager = new BlastManager(this);
         this.breathManager = new BreathManager(this);
-
+        this.mobilityManager = new MobilityManager(this);
     }
 
 
 
     public void enableBending(){
         Player player = Bukkit.getPlayer(this.getUUID());
-
         BendingPlayer.getOrLoadOfflineAsync(player).thenRun(() -> {
             BendingPlayer bPlayer =  BendingPlayer.getBendingPlayer(player);
             Arrays.stream(Element.getAllElements()).forEach(element -> {
@@ -73,12 +100,21 @@ public class BendingNPC extends HumanEntity {
             Arrays.stream(Element.getAllSubElements()).forEach(subElement -> {
                 bPlayer.addSubElement(subElement);
             });
+            bPlayer.togglePassive(Element.CHI);
+            player.setGlowing(true);
+            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(100);
+            player.setHealth(100);
 
         });
+
     }
 
     public void startDuel(LivingEntity target){
         masterGoalSelector.addMasterGoal(new BendingKillEntity("kill entity", this, target));
+    }
+
+    public void startDuel(org.bukkit.entity.LivingEntity target){
+        masterGoalSelector.addMasterGoal(new BendingKillEntity("kill entity", this, ((CraftLivingEntity)target).getHandle()));
     }
 
     @Override

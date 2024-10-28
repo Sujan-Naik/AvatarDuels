@@ -1,6 +1,8 @@
 package com.serene.avatarduels.npc.entity.AI.goal;
 
 import com.serene.avatarduels.npc.entity.AI.goal.basic.BasicGoal;
+import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.BendingUseAbility;
+import org.bukkit.Bukkit;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -32,9 +34,12 @@ public class GoalSelector {
             if (currentBasicGoal.isFinished()) {
                 removeCurrentGoal();
             } else {
+                if (currentBasicGoal instanceof BendingUseAbility bendingUseAbility){
+                    // Bukkit.broadcastMessage(bendingUseAbility.getName());
+                }
                 currentBasicGoal.tick();
             }
-            //Bukkit.broadcastMessage(currentBasicGoal.getName());
+            //// Bukkit.broadcastMessage(currentBasicGoal.getName());
 
         }
     }
@@ -44,6 +49,10 @@ public class GoalSelector {
             return name.equals(goals.peek().getName());
         }
         return false;
+    }
+
+    public BasicGoal getCurrentGoal(){
+        return goals.peek();
     }
 
 

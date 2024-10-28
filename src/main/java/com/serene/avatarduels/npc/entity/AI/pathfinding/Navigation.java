@@ -49,10 +49,10 @@ public class Navigation {
 
 
     private boolean isAcceptableDirection(Direction direction){
-        Vec3 currentPos = humanEntity.getOnPos().getCenter();
-        Vec3 newPos = currentPos.relative(direction, 1);
+        Vec3 floorPos = humanEntity.getOnPos().getCenter();
+        Vec3 newPos = floorPos.relative(direction, 1);
 
-        return (  (isAir(newPos.relative(Direction.UP, 1)) && isSolid(newPos) ) || // forward
+        return ( humanEntity.hasClearRay(Vec3.atLowerCornerOf(direction.getNormal())) && (isAir(newPos.relative(Direction.UP, 1)) && isSolid(newPos) ) || // forward
                 (isAir(newPos) && isSolid(newPos.relative(Direction.DOWN, 1)) ) || // down
                 (isAir(newPos.relative(Direction.UP, 2)) && isSolid(newPos.relative(Direction.UP, 1)) )); //up
     }
@@ -72,6 +72,10 @@ public class Navigation {
                             }
                         }, () -> {
                             isStuck = true;
+                            newPos = humanEntity.getOnPos().getCenter().subtract(humanEntity.getForward().scale(3));
+
+                            moveControl.setWantedPosition(newPos.x, newPos.y, newPos.z, 10);
+
                         });
 
         }

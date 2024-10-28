@@ -26,7 +26,7 @@ public class PeriodicallyRotate extends BasicGoal {
     @Override
     public void tick() {
         if (npc.tickCount - sinceLastRotate > rotateCounter) {
-            //Bukkit.broadcastMessage("rotating head");
+            //// Bukkit.broadcastMessage("rotating head");
             npc.setYRot((float) (npc.getBukkitYaw() + (Math.random() - 0.5) * maxRotateRange));
             sinceLastRotate = npc.tickCount;
         }

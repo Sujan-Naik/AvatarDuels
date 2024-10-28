@@ -11,6 +11,7 @@ import com.projectkorra.projectkorra.ability.ChiAbility;
 import com.projectkorra.projectkorra.attribute.Attribute;
 import com.projectkorra.projectkorra.util.ParticleEffect;
 
+import com.serene.avatarduels.npc.NPCHandler;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -43,6 +44,9 @@ public class WallRun extends ChiAbility implements AddonAbility {
 		super(player);
 
 		setFields();
+		if (NPCHandler.getNpcs().stream().anyMatch(bendingNPC -> bendingNPC.getUUID().equals(player.getUniqueId()))){
+			return;
+		}
 		if (!enabled) return;
 		
 		if (bPlayer.isOnCooldown("WallRun")) return;

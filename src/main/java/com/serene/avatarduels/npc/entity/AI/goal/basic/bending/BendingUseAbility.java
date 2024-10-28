@@ -6,6 +6,7 @@ import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
 import com.serene.avatarduels.npc.entity.AI.goal.BaseGoal;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.BasicGoal;
+import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility.MovementAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.sourced.SourcedAbility;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -48,6 +49,11 @@ public abstract class BendingUseAbility extends BasicGoal {
             npc.useAbility(AbilityUsages.fromName(abilityName));
             if (bPlayer.getBoundAbility().isSneakAbility()) {
                 npc.setBusyBending(true);
+            } else {
+                npc.setBusyBending(true);
+                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                    npc.setBusyBending(false);
+                }, 3L);
             }
         } else {
             setFinished(true);
@@ -67,9 +73,9 @@ public abstract class BendingUseAbility extends BasicGoal {
             hasStarted = true;
         }
 
-        if (bPlayer.getBoundAbility() != null) {
+        if (bPlayer.getBoundAbility() != null && !(this instanceof MovementAbility)) {
             // Ability is finished using
-            if (!CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass()) ) {
+            if ( !CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass()) ) {
                 remove();
             } else {
                 // Ability is finished but still needs to be disabled, the players part is done

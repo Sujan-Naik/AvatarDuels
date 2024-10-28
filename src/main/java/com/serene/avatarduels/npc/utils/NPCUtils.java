@@ -99,7 +99,6 @@ public class NPCUtils {
 
 //        serverLevel.addNewPlayer(serverPlayer);
         serverLevel.getServer().getPlayerList().placeNewPlayer(serverPlayerConnection, serverPlayer, commonListenerCookie);
-        serverLevel.getServer().getPlayerList().players.forEach(serverPlayer1 -> Bukkit.broadcastMessage(serverPlayer1.displayName));
 
         NPCHandler.addNPC(serverPlayer);
 

@@ -16,9 +16,9 @@ public enum NPC_STATES {
 
 
 
-    KEEP_AWAY(25, 0, mergeCategories(SNIPER, DOOM)),
+    KEEP_AWAY(25, 0, mergeCategories(SNIPER, DOOM, MOVEMENT)),
 
-    NEUTRAL(20, 10, mergeCategories(CHUNKY, DOOM, SNIPER) ),
+    NEUTRAL(20, 10, mergeCategories(CHUNKY, DOOM, SNIPER, MOVEMENT) ),
 
     RUSHDOWN(15, 15, mergeCategories(SHIELD, SHREDDER, YEETER, PUNCH_PROJECTILE, HARMLESS) ),
 
