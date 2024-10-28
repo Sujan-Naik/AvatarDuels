@@ -15,6 +15,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -101,6 +102,10 @@ public class BendingNPC extends HumanEntity {
 
     public void startDuel(LivingEntity target){
         masterGoalSelector.addMasterGoal(new BendingKillEntity("kill entity", this, target));
+    }
+
+    public void startDuel(org.bukkit.entity.LivingEntity target){
+        masterGoalSelector.addMasterGoal(new BendingKillEntity("kill entity", this, ((CraftLivingEntity)target).getHandle()));
     }
 
     @Override

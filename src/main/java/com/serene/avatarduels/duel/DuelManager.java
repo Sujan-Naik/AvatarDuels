@@ -13,6 +13,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -53,20 +54,47 @@ public class DuelManager {
         });
     }
 
-    public void goToArena(String name, Player player, int slot){
-        arenas.stream().filter(arena -> arena.name().equalsIgnoreCase(name)).findAny().ifPresent(arena -> {
+
+    // Assuming this method is part of a class; you need to specify your return type instead of 'Void' based on your requirements.
+    public Arena goToArena(String name, Player player, int slot) {
+        // Stream through the arenas and filter by name
+        Optional<Arena> optionalArena = arenas.stream()
+                .filter(arena -> arena.name().equalsIgnoreCase(name)) // Filter by name
+                .findAny(); // Find any matching arena
+
+        // If an arena was found, perform the teleport
+        optionalArena.ifPresent(arena -> {
             MultiverseCore core = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
             MVWorldManager worldManager = core.getMVWorldManager();
 
+            // Check if the world is an MV world
             if (worldManager.isMVWorld(name)) {
                 World world = worldManager.getMVWorld(name).getCBWorld();
                 if (world != null) {
-                    Location loc = new Location(world,arena.points().get(slot).x(), arena.points().get(slot).y(), arena.points().get(slot).z());
-                    player.teleport(loc);
-                    player.sendMessage("Teleported to " + arena.name());
+                    // Ensure the slot is within bounds
+                    if (slot >= 0 && slot < arena.points().size()) {
+                        // Create a new location and teleport the player
+                        Location loc = new Location(world,
+                                arena.points().get(slot).x(),
+                                arena.points().get(slot).y(),
+                                arena.points().get(slot).z());
+                        player.teleport(loc); // Teleport the player
+                        player.sendMessage("Teleported to " + arena.name()); // Inform the player
+                    } else {
+                        player.sendMessage("Invalid slot number."); // Handle invalid slot case
+                    }
+                } else {
+                    player.sendMessage("World not found."); // Handle world not found case
                 }
+            } else {
+                player.sendMessage("Not a Multiverse world."); // Handle not a Multiverse world case
             }
-
         });
+
+        // Return the arena or null if no arena was found
+        return optionalArena.orElse(null);
     }
+
+
+
 }

@@ -54,7 +54,7 @@ public class BendingKillEntity extends MasterCombat {
     public void tick() {
         super.tick();
 
-        if (entity == null){
+        if (entity == null || !entity.isAlive() || !npc.isAlive()){
             this.setFinished(true);
             return;
         }
