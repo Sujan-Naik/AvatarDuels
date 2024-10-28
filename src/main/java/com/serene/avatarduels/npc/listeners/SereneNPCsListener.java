@@ -7,9 +7,14 @@ import com.serene.avatarduels.npc.utils.NPCUtils;
 import com.serene.avatarduels.npc.utils.PacketUtils;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.EnumSet;
@@ -30,5 +35,37 @@ public class SereneNPCsListener implements Listener {
         });
 
     }
+
+    @EventHandler
+    public void suffocate(EntityDamageByBlockEvent event){
+        if (event.getEntity() instanceof  Player player){
+            if (event.getCause().equals(EntityDamageEvent.DamageCause.SUFFOCATION)){
+                ascendLevel(player);
+            }
+        }
+    }
+    public boolean ascendLevel(Player player) {
+        final World world = player.getWorld();
+        final Location pos = player.getLocation();
+        final int x = pos.getBlockX();
+        int y = Math.max(-128, pos.getBlockY() + 1);
+        final int z = pos.getBlockZ();
+        int yPlusSearchHeight = y + 10;
+        int maxY = Math.min(200, yPlusSearchHeight) + 2;
+
+        while (y <= maxY) {
+            Location attemptedNewLoc = new Location(world,x, y, z);
+            if (!attemptedNewLoc.getBlock().isPassable()
+                    && attemptedNewLoc.getBlock().isPassable() && attemptedNewLoc.getBlock().getRelative(BlockFace.UP).isPassable()) {
+                attemptedNewLoc.setDirection(player.getEyeLocation().getDirection());
+                player.teleport(attemptedNewLoc);
+                return true;
+            }
+            ++y;
+        }
+
+        return false;
+    }
+
 
 }

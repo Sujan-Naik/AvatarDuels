@@ -50,17 +50,17 @@ public class Duel {
 
     private void tick(){
         if (!regionContainsPlayer(player1)){
-            finished(player1);
+            finished(player2);
         }
         if (!regionContainsPlayer(player2)){
-            finished(player2);
+            finished(player1);
         }
     }
 
     private boolean regionContainsPlayer(Player player){
 
         Location location = player.getLocation();
-        return !player.isOnline() || arena.region().contains(new Vector3d() {
+        return player.isOnline() && arena.region().contains(new Vector3d() {
             @Override
             public double x() {
                 return location.getX();
@@ -75,7 +75,7 @@ public class Duel {
             public double z() {
                 return location.getZ();
             }
-        }) || player.isDead();
+        }) && !player.isDead();
     }
 
 

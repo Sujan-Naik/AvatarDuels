@@ -26,6 +26,7 @@ public class ScooterAbility extends MovementAbility {
             remove();
         }
 
+
     }
 
     @Override

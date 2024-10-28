@@ -2,6 +2,7 @@ package com.serene.avatarduels.npc.entity;
 
 import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import com.mojang.authlib.GameProfile;
+import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.entity.AI.control.BodyRotationControl;
 import com.serene.avatarduels.npc.entity.AI.control.JumpControl;
 import com.serene.avatarduels.npc.entity.AI.control.LookControl;
@@ -48,6 +49,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -94,6 +96,15 @@ public class HumanEntity extends ServerPlayer {
     private int levitationStartTime;
     private boolean on = true;
 
+    public boolean hasClearRay(Vec3 vec3d, Vec3 vec3d1){
+        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+    }
+
+    public boolean hasClearRay(Vec3 vec3d){
+        Vec3 vec3d1 = new Vec3(this.getX(), this.getY(), this.getZ());
+
+        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+    }
 
 
     public HumanEntity(MinecraftServer server, ServerLevel world, GameProfile profile, ClientInformation clientOptions) {
@@ -159,7 +170,9 @@ public class HumanEntity extends ServerPlayer {
     public void die(DamageSource damageSource) {
         super.die(damageSource);
 //        spawnIn(this.level());
-        Bukkit.getPlayer(this.uuid).spigot().respawn();
+        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+            Bukkit.getPlayer(this.uuid).spigot().respawn();
+        }, 20L);
     }
 
     private void setPosToBed(BlockPos pos) {

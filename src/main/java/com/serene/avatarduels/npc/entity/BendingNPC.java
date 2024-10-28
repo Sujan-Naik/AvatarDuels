@@ -60,13 +60,22 @@ public class BendingNPC extends HumanEntity {
         if (entity.level() != this.level()) {
             return false;
         } else {
-            return hasClearRay(new Vec3(this.getX(), this.getEyeY(), this.getZ()),  new Vec3(entity.getX(), entity.getEyeY(), entity.getZ()), entity)
-            && hasClearRay(new Vec3(this.getX(), this.getY(), this.getZ()),  new Vec3(entity.getX(), entity.getY(), entity.getZ()), entity);
+            return hasClearRay(new Vec3(this.getX(), this.getEyeY(), this.getZ()),  new Vec3(entity.getX(), entity.getEyeY(), entity.getZ()))
+            && hasClearRay(new Vec3(this.getX(), this.getY(), this.getZ()),  new Vec3(entity.getX(), entity.getY(), entity.getZ()));
 
         }
     }
 
-    private boolean hasClearRay(Vec3 vec3d, Vec3 vec3d1, Entity entity){
+    public boolean hasClearRayForward(){
+        return hasClearRay(this.getPosition(0).add(this.getForward().scale(1)));
+    }
+
+    public boolean hasClearRay(Vec3 vec3d, Vec3 vec3d1){
+        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+    }
+
+    public boolean hasClearRay(Vec3 vec3d){
+        Vec3 vec3d1 = new Vec3(this.getX(), this.getY(), this.getZ());
         return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
     }
 

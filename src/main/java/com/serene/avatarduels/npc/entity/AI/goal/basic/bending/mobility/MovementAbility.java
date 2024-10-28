@@ -42,7 +42,10 @@ public abstract class MovementAbility extends BendingUseAbility {
             }
         } else {
             remove();
+        }
 
+        if (!npc.hasClearRayForward()){
+            this.remove();
         }
     }
 
