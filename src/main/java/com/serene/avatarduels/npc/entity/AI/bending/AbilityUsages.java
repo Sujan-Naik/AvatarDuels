@@ -8,6 +8,8 @@ import com.projectkorra.projectkorra.configuration.ConfigManager;
 import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.configuration.AvatarDuelsConfig;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.BendingUseAbility;
+import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility.JetAbility;
+import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility.JumpAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility.ScooterAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility.SourcedMovementAbility;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.ranged.RangedAbility;
@@ -40,6 +42,18 @@ public enum AbilityUsages {
         player.getMobilityManager().useAbility(CoreAbility.getAbility("AirScooter"), false, 0, false, false, true, false);
     }, (npc) -> new ScooterAbility("AirScooter", npc, "AirScooter", 10)),
 
+    CATAPULT("Catapult", (player) -> {
+        player.getMobilityManager().useAbility(CoreAbility.getAbility("Catapult"), true, 1000, false, true, false, false);
+    }, (npc) -> new JumpAbility("Catapult", npc, "Catapult", PK_CONFIG.getDouble("Abilities.Earth.Catapult.Range"))),
+
+    EARTHSURF("EarthSurf", (player) -> {
+        player.getMobilityManager().useAbility(CoreAbility.getAbility("EarthSurf"), false, 0, false, false, true, false);
+    }, (npc) -> new ScooterAbility("EarthSurf", npc, "EarthSurf", 10)),
+
+    FIREJET("FireJet", (player) -> {
+        player.getMobilityManager().useAbility(CoreAbility.getAbility("FireJet"), false, 0, false, false, true, false);
+    }, (npc) -> new JetAbility("FireJet", npc, "FireJet", 10)),
+    
 
     // AIR ABILITIES
     AIRBREATH("AirBreath", (player) -> {
