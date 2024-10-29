@@ -7,6 +7,7 @@ import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.CircleEntity;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.MoveToEntity;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.movement.RunFromEntity;
 import com.serene.avatarduels.npc.entity.AI.goal.complex.combat.MasterCombat;
+import com.serene.avatarduels.npc.entity.AI.sensing.CombatPositionSelector;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.world.entity.LivingEntity;
 import org.bukkit.Bukkit;
@@ -22,13 +23,16 @@ public class BendingKillEntity extends MasterCombat {
     private static final int STATE_CHANGE_TICK_COOLDOWN = 80;
 
     private int lastAttemptedAbility;
-    private static final int ABILITY_ATTEMPT_COOLDOWN = 3;
+    private static final int ABILITY_ATTEMPT_COOLDOWN = 10;
+    private static final int MOBILITY_ATTEMPT_COOLDOWN = 40;
 
     private int lastSeen;
     private static final int ENTITY_MUST_SEE_COOLDOWN = 20;
 
     private int lastStrafed;
     private static final int STRAFE_COOLDOWN = 2;
+
+    private CombatPositionSelector positionSelector;
 
     public BendingKillEntity(String name, BendingNPC npc, LivingEntity target) {
         super(name, npc);
@@ -44,6 +48,8 @@ public class BendingKillEntity extends MasterCombat {
         this.lastSeen = npc.tickCount;
         this.lastStrafed = npc.tickCount;
         npc.getTargetSelector().setCurrentTarget(target);
+
+        this.positionSelector = new CombatPositionSelector(npc, target);
     }
 
 
@@ -58,62 +64,78 @@ public class BendingKillEntity extends MasterCombat {
             this.setFinished(true);
             return;
         }
+
+
+
         double distance = Math.sqrt(npc.distanceToSqr(entity));
-        double health = npc.getHealth();
 
-        boolean canChangeState = npc.tickCount - lastChangedState > STATE_CHANGE_TICK_COOLDOWN;
+        if (distance < 50) {
+            double health = npc.getHealth();
 
-        if ( npc.tickCount - lastStrafed > STRAFE_COOLDOWN){
-            lastStrafed = npc.tickCount;
-            npc.getMoveControl().strafe(0,0.1f);
-        }
+            boolean canChangeState = npc.tickCount - lastChangedState > STATE_CHANGE_TICK_COOLDOWN;
 
-        if (!npc.hasCompleteLineOfSight(entity) && npc.tickCount - lastSeen > ENTITY_MUST_SEE_COOLDOWN) {
-            if (!movementGoalSelector.doingGoal("Enter LOS")) {
-                movementGoalSelector.removeAllGoals();
-                movementGoalSelector.addGoal(new MoveToEntity("Enter LOS", npc, 1, 5, entity));
-                // Bukkit.broadcastMessage("Attempting to enter LOS");
+            if (npc.tickCount - lastStrafed > STRAFE_COOLDOWN) {
+                lastStrafed = npc.tickCount;
+                npc.getMoveControl().strafe(0, 0.1f);
+            }
 
+            if (!npc.hasCompleteLineOfSight(entity) && npc.tickCount - lastSeen > ENTITY_MUST_SEE_COOLDOWN) {
+                if (!movementGoalSelector.doingGoal("Enter LOS")) {
+                    movementGoalSelector.removeAllGoals();
+                    movementGoalSelector.addGoal(new MoveToEntity("Enter LOS", npc, 1, 5, entity));
+                    // Bukkit.broadcastMessage("Attempting to enter LOS");
+
+                }
+            } else {
+                lastSeen = npc.tickCount;
+                if (movementGoalSelector.doingGoal("Enter LOS")) {
+                    // Bukkit.broadcastMessage("Removed defunt LOS goal");
+
+                    movementGoalSelector.removeCurrentGoal();
+                }
+            }
+
+            if (canChangeState) {
+                state = NPC_STATES.getBestState(distance, health);
+                double idealRange = state.getIdealRange();
+
+                if (distance > idealRange + DISTANCE_TOLERANCE) {
+                    // Too far from the target
+                    closeTheGap(idealRange);
+                } else if (distance < idealRange - DISTANCE_TOLERANCE) {
+                    // Too close to the target
+                    widenTheGap(idealRange);
+                } else {
+                    // Within the tolerance range of the ideal distance, switch to circling
+                    // Bukkit.broadcastMessage("circling");
+                    circleTarget(idealRange);
+                }
+
+                lastChangedState = npc.tickCount;
+                // Bukkit.broadcastMessage(npc.displayName + ": " + state.name());
+                if (npc.isBusyBending()) {
+                    // Bukkit.broadcastMessage("Busy");
+                }
+            }
+
+
+            if (npc.tickCount - lastAttemptedAbility > ABILITY_ATTEMPT_COOLDOWN && !npc.isBusyBending()) {
+                AbilityUsages usage = getRandom(state.getAbilityUsagesList());
+                bendingGoalSelector.addGoal(usage.makeGoal(npc));
+                this.lastAttemptedAbility = npc.tickCount;
             }
         } else {
-            lastSeen = npc.tickCount;
-            if (movementGoalSelector.doingGoal("Enter LOS")) {
-                // Bukkit.broadcastMessage("Removed defunt LOS goal");
-
-                movementGoalSelector.removeCurrentGoal();
-            }
-        }
-
-         if (canChangeState){
-            state = NPC_STATES.getBestState(distance, health);
-            double idealRange = state.getIdealRange();
-
-            if (distance > idealRange + DISTANCE_TOLERANCE) {
-                    // Too far from the target
-                closeTheGap(idealRange);
-            } else if (distance < idealRange - DISTANCE_TOLERANCE) {
-                    // Too close to the target
-                widenTheGap(idealRange);
+            if (! positionSelector.tick() ){
+                closeTheGap(50);
             } else {
-                    // Within the tolerance range of the ideal distance, switch to circling
-                // Bukkit.broadcastMessage("circling");
-                circleTarget(idealRange);
+                movementGoalSelector.removeAllGoals();
+
+                if (npc.tickCount - lastAttemptedAbility > MOBILITY_ATTEMPT_COOLDOWN && !npc.isBusyBending()) {
+                    AbilityUsages usage = getRandom(ABIL_CATEGORISATIONS.MOVEMENT);
+                    bendingGoalSelector.addGoal(usage.makeGoal(npc));
+                    this.lastAttemptedAbility = npc.tickCount;
+                }
             }
-
-            lastChangedState = npc.tickCount;
-            // Bukkit.broadcastMessage(npc.displayName + ": " + state.name());
-            if (npc.isBusyBending()){
-                // Bukkit.broadcastMessage("Busy");
-            }
-        }
-
-
-        if (npc.tickCount - lastAttemptedAbility > ABILITY_ATTEMPT_COOLDOWN && !npc.isBusyBending()){
-            AbilityUsages usage = getRandom(state.getAbilityUsagesList());
-            bendingGoalSelector.addGoal(usage.makeGoal(npc));
-            this.lastAttemptedAbility = npc.tickCount;
-
-
         }
 
 

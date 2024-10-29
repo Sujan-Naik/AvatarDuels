@@ -3,6 +3,7 @@ package com.serene.avatarduels.npc.entity.AI.bending;
 import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.serene.avatarduels.AvatarDuels;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,9 +19,9 @@ import org.bukkit.util.Vector;
 
 public class MobilityManager {
 
-    private final HumanEntity NMSPlayer;
+    private final BendingNPC NMSPlayer;
 
-    public MobilityManager(HumanEntity NMSPlayer) {
+    public MobilityManager(BendingNPC NMSPlayer) {
         this.NMSPlayer = NMSPlayer;
     }
 
@@ -56,12 +57,14 @@ public class MobilityManager {
             NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
         }
 
+        double distRoot = Math.sqrt(nmsTarget.distanceTo(NMSPlayer));
         // Handle shift before movement
         if (shiftBefore) {
 
             // Optionally look at the ground while shifting
             if (shouldLookAtGroundWhileShifting) {
                 NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, NMSPlayer.getOnPos().getCenter().subtract(0,2,0));
+
 
                 Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
                     NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, NMSPlayer.getOnPos().getCenter().subtract(0,2,0));
@@ -76,7 +79,7 @@ public class MobilityManager {
                             player.setSneaking(false);
 
                             if (shouldClick) {
-                                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
+                                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget.getPosition(0).add(0,distRoot,0 ));
 
                                 Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
                                 player.swingMainHand();
@@ -88,7 +91,7 @@ public class MobilityManager {
                         Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
 
                             if (shouldClick) {
-                                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
+                                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget.getPosition(0).add(0,distRoot,0 ));
 
 
                                 Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
@@ -111,7 +114,7 @@ public class MobilityManager {
 
 
                         if (shouldClick) {
-                            NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
+                            NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget.getPosition(0).add(0,distRoot,0 ));
 
                             Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
                             player.swingMainHand();
@@ -122,7 +125,7 @@ public class MobilityManager {
                     // Just release shift after duration
                     Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
                         if (shouldClick) {
-                            NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
+                            NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget.getPosition(0).add(0,distRoot,0 ));
 
                             Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
                             player.swingMainHand();
