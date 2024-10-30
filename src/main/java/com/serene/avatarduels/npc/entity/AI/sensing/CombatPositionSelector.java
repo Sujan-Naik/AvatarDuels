@@ -3,14 +3,15 @@ package com.serene.avatarduels.npc.entity.AI.sensing;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import com.serene.avatarduels.npc.utils.PacketUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CombatPositionSelector {
 
@@ -36,6 +37,7 @@ public class CombatPositionSelector {
         chunkGrid = createChunkGrid();
 
         sinceLastPathRefresh = npc.tickCount;
+        lastDistanceFromEntity = livingEntity.distanceToSqr(npc);
     }
 
     private void navigateIfChanged(Vec3 pos){
@@ -77,24 +79,21 @@ public class CombatPositionSelector {
                 // Now iterate through the blocks within each chunk (0 to 15)
 
                 double bestScore = Double.NEGATIVE_INFINITY;
+
+
                 Vec3 bestPos = null;
-                Heightmap heightmap = level.getChunk(chunkX, chunkZ).getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING);
+                Heightmap heightmap = Heightmap.getOrCreateHeightmapUnprimed( level.getChunk(chunkX, chunkZ), Heightmap.Types.MOTION_BLOCKING_NO_BARRIERS);
+                int meanHeight = calculateMeanHeight(heightmap);
 
-
+                double stdDev = calculateStandardDeviation(heightmap, meanHeight);
 
                 for (int blockX = 0; blockX < 16; blockX++) {
                     for (int blockZ = 0; blockZ < 16; blockZ++) {
 
-                        int meanHeight = calculateMeanHeight(heightmap);
-                        if (meanHeight == 0){
-                            Bukkit.broadcastMessage("HEIGHTMAP IS FUCKED");
-                        }
-                        double stdDev = calculateStandardDeviation(heightmap, meanHeight);
-                        int obstacleCount = calculateObstacleCount(heightmap);
+                        int height = heightmap.getFirstAvailable(blockX, blockZ); // Get height at position (blockX, blockZ)
 
-                        // Calculate score
-                        double score = meanHeight - (stdDev * 2) - (obstacleCount * 3); // Adjust weights as needed
-
+                        // Calculate score based on flatness metric
+                        double score = -Math.abs(height - meanHeight) + stdDev; // You can adjust this formula
                         // Update best point
                         if (score > bestScore) {
                             bestScore = score;
@@ -102,15 +101,17 @@ public class CombatPositionSelector {
                         }
                     }
                 }
-                bestChunkGridPositions.add(bestPos);
+
+                if (bestPos != null ) {
+                    bestChunkGridPositions.add(bestPos);
+                }
             }
         }
         return bestChunkGridPositions;
     }
 
+
     private static final int CHUNK_SIZE = 16;
-    private static final int SEARCH_RADIUS = 1; // To check neighbors
-    private static final int OBSTACLE_THRESHOLD = 5; // Example threshold for an
 
     private static int calculateMeanHeight(Heightmap heightmap) {
         int sum = 0;
@@ -146,49 +147,58 @@ public class CombatPositionSelector {
     }
 
 
-    private static int calculateObstacleCount(Heightmap heightmap) {
-        int count = 0;
-        final int OBSTACLE_THRESHOLD = 5; // Adjust this value based on your game's definition of an obstacle
 
-        // Iterate through all blocks in the chunk (0 to 15 for both X and Z)
-        for (int blockX = 0; blockX < CHUNK_SIZE; blockX++) {
-            for (int blockZ = 0; blockZ < CHUNK_SIZE; blockZ++) {
-                int height = heightmap.getFirstAvailable(blockX, blockZ);
-                // Check if height is above the defined obstacle threshold
-                if (height > OBSTACLE_THRESHOLD) {
-                    count++;
-                }
-            }
-        }
-
-        return count; // Return the total count of obstacles found
-    }
 
 
 
     private static final int PATH_REFRESH_CD = 100;
 
+    private double lastDistanceFromEntity;
+
 
     private List<Vec3> path = new ArrayList<>();
+
+    private Vec3 currentNavigatingPos;
     public boolean tick(){
         if (!shouldContinue()){
             Bukkit.broadcastMessage("no continue");
             return false;
         } else {
 
-//            if (npc.tickCount - sinceLastPathRefresh > PATH_REFRESH_CD){
-//                this.refreshChunkGrid();
-//                sinceLastPathRefresh = npc.tickCount;
-//
-//            }
+            if (npc.tickCount - sinceLastPathRefresh > PATH_REFRESH_CD){
+                this.refreshChunkGrid();
+                sinceLastPathRefresh = npc.tickCount;
+                path = computePath();
+
+                if (lastDistanceFromEntity < npc.distanceTo(livingEntity)){
+                    if (!path.isEmpty()){
+                        currentNavigatingPos = path.removeFirst();
+                        navigateIfChanged(currentNavigatingPos);
+                        lastDistanceFromEntity = npc.distanceTo(livingEntity);
+                    }
+                }
+
+            }
             if (!path.isEmpty()) {
-                navigateIfChanged(path.get(0));
+                if (currentNavigatingPos != null){
+                    if (npc.getPosition(0).multiply(1,0,1).distanceToSqr(currentNavigatingPos.multiply(1,0,1))< CHUNK_SIZE * CHUNK_SIZE){
+                        currentNavigatingPos = path.removeFirst();
+                        navigateIfChanged(currentNavigatingPos);
+                    }
+                } else {
+                    currentNavigatingPos = path.removeFirst();
+
+                }
+//                navigateIfChanged(currentNavigatingPos);
+
+
+
 //                Bukkit.broadcastMessage("Dijkstra'ing off into oblivion");
             } else {
                 this.refreshChunkGrid();
                 path = computePath();
 
-//                Bukkit.broadcastMessage("no Dijkce");
+                Bukkit.broadcastMessage("no Dijkce");
                 return false;
             }
 
@@ -202,6 +212,31 @@ public class CombatPositionSelector {
         return dijkstra(npc.getPosition(0), target);
     }
 
+    private Vec3 getLowestYAdjustedGoalPos(Vec3 startPos, Vec3 goalPos){
+        Vec3 adjustedGoalPos = goalPos;
+
+        int maximumIterations = (int) (384 - goalPos.y());
+
+        do {
+            adjustedGoalPos = adjustedGoalPos.add(0, 1, 0);
+            maximumIterations--;
+        } while (!npc.hasClearRay(startPos.add(0,2,0), adjustedGoalPos) && maximumIterations > 0);
+
+        if (maximumIterations < 0) {
+//            Bukkit.broadcastMessage("no clear goalPos");
+            return null;
+        }
+
+        return adjustedGoalPos;
+    }
+
+
+    private Set<Vec3> getNeighbours(Vec3 current){
+
+//        return chunkGrid.stream().filter(vec3 -> npc.hasClearRay(vec3, current) ).collect(Collectors.toSet());
+        return chunkGrid.stream().map(vec3 -> getLowestYAdjustedGoalPos(vec3, current)).filter(Objects::nonNull).collect(Collectors.toSet());
+    }
+
     private List<Vec3> dijkstra(Vec3 start, Vec3 target) {
         // Priority queue to store (cost, Vec3)
         PriorityQueue<Node> openSet = new PriorityQueue<>(Comparator.comparingDouble(node -> node.cost));
@@ -210,11 +245,10 @@ public class CombatPositionSelector {
         List<Vec3> path = new ArrayList<>();
 //        Vec3 target = chunkGrid.stream().min(Comparator.comparingDouble(o -> o(actualTarget)).get();
 
-        for (Vec3 pos : chunkGrid) {
-            costMap.put(pos, Double.POSITIVE_INFINITY); // All nodes cost is initially infinity
-        }
+
         costMap.put(start, 0.0);
         openSet.add(new Node(start, 0));
+
 
         while (!openSet.isEmpty()) {
             Node current = openSet.poll();
@@ -225,13 +259,23 @@ public class CombatPositionSelector {
             }
 
             // Visit each neighbor
+//            for (Vec3 neighbor : getNeighbours(current.position)) {
             for (Vec3 neighbor : chunkGrid) {
-                double newCost = costMap.get(current.position) + current.position.distanceTo(neighbor);
-                if (newCost < costMap.get(neighbor)) {
-                    costMap.put(neighbor, newCost);
-                    cameFrom.put(neighbor, current.position);
-                    openSet.add(new Node(neighbor, newCost));
-                }
+//                if (isSolid(npc.getBlockingPos(neighbor.add(0,50,0), neighbor.subtract(0,50,0)))) {
+                    double newCost = costMap.get(current.position) + current.position.distanceTo(neighbor);
+                    costMap.putIfAbsent(neighbor, Double.POSITIVE_INFINITY);
+                    if (newCost < costMap.get(neighbor)) {
+                        costMap.put(neighbor, newCost);
+                        cameFrom.put(neighbor, current.position);
+                        openSet.add(new Node(neighbor, newCost));
+                    }
+//                }
+            }
+
+            if (openSet.isEmpty()){
+                Bukkit.broadcastMessage("this isn't the best path but it gets you " + current.position.multiply(1,0,1).distanceToSqr(target.multiply(1,0,1)) );
+                return reconstructPath(cameFrom, current.position);
+
             }
         }
         return path; // Return empty if no path is found

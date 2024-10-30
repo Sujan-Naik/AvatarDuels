@@ -1,5 +1,6 @@
 package com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility;
 
+import com.serene.avatarduels.npc.entity.AI.control.MoveControl;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.BendingUseAbility;
 import com.serene.avatarduels.npc.entity.AI.pathfinding.Navigation;
 import com.serene.avatarduels.npc.entity.BendingNPC;
@@ -20,6 +21,8 @@ public abstract class MovementAbility extends BendingUseAbility {
         this.goalPos = target.getPosition(0);
     }
 
+
+
     @Override
     public boolean shouldStart() {
         return target != null && target.isAlive();
@@ -37,17 +40,19 @@ public abstract class MovementAbility extends BendingUseAbility {
             if (getDistance() > requiredDistance ) {
 //                npc.getNavigation().moveTo(goalPos.x, goalPos.y, goalPos.z, 10);
                 //  npc.getNavigation().createPath(BlockPos.containing(goalPos), 1000);
+
+//                this.npc.getMoveControl().setOperation(MoveControl.Operation.WAIT);
+
             } else {
                 remove();
             }
         } else {
             remove();
         }
-
-        if (!npc.hasClearRayForward()){
-            this.remove();
-        }
     }
+
+
+
 
 
 }

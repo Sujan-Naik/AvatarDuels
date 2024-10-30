@@ -43,12 +43,14 @@ public class MoveControl implements Control {
         return this.speedModifier;
     }
 
+
+
     public void setWantedPosition(double x, double y, double z, double speed) {
         this.wantedX = x;
         this.wantedY = y;
         this.wantedZ = z;
         this.speedModifier = speed;
-        if (this.operation != Operation.JUMPING) {
+        if (this.operation != Operation.JUMPING && !(mob instanceof BendingNPC bendingNPC && bendingNPC.isBusyBending()) ) {
             this.operation = Operation.MOVE_TO;
         }
 
@@ -62,6 +64,9 @@ public class MoveControl implements Control {
     }
 
     public void tick() {
+        if (mob instanceof BendingNPC bendingNPC &&  bendingNPC.isBusyMovementBending()) {
+            return;
+        }
         float q;
         if (this.operation == Operation.STRAFE) {
             float f = (float) this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
@@ -101,12 +106,11 @@ public class MoveControl implements Control {
             }
 
             q = (float) (Mth.atan2(e, d) * 57.2957763671875) - 90.0F;
-            if (mob instanceof BendingNPC bendingNPC && !bendingNPC.isBusyBending()) {
-                this.mob.setYRot(this.rotlerp(this.mob.getYRot(), q, 90.0F));
-            } else {
-                this.mob.setYRot(this.rotlerp(this.mob.getYRot(), q, 90.0F));
 
-            }
+            this.mob.setYRot(this.rotlerp(this.mob.getYRot(), q, 90.0F));
+
+
+
             this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
             mob.zza = ((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
 

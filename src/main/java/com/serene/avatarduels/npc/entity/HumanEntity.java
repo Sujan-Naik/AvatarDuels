@@ -137,6 +137,13 @@ public class HumanEntity extends ServerPlayer {
         return this.level().clip( new ClipContext(vec3d, vec3d1, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, this)).getLocation()  ; // Paper - Perf: Use distance squared & strip raytracing
     }
 
+    public Vec3 getBlockingPos(Vec3 vec3d, Vec3 vec3d1){
+//        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+        return this.level().clip( new ClipContext(vec3d, vec3d1, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, this)).getLocation()  ; // Paper - Perf: Use distance squared & strip raytracing
+
+    }
+
+
 
     public HumanEntity(MinecraftServer server, ServerLevel world, GameProfile profile, ClientInformation clientOptions) {
         super(server, world, profile, clientOptions);
@@ -626,6 +633,8 @@ public class HumanEntity extends ServerPlayer {
                 }
 
                 // // Bukkit.broadcastMessage("travelling " + vec3d1.length() + " distance");
+
+
                 this.travel(vec3d1);
             }
 

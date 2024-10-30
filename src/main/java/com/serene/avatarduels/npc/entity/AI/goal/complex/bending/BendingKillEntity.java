@@ -10,6 +10,7 @@ import com.serene.avatarduels.npc.entity.AI.goal.complex.combat.MasterCombat;
 import com.serene.avatarduels.npc.entity.AI.sensing.CombatPositionSelector;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 
 import java.util.Collection;
@@ -125,12 +126,15 @@ public class BendingKillEntity extends MasterCombat {
                 this.lastAttemptedAbility = npc.tickCount;
             }
         } else {
-            if (! positionSelector.tick() ){
+            if ( ! positionSelector.tick() ){
                 closeTheGap(50);
             } else {
                 movementGoalSelector.removeAllGoals();
 
-                if (npc.tickCount - lastAttemptedAbility > MOBILITY_ATTEMPT_COOLDOWN && !npc.isBusyBending()) {
+                if (npc.tickCount - lastAttemptedAbility > MOBILITY_ATTEMPT_COOLDOWN && !npc.isBusyBending() ) {
+                    Vec3 accessibleNavPos = npc.getNavigation().getLowestYAdjustedGoalPos();
+
+
                     AbilityUsages usage = getRandom(ABIL_CATEGORISATIONS.MOVEMENT);
                     bendingGoalSelector.addGoal(usage.makeGoal(npc));
                     this.lastAttemptedAbility = npc.tickCount;

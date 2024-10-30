@@ -1,5 +1,6 @@
 package com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility;
 
+import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import org.bukkit.Bukkit;
@@ -19,16 +20,26 @@ public class JetAbility extends MovementAbility {
         if ( !CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass())){
             remove();
         } else {
-            npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.FEET);
+//            npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.FEET);
+        }
+
+        if (!npc.hasClearRayForward()){
+            remove();
         }
     }
 
     @Override
     protected void remove(){
+
         if (hasStarted){
-            npc.setBusyBending(false);
+
             Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, true));
             player.setSneaking(true);
+            Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+                player.setSneaking(false);
+                npc.setBusyBending(false);
+            }, 2L);
         }
         setFinished(true);
     }

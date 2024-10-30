@@ -141,9 +141,9 @@ public class NavigationMesh {
     private boolean isAcceptableDirection(Vec3 floorPos, Direction direction){
         Vec3 newPos = floorPos.relative(direction, 1);
 
-        return  (isAir(newPos.relative(Direction.UP, 1)) && isSolid(newPos) ) || // straight
-                (isAir(newPos) && isSolid(newPos.relative(Direction.DOWN, 1)) ) || // down
-                (isAir(newPos.relative(Direction.UP, 2 )) && isSolid(newPos.relative(Direction.UP, 1 )) ); //up
+        return  (isAir(newPos.relative(Direction.UP, 1)) && isAir(newPos.relative(Direction.UP, 2))  && isSolid(newPos) ) || // straight
+                (isAir(newPos) && isAir(newPos.relative(Direction.UP, 1))  && isSolid(newPos.relative(Direction.DOWN, 1)) ) || // down
+                (isAir(newPos.relative(Direction.UP, 2 )) && isAir(newPos.relative(Direction.UP, 3))  && isSolid(newPos.relative(Direction.UP, 1 )) ); //up
     }
 
     private static final List<Direction> directions = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
@@ -189,7 +189,7 @@ public class NavigationMesh {
                 }
             }
 
-            if (counter > 100000){
+            if (counter > 1000000){
                 break;
             }
         }

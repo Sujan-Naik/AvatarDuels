@@ -4,6 +4,9 @@ import com.serene.avatarduels.npc.entity.AI.control.JumpControl;
 import com.serene.avatarduels.npc.entity.AI.control.MoveControl;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import com.serene.avatarduels.npc.entity.HumanEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 
@@ -21,6 +24,7 @@ public class Navigation {
 
 
     private Vec3 goalPos;
+    private Vec3 adjustedGoalPos;
 
     private Vec3 newPos;
 
@@ -41,11 +45,35 @@ public class Navigation {
 
 
     public void navigateToPos(Vec3 pos){
-        this.goalPos = pos;
+        if (pos != null) {
+            this.goalPos = pos;
+            adjustedGoalPos = null;
+
+//            humanEntity.level().setBlock(BlockPos.containing(pos), new BlockState(Blocks.DIRT,  n ));
+            Bukkit.broadcastMessage(String.valueOf(pos));
+        }
     }
 
     public Vec3 getGoalPos() {
         return goalPos;
+    }
+
+    public Vec3 getLowestYAdjustedGoalPos(){
+        if (adjustedGoalPos == null) {
+             adjustedGoalPos = goalPos;
+            int maximumIterations = (int) (384 - goalPos.y());
+
+            do {
+                adjustedGoalPos = adjustedGoalPos.add(0, 1, 0);
+                maximumIterations--;
+            } while (!humanEntity.hasClearRay(adjustedGoalPos) && maximumIterations > 0);
+
+            if (maximumIterations < 0) {
+                Bukkit.broadcastMessage("no clear goalPos");
+                return goalPos;
+            }
+        }
+        return adjustedGoalPos;
     }
 
 
@@ -84,7 +112,7 @@ public class Navigation {
 
                 } else {
                     newPos = currentPath.removeFirst().getPos();
-                    if (newPos.y > humanEntity.getOnPos().getY() + 1){
+                    if (newPos.y > humanEntity.getOnPos().getY() + 1) {
                         jumpControl.jump();
                     }
                     moveControl.setWantedPosition(newPos.x, newPos.y, newPos.z, 10);

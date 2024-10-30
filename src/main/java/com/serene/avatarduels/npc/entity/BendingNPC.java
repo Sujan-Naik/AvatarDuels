@@ -57,6 +57,16 @@ public class BendingNPC extends HumanEntity {
         isBusyBending = busyBending;
     }
 
+    private boolean isBusyMovementBending;
+
+    public boolean isBusyMovementBending() {
+        return isBusyMovementBending;
+    }
+
+    public void setBusyMovementBending(boolean busyBending) {
+        isBusyMovementBending = busyBending;
+    }
+
     public boolean hasCompleteLineOfSight(Entity entity) {
         if (entity.level() != this.level()) {
             return false;
