@@ -37,7 +37,7 @@ public class CombatPositionSelector {
         chunkGrid = createChunkGrid();
 
         sinceLastPathRefresh = npc.tickCount;
-        lastDistanceFromEntity = livingEntity.distanceToSqr(npc);
+//        lastDistanceFromEntity = livingEntity.distanceToSqr(npc);
     }
 
     private void navigateIfChanged(Vec3 pos){
@@ -151,9 +151,9 @@ public class CombatPositionSelector {
 
 
 
-    private static final int PATH_REFRESH_CD = 100;
+    private static final int PATH_REFRESH_CD = 1200;
 
-    private double lastDistanceFromEntity;
+//    private double lastDistanceFromEntity;
 
 
     private List<Vec3> path = new ArrayList<>();
@@ -168,21 +168,35 @@ public class CombatPositionSelector {
             if (npc.tickCount - sinceLastPathRefresh > PATH_REFRESH_CD){
                 this.refreshChunkGrid();
                 sinceLastPathRefresh = npc.tickCount;
-                path = computePath();
+//                path = computePath();
 
-                if (lastDistanceFromEntity < npc.distanceTo(livingEntity)){
-                    if (!path.isEmpty()){
-                        currentNavigatingPos = path.removeFirst();
-                        navigateIfChanged(currentNavigatingPos);
-                        lastDistanceFromEntity = npc.distanceTo(livingEntity);
-                    }
-                }
+//                if (lastDistanceFromEntity < npc.distanceTo(livingEntity)){
+//                    if (!path.isEmpty()){
+//                        currentNavigatingPos = path.removeFirst();
+//                        navigateIfChanged(currentNavigatingPos);
+//                        lastDistanceFromEntity = npc.distanceTo(livingEntity);
+//                    }
+//                }
 
             }
             if (!path.isEmpty()) {
                 if (currentNavigatingPos != null){
-                    if (npc.getPosition(0).multiply(1,0,1).distanceToSqr(currentNavigatingPos.multiply(1,0,1))< CHUNK_SIZE * CHUNK_SIZE){
+                    Vec3 currentNavigatingPosY0 = currentNavigatingPos.multiply(1,0,1);
+                    Vec3 npcPosY0 = npc.getPosition(0).multiply(1,0,1);
+                    Vec3 targetPosY0 = livingEntity.getPosition(0).multiply(1,0,1);
+
+                    double npcDistSqrToCurrentPos = npcPosY0.distanceToSqr(currentNavigatingPosY0);
+                    double npcDistSqrToEnemy = npcPosY0.distanceToSqr(targetPosY0);
+                    double currentPosDistSqrToEnemy = currentNavigatingPosY0.distanceToSqr(targetPosY0);
+
+                    if (npcDistSqrToCurrentPos < CHUNK_SIZE * CHUNK_SIZE || npcDistSqrToEnemy < currentPosDistSqrToEnemy){
+
                         currentNavigatingPos = path.removeFirst();
+                        Vec3 relative = new Vec3(currentNavigatingPos.x()-npcPosY0.x(), 69 , currentNavigatingPos.z()-npcPosY0.z() );
+                        if (!npc.hasClearRayRelative(relative)){
+                            currentNavigatingPos = npc.getBlockingPos(currentNavigatingPos);
+                        }
+
                         navigateIfChanged(currentNavigatingPos);
                     }
                 } else {
@@ -190,8 +204,6 @@ public class CombatPositionSelector {
 
                 }
 //                navigateIfChanged(currentNavigatingPos);
-
-
 
 //                Bukkit.broadcastMessage("Dijkstra'ing off into oblivion");
             } else {
