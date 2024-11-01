@@ -42,10 +42,10 @@ public class NavigationMesh {
         this.updateMesh();
 
         if (!mesh.isEmpty()) {
-           // Bukkit.broadcastMessage("the mesh has " + mesh.size() + " nodes");
+           // // Bukkit.broadcastMessage("the mesh has " + mesh.size() + " nodes");
             if (!mesh.contains(target)) {
                 this.target = mesh.stream().min(Comparator.comparingDouble(o -> o.getPos().distanceTo(this.target.getPos()))).get();
-               // Bukkit.broadcastMessage("target distance to start is " + target.dist(start));
+               // // Bukkit.broadcastMessage("target distance to start is " + target.dist(start));
             }
 
             return aStar(mesh);
@@ -86,11 +86,11 @@ public class NavigationMesh {
         // Optionally, check if the path starts with the start node
         // and ends with the target node
         if (!path.isEmpty() && path.get(0).equals(start) && path.get(path.size() - 1).equals(target)) {
-           // Bukkit.broadcastMessage("A valid path should be being returned");
+           // // Bukkit.broadcastMessage("A valid path should be being returned");
             return path;
         } else {
 
-           // Bukkit.broadcastMessage("Path is invalid but " + path.size());
+           // // Bukkit.broadcastMessage("Path is invalid but " + path.size());
             return new ArrayList<>(); // Return empty if the path is invalid
         }
     }
@@ -110,7 +110,7 @@ public class NavigationMesh {
 
             // Check if current is the target
             if (current.equals(target)) {
-               // Bukkit.broadcastMessage("WE ARE RECONSTRUCTING THE PATH");
+               // // Bukkit.broadcastMessage("WE ARE RECONSTRUCTING THE PATH");
                 return reconstructPath(cameFrom);
             }
 
@@ -122,18 +122,19 @@ public class NavigationMesh {
                     continue; // Ignore if not valid or already evaluated
                 }
 
+
                 double tentativePathCost = pathCosts.get(current) + 1; // Assuming uniform cost
                 if (!pathCosts.containsKey(neighbor) || tentativePathCost < pathCosts.get(neighbor)) {
                     cameFrom.put(neighbor, current);
                     pathCosts.put(neighbor, tentativePathCost);
 
                     // Create new node with updated cost values
-                    openSet.add(new Node(neighbor.getPos(), tentativePathCost, heuristic(neighbor)));
+                    openSet.add(neighbor);
                 }
             }
         }
 
-       // Bukkit.broadcastMessage("no path found containing target");
+       // // Bukkit.broadcastMessage("no path found containing target");
         return new ArrayList<>(); // Return empty path if not found
     }
     
@@ -218,7 +219,7 @@ public class NavigationMesh {
                 }
             }
 
-            if (counter > 100000){
+            if (counter > 10000){
                 break;
             }
         }

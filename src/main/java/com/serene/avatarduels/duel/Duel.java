@@ -81,7 +81,7 @@ public class Duel {
 
     private void finished(Player winner){
         winner.sendTitle("YOU WON!", "Well done");
-        Bukkit.broadcastMessage(winner.getDisplayName() + " won the duel!");
+        // Bukkit.broadcastMessage(winner.getDisplayName() + " won the duel!");
         player1.setGlowing(false);
         player2.setGlowing(false);
         this.runner.cancel();

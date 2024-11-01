@@ -50,7 +50,7 @@ public class DuelManager {
             );
 
             String message = messageBuilder.toString();
-            Bukkit.broadcastMessage(message);
+            // Bukkit.broadcastMessage(message);
         });
     }
 

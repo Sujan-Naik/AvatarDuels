@@ -43,13 +43,14 @@ public class CombatPositionSelector {
     private void navigateIfChanged(Vec3 pos){
         if (npc.getNavigation().getGoalPos() != pos){
             npc.getNavigation().navigateToPos(pos);
+            // Bukkit.broadcastMessage(String.valueOf(pos));
         }
     }
 
     public void refreshChunkGrid(){
         chunkGrid = createChunkGrid();
 
-//        Bukkit.broadcastMessage(String.valueOf(chunkGrid.size()));
+//        // Bukkit.broadcastMessage(String.valueOf(chunkGrid.size()));
 //        chunkGrid.forEach(vec3 -> {
 //            System.out.println(vec3);
 //        });
@@ -66,10 +67,10 @@ public class CombatPositionSelector {
         int targetChunkZ = level.getChunkAt(livingEntity.getOnPos()).locZ;
 
         // Get the minimum and maximum chunk coordinates
-        int minX = Math.min(npcChunkX, targetChunkX);
-        int maxX = Math.max(npcChunkX, targetChunkX);
-        int minZ = Math.min(npcChunkZ, targetChunkZ);
-        int maxZ = Math.max(npcChunkZ, targetChunkZ);
+        int minX = Math.min(npcChunkX, targetChunkX) - 2;
+        int maxX = Math.max(npcChunkX, targetChunkX) + 2;
+        int minZ = Math.min(npcChunkZ, targetChunkZ) - 2;
+        int maxZ = Math.max(npcChunkZ, targetChunkZ) + 2;
 
 
         // Iterate through the X range of chunks
@@ -84,13 +85,14 @@ public class CombatPositionSelector {
                 Vec3 bestPos = null;
                 Heightmap.primeHeightmaps(level.getChunk(chunkX, chunkZ), Arrays.stream(Heightmap.Types.values()).collect(Collectors.toSet()));
 
-                Heightmap heightmap = Heightmap.getOrCreateHeightmapUnprimed( level.getChunk(chunkX, chunkZ), Heightmap.Types.MOTION_BLOCKING_NO_BARRIERS_OR_WATER);
+
+                Heightmap heightmap = Heightmap.getOrCreateHeightmapUnprimed(level.getChunk(chunkX, chunkZ) , Heightmap.Types.MOTION_BLOCKING_NO_BARRIERS_OR_WATER);
                 Heightmap waterInclHeightMap = Heightmap.getOrCreateHeightmapUnprimed( level.getChunk(chunkX, chunkZ), Heightmap.Types.MOTION_BLOCKING_NO_BARRIERS);
                 int meanHeight = calculateMeanHeight(heightmap);
 
                 double stdDev = calculateStandardDeviation(heightmap, meanHeight);
 
-                if (stdDev > 50 || stdDev < 1){
+                if (stdDev > 80 || stdDev < 0.3){
                     continue;
                 }
                 for (int blockX = 0; blockX < 16; blockX++) {
@@ -168,9 +170,13 @@ public class CombatPositionSelector {
     private List<Vec3> path = new ArrayList<>();
 
     private Vec3 currentNavigatingPos;
+
+    public Set<Vec3> getChunkGrid(){
+        return chunkGrid;
+    }
     public boolean tick(){
         if (!shouldContinue()){
-            Bukkit.broadcastMessage("no continue");
+            // Bukkit.broadcastMessage("no continue");
             return false;
         } else {
 
@@ -195,16 +201,18 @@ public class CombatPositionSelector {
                     Vec3 targetPosY0 = livingEntity.getPosition(0).multiply(1,0,1);
 
                     double npcDistSqrToCurrentPos = npcPosY0.distanceToSqr(currentNavigatingPosY0);
+
                     double npcDistSqrToEnemy = npcPosY0.distanceToSqr(targetPosY0);
                     double currentPosDistSqrToEnemy = currentNavigatingPosY0.distanceToSqr(targetPosY0);
 
                     if (npcDistSqrToCurrentPos < 4 * CHUNK_SIZE * CHUNK_SIZE || npcDistSqrToEnemy < currentPosDistSqrToEnemy){
 
                         currentNavigatingPos = path.removeFirst();
-                        Vec3 relative = new Vec3(currentNavigatingPos.x()-npcPosY0.x(), 69 , currentNavigatingPos.z()-npcPosY0.z() );
-                        if (!npc.hasClearRayRelative(relative)){
-                            currentNavigatingPos = npc.getBlockingPos(currentNavigatingPos);
-                        }
+
+//                        Vec3 relative = new Vec3(currentNavigatingPos.x()-npcPosY0.x(), 69 , currentNavigatingPos.z()-npcPosY0.z() );
+//                        if (!npc.hasClearRayRelative(relative)){
+//                            currentNavigatingPos = npc.getBlockingPos(currentNavigatingPos);
+//                        }
 
                         navigateIfChanged(currentNavigatingPos);
                     }
@@ -215,12 +223,12 @@ public class CombatPositionSelector {
                 }
 //                navigateIfChanged(currentNavigatingPos);
 
-//                Bukkit.broadcastMessage("Dijkstra'ing off into oblivion");
+//                // Bukkit.broadcastMessage("Dijkstra'ing off into oblivion");
             } else {
                 this.refreshChunkGrid();
                 path = computePath();
 
-                Bukkit.broadcastMessage("no Dijkce");
+                // Bukkit.broadcastMessage("no Dijkce");
                 return false;
             }
 
@@ -245,7 +253,7 @@ public class CombatPositionSelector {
         } while (!npc.hasClearRay(startPos.add(0,2,0), adjustedGoalPos) && maximumIterations > 0);
 
         if (maximumIterations < 0) {
-//            Bukkit.broadcastMessage("no clear goalPos");
+//            // Bukkit.broadcastMessage("no clear goalPos");
             return null;
         }
 
@@ -295,7 +303,7 @@ public class CombatPositionSelector {
             }
 
             if (openSet.isEmpty()){
-                Bukkit.broadcastMessage("this isn't the best path but it gets you " + current.position.multiply(1,0,1).distanceToSqr(target.multiply(1,0,1)) );
+                // Bukkit.broadcastMessage("this isn't the best path but it gets you " + current.position.multiply(1,0,1).distanceToSqr(target.multiply(1,0,1)) );
                 return reconstructPath(cameFrom, current.position);
 
             }
@@ -334,7 +342,7 @@ public class CombatPositionSelector {
             Vec3 bypassPos = findNewPositionAroundObstacle(findFirstObstacleInPath());
             return bypassPos;
         } else {
-            Bukkit.broadcastMessage("first obstacle is null");
+            // Bukkit.broadcastMessage("first obstacle is null");
             return null;
         }
     }
@@ -379,27 +387,27 @@ public class CombatPositionSelector {
 
 // Check if npc is null
         if (npc == null) {
-            Bukkit.broadcastMessage("NPC is null");
+            // Bukkit.broadcastMessage("NPC is null");
         }
 
 // Check if livingEntity is null
         if (livingEntity == null) {
-            Bukkit.broadcastMessage("LivingEntity is null");
+            // Bukkit.broadcastMessage("LivingEntity is null");
         }
 
 // Check if npc is alive
         if (!npc.isAlive()) {
-            Bukkit.broadcastMessage("NPC is not alive");
+            // Bukkit.broadcastMessage("NPC is not alive");
         }
 
 // Check if livingEntity is alive
         if (!livingEntity.isAlive()) {
-            Bukkit.broadcastMessage("LivingEntity is not alive");
+            // Bukkit.broadcastMessage("LivingEntity is not alive");
         }
 
 // Check if the current target of the npc is not the livingEntity
         if (npc.getTargetSelector().getCurrentTarget() != livingEntity) {
-            Bukkit.broadcastMessage("NPC's current target is not the LivingEntity");
+            // Bukkit.broadcastMessage("NPC's current target is not the LivingEntity");
         }
 
 // Finally, if all checks pass, you can return the result

@@ -26,7 +26,7 @@ public class RandomExploration extends MasterMovement {
     public void tick() {
         super.tick();
         if (moveForward.isBugged()) {
-            //// Bukkit.broadcastMessage("can't go anywhere");
+            //// // Bukkit.broadcastMessage("can't go anywhere");
 
         } else {
             if (moveForward.isStuck()) {

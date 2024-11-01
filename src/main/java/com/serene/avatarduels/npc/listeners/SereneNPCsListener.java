@@ -40,7 +40,10 @@ public class SereneNPCsListener implements Listener {
     public void suffocate(EntityDamageByBlockEvent event){
         if (event.getEntity() instanceof  Player player){
             if (event.getCause().equals(EntityDamageEvent.DamageCause.SUFFOCATION)){
+                // Bukkit.broadcastMessage("balls");
                 ascendLevel(player);
+            } else {
+                // Bukkit.broadcastMessage(String.valueOf(event.getCause()));
             }
         }
     }
@@ -50,7 +53,7 @@ public class SereneNPCsListener implements Listener {
         final int x = pos.getBlockX();
         int y = Math.max(-128, pos.getBlockY() + 1);
         final int z = pos.getBlockZ();
-        int yPlusSearchHeight = y + 10;
+        int yPlusSearchHeight = y + 20;
         int maxY = Math.min(200, yPlusSearchHeight) + 2;
 
         while (y <= maxY) {

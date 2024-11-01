@@ -44,6 +44,13 @@ public class Navigation {
         if (pos != null) {
             this.goalPos = pos;
             adjustedGoalPos = null;
+
+            currentPath = navigationMesh.getPath(goalPos);
+            if (!currentPath.isEmpty()) {
+                newPos = currentPath.removeFirst().getPos();
+                sinceLastPathRefresh = humanEntity.tickCount;
+
+            }
         }
     }
 
@@ -62,7 +69,7 @@ public class Navigation {
             } while (!humanEntity.hasClearRay(adjustedGoalPos) && maximumIterations > 0);
 
             if (maximumIterations < 0) {
-                Bukkit.broadcastMessage("no clear goalPos");
+                // Bukkit.broadcastMessage("no clear goalPos");
                 return goalPos;
             }
         }

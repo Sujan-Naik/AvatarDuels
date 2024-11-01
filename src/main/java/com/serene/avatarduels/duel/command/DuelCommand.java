@@ -35,7 +35,7 @@ public class DuelCommand implements CommandExecutor {
                         AvatarDuels.instance.getDuelManager().listArenas();
                     }
                     case "spawn" -> {
-//                        Bukkit.getServicesManager().getKnownServices().forEach(aClass -> Bukkit.broadcastMessage(aClass.getName()));
+//                        Bukkit.getServicesManager().getKnownServices().forEach(aClass -> // Bukkit.broadcastMessage(aClass.getName()));
                         if (strings.length == 2){
                             AvatarDuels.instance.getDuelManager().goToArena(strings[1], player, 0);
                         }
@@ -60,10 +60,10 @@ public class DuelCommand implements CommandExecutor {
                             String world = strings[3];
 
                             NPCHandler.getNpcs().stream().filter(bendingNPC -> bendingNPC.getUUID().equals(player1.getUniqueId())).findFirst().
-                                    ifPresentOrElse(bendingNPC -> bendingNPC.startDuel(player2), () -> Bukkit.broadcastMessage("Player 1 is not a valid AI"));
+                                    ifPresentOrElse(bendingNPC -> bendingNPC.startDuel(player2), () ->  Bukkit.broadcastMessage("Player 1 is not a valid AI"));
 
                             NPCHandler.getNpcs().stream().filter(bendingNPC -> bendingNPC.getUUID().equals(player2.getUniqueId())).findFirst().
-                                    ifPresentOrElse(bendingNPC -> bendingNPC.startDuel(player1), () -> Bukkit.broadcastMessage("Player 2 is not a valid AI"));
+                                    ifPresentOrElse(bendingNPC -> bendingNPC.startDuel(player1), () ->  Bukkit.broadcastMessage("Player 2 is not a valid AI"));
 
                             new Duel(player1, player2, world);
                         }

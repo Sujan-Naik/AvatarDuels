@@ -35,11 +35,11 @@ public class GoalSelector {
                 removeCurrentGoal();
             } else {
                 if (currentBasicGoal instanceof BendingUseAbility bendingUseAbility){
-                    // Bukkit.broadcastMessage(bendingUseAbility.getName());
+                    // // Bukkit.broadcastMessage(bendingUseAbility.getName());
                 }
                 currentBasicGoal.tick();
             }
-            //// Bukkit.broadcastMessage(currentBasicGoal.getName());
+            //// // Bukkit.broadcastMessage(currentBasicGoal.getName());
 
         }
     }

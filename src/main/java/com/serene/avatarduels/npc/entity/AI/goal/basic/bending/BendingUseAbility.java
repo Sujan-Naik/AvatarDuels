@@ -60,7 +60,7 @@ public abstract class BendingUseAbility extends BasicGoal {
                     npc.setBusyBending(true);
                     Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
                         npc.setBusyBending(false);
-                    }, 5L);
+                    }, 10L);
                 }
             }
         } else {
