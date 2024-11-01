@@ -43,6 +43,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -96,15 +97,52 @@ public class HumanEntity extends ServerPlayer {
     private int levitationStartTime;
     private boolean on = true;
 
+
+
+    public boolean hasCompleteLineOfSight(Entity entity) {
+        if (entity.level() != this.level()) {
+            return false;
+        } else {
+            return hasClearRay(new Vec3(this.getX(), this.getEyeY(), this.getZ()),  new Vec3(entity.getX(), entity.getEyeY(), entity.getZ()))
+                    && hasClearRay(new Vec3(this.getX(), this.getY(), this.getZ()),  new Vec3(entity.getX(), entity.getY(), entity.getZ()));
+
+        }
+    }
+
+    public boolean hasClearRayForward(){
+        return hasClearRay(this.getPosition(0).add(this.getForward().multiply(1,0,1).normalize()));
+    }
+
     public boolean hasClearRay(Vec3 vec3d, Vec3 vec3d1){
-        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+//        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+        return this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
     }
 
     public boolean hasClearRay(Vec3 vec3d){
         Vec3 vec3d1 = new Vec3(this.getX(), this.getY(), this.getZ());
-
-        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+//        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+        return this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
     }
+
+    public boolean hasClearRayRelative(Vec3 relative){
+        Vec3 vec3d = new Vec3(this.getX(), this.getY(), this.getZ());
+        Vec3 vec3d1 = vec3d.add(relative);
+//        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+        return this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+    }
+
+    public Vec3 getBlockingPos(Vec3 vec3d){
+        Vec3 vec3d1 = new Vec3(this.getX(), this.getY(), this.getZ());
+//        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? null : this.level().clip( new ClipContext(vec3d, vec3d1, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, this)).getLocation()  ; // Paper - Perf: Use distance squared & strip raytracing
+        return this.level().clip( new ClipContext(vec3d, vec3d1, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, this)).getLocation()  ; // Paper - Perf: Use distance squared & strip raytracing
+    }
+
+    public Vec3 getBlockingPos(Vec3 vec3d, Vec3 vec3d1){
+//        return vec3d1.distanceToSqr(vec3d) > 128.0D * 128.0D ? false : this.level().clipDirect(vec3d, vec3d1, net.minecraft.world.phys.shapes.CollisionContext.of(this)) == HitResult.Type.MISS; // Paper - Perf: Use distance squared & strip raytracing
+        return this.level().clip( new ClipContext(vec3d, vec3d1, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, this)).getLocation()  ; // Paper - Perf: Use distance squared & strip raytracing
+
+    }
+
 
 
     public HumanEntity(MinecraftServer server, ServerLevel world, GameProfile profile, ClientInformation clientOptions) {
@@ -594,7 +632,9 @@ public class HumanEntity extends ServerPlayer {
                     }
                 }
 
-                // // Bukkit.broadcastMessage("travelling " + vec3d1.length() + " distance");
+                // // // Bukkit.broadcastMessage("travelling " + vec3d1.length() + " distance");
+
+
                 this.travel(vec3d1);
             }
 

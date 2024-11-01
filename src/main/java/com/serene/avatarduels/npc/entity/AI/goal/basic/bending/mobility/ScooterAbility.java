@@ -1,6 +1,7 @@
 package com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility;
 
 import com.projectkorra.projectkorra.ability.CoreAbility;
+import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import org.bukkit.Bukkit;
@@ -16,15 +17,21 @@ public class ScooterAbility extends MovementAbility {
     @Override
     public void tick() {
         super.tick();
-        if ( !CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass())){
+        if ( !CoreAbility.hasAbility(player, bPlayer.getBoundAbility().getClass()) ){
             remove();
         } else {
-            npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.FEET);
+//            npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.FEET);
+            if (npc.getPosition(0).add(npc.getForward()).distanceToSqr(target.getPosition(0)) > npc.getPosition(0).distanceToSqr(target.getPosition(0))  ){
+                remove();
+            }
+
+            if (!npc.hasClearRayForward()) {
+                remove();
+            }
+
         }
 
-        if (npc.getPosition(0).add(npc.getForward()).distanceToSqr(target.getPosition(0)) > npc.getPosition(0).distanceToSqr(target.getPosition(0))  ){
-            remove();
-        }
+
 
 
     }
@@ -32,10 +39,14 @@ public class ScooterAbility extends MovementAbility {
     @Override
     protected void remove(){
         if (hasStarted){
-
             Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, true));
             player.setSneaking(true);
-            npc.setBusyBending(false);
+            Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+                player.setSneaking(false);
+                npc.setBusyBending(false);
+            }, 2L);
+
         }
         setFinished(true);
     }

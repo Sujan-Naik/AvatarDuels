@@ -15,6 +15,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.Control;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.bukkit.Bukkit;
 
 public class MoveControl implements Control {
     public static final float MIN_SPEED = 5.0E-4F;
@@ -43,12 +44,19 @@ public class MoveControl implements Control {
         return this.speedModifier;
     }
 
+
+    public void setOperation(Operation operation){
+        this.operation = operation;
+    }
+
+
+
     public void setWantedPosition(double x, double y, double z, double speed) {
         this.wantedX = x;
-        this.wantedY = y;
+        this.wantedY = (int)y;
         this.wantedZ = z;
         this.speedModifier = speed;
-        if (this.operation != Operation.JUMPING) {
+        if (this.operation != Operation.JUMPING && !(mob instanceof BendingNPC bendingNPC && bendingNPC.isBusyMovementBending()) ) {
             this.operation = Operation.MOVE_TO;
         }
 
@@ -62,6 +70,9 @@ public class MoveControl implements Control {
     }
 
     public void tick() {
+        if (mob instanceof BendingNPC bendingNPC &&  bendingNPC.isBusyMovementBending()) {
+            return;
+        }
         float q;
         if (this.operation == Operation.STRAFE) {
             float f = (float) this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
@@ -101,20 +112,24 @@ public class MoveControl implements Control {
             }
 
             q = (float) (Mth.atan2(e, d) * 57.2957763671875) - 90.0F;
-            if (mob instanceof BendingNPC bendingNPC && !bendingNPC.isBusyBending()) {
-                this.mob.setYRot(this.rotlerp(this.mob.getYRot(), q, 90.0F));
-            } else {
-                this.mob.setYRot(this.rotlerp(this.mob.getYRot(), q, 90.0F));
 
-            }
+            this.mob.setYRot(this.rotlerp(this.mob.getYRot(), q, 90.0F));
+
+
             this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
             mob.zza = ((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
 
-            BlockPos blockPos = this.mob.blockPosition();
+//            BlockPos blockPos = this.mob.blockPosition();
+            BlockPos blockPos = this.mob.getOnPos();
             BlockState blockState = this.mob.level().getBlockState(blockPos);
             VoxelShape voxelShape = blockState.getCollisionShape(this.mob.level(), blockPos);
 
-            if (o > (double) this.mob.maxUpStep() && d * d + e * e < (double) Math.max(1.0F, this.mob.getBbWidth()) || !voxelShape.isEmpty() && this.mob.getY() < voxelShape.max(Axis.Y) + (double) blockPos.getY() && !blockState.is(BlockTags.DOORS) && !blockState.is(BlockTags.FENCES)) {
+//            if (o > (double) this.mob.maxUpStep() && d * d + e * e < (double) Math.max(1.0F, this.mob.getBbWidth()) || !voxelShape.isEmpty() && this.mob.getY() < voxelShape.max(Axis.Y) + (double) blockPos.getY() && !blockState.is(BlockTags.DOORS) && !blockState.is(BlockTags.FENCES)) {
+//                this.mob.getJumpControl().jump();
+//                this.operation = Operation.JUMPING;
+//            }
+
+            if (BlockPos.containing(wantedX, wantedY, wantedZ).getY() > blockPos.getY()) {
                 this.mob.getJumpControl().jump();
                 this.operation = Operation.JUMPING;
             }

@@ -3,6 +3,7 @@ package com.serene.avatarduels.npc.entity.AI.bending;
 import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.serene.avatarduels.AvatarDuels;
+import com.serene.avatarduels.npc.entity.BendingNPC;
 import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,9 +19,9 @@ import org.bukkit.util.Vector;
 
 public class MobilityManager {
 
-    private final HumanEntity NMSPlayer;
+    private final BendingNPC NMSPlayer;
 
-    public MobilityManager(HumanEntity NMSPlayer) {
+    public MobilityManager(BendingNPC NMSPlayer) {
         this.NMSPlayer = NMSPlayer;
     }
 
@@ -51,94 +52,6 @@ public class MobilityManager {
         // Bind core ability
         BendingPlayer.getBendingPlayer(player).bindAbility(coreAbility.getName());
 
-        // Look at the target
-        if (!shouldLookAtGroundWhileShifting) {
-            NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
-        }
-
-        // Handle shift before movement
-        if (shiftBefore) {
-
-            // Optionally look at the ground while shifting
-            if (shouldLookAtGroundWhileShifting) {
-                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, NMSPlayer.getOnPos().getCenter().subtract(0,2,0));
-
-                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-                    NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, NMSPlayer.getOnPos().getCenter().subtract(0,2,0));
-
-                    Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, true));
-                    player.setSneaking(true);
-
-                    // If click should happen before releasing shift, schedule that
-                    if (shouldReleaseShiftBeforeClick) {
-                        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-                            Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
-                            player.setSneaking(false);
-
-                            if (shouldClick) {
-                                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
-
-                                Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
-                                player.swingMainHand();
-                            }
-
-                        }, shiftDuration/50);
-                    } else {
-                        // Just release shift after duration
-                        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-
-                            if (shouldClick) {
-                                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
-
-
-                                Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
-                                player.swingMainHand();
-                            }
-
-                            Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
-                            player.setSneaking(false);
-                        }, shiftDuration/50);
-                    }
-                }, 5L);
-            } else {
-                // If click should happen before releasing shift, schedule that
-                if (shouldReleaseShiftBeforeClick) {
-                    Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-
-                        // Release shift after click
-                        Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
-                        player.setSneaking(false);
-
-
-                        if (shouldClick) {
-                            NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
-
-                            Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
-                            player.swingMainHand();
-                        }
-
-                    }, shiftDuration/50);
-                } else {
-                    // Just release shift after duration
-                    Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-                        if (shouldClick) {
-                            NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
-
-                            Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
-                            player.swingMainHand();
-                        }
-                        Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
-                        player.setSneaking(false);
-                    }, shiftDuration/50);
-                }
-            }
-        } else {
-            // If shiftBefore is false, we can perform actions immediately
-            if (shouldClick) {
-                Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
-                player.swingMainHand();
-            }
-        }
 
         // Handle running and jumping logic if specified
         if (runJump) {
@@ -156,7 +69,104 @@ public class MobilityManager {
             Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
                 Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
                 player.swingMainHand();
-            },5L);
+            },3L);
+        } else {
+
+
+            Vec3 accessibleNavPos = NMSPlayer.getNavigation().getLowestYAdjustedGoalPos().add(0,2,0);
+
+            // Look at the target
+            if (!shouldLookAtGroundWhileShifting) {
+                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, nmsTarget, EntityAnchorArgument.Anchor.FEET);
+            }
+
+            double distRoot = Math.sqrt(nmsTarget.distanceTo(NMSPlayer));
+
+            // Handle shift before movement
+            if (shiftBefore) {
+
+                // Optionally look at the ground while shifting
+                if (shouldLookAtGroundWhileShifting) {
+                    NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, NMSPlayer.getOnPos().getCenter().subtract(0, 2, 0));
+
+
+                    Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                        NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, NMSPlayer.getOnPos().getCenter().subtract(0, 2, 0));
+
+                        Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, true));
+                        player.setSneaking(true);
+
+                        // If click should happen before releasing shift, schedule that
+                        if (shouldReleaseShiftBeforeClick) {
+                            Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                                Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+                                player.setSneaking(false);
+
+                                if (shouldClick) {
+                                    NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, accessibleNavPos);
+
+                                    Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                                    player.swingMainHand();
+                                }
+
+                            }, shiftDuration / 50);
+                        } else {
+                            // Just release shift after duration
+                            Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+
+                                if (shouldClick) {
+                                    NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, accessibleNavPos);
+
+
+                                    Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                                    player.swingMainHand();
+                                }
+
+                                Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+                                player.setSneaking(false);
+                            }, shiftDuration / 50);
+                        }
+                    }, 3L);
+                } else {
+                    // If click should happen before releasing shift, schedule that
+                    if (shouldReleaseShiftBeforeClick) {
+                        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+
+                            // Release shift after click
+                            Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+                            player.setSneaking(false);
+
+
+                            if (shouldClick) {
+                                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, accessibleNavPos);
+
+                                Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                                player.swingMainHand();
+                            }
+
+                        }, shiftDuration / 50);
+                    } else {
+                        // Just release shift after duration
+                        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                            if (shouldClick) {
+                                NMSPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, accessibleNavPos);
+
+                                Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                                player.swingMainHand();
+                            }
+                            Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, false));
+                            player.setSneaking(false);
+                        }, shiftDuration / 50);
+                    }
+                }
+            } else {
+                // If shiftBefore is false, we can perform actions immediately
+                if (shouldClick) {
+                    Bukkit.getServer().getPluginManager().callEvent(new PlayerInteractEvent(player, Action.LEFT_CLICK_AIR, null, null, BlockFace.SELF));
+                    player.swingMainHand();
+                }
+            }
+
         }
     }
 }

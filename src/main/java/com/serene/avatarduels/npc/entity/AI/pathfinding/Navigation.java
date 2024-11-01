@@ -1,14 +1,16 @@
 package com.serene.avatarduels.npc.entity.AI.pathfinding;
 
+import com.serene.avatarduels.npc.entity.AI.control.JumpControl;
 import com.serene.avatarduels.npc.entity.AI.control.MoveControl;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import com.serene.avatarduels.npc.entity.HumanEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Navigation {
@@ -17,68 +19,93 @@ public class Navigation {
 
     private final MoveControl moveControl;
 
+
     private Vec3 goalPos;
+    private Vec3 adjustedGoalPos;
 
     private Vec3 newPos;
 
     private boolean isStuck = false;
-    
+
+    private long sinceLastPathRefresh;
+
+    private NavigationMesh navigationMesh;
 
     public Navigation(HumanEntity humanEntity){
         this.humanEntity = humanEntity;
         this.moveControl = humanEntity.getMoveControl();
+        this.sinceLastPathRefresh = humanEntity.tickCount;
+
+        this.navigationMesh = new NavigationMesh(humanEntity);
     }
 
-    private static final List<Direction> directions = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
 
     public void navigateToPos(Vec3 pos){
-        this.goalPos = pos;
+        if (pos != null) {
+            this.goalPos = pos;
+            adjustedGoalPos = null;
+
+            currentPath = navigationMesh.getPath(goalPos);
+            if (!currentPath.isEmpty()) {
+                newPos = currentPath.removeFirst().getPos();
+                sinceLastPathRefresh = humanEntity.tickCount;
+
+            }
+        }
     }
 
     public Vec3 getGoalPos() {
         return goalPos;
     }
 
-    private boolean isSolid(Vec3 pos){
-        return !humanEntity.level().getBlockState(BlockPos.containing(pos)).isAir();
+    public Vec3 getLowestYAdjustedGoalPos(){
+        if (adjustedGoalPos == null) {
+             adjustedGoalPos = goalPos;
+            int maximumIterations = (int) (384 - goalPos.y());
+
+            do {
+                adjustedGoalPos = adjustedGoalPos.add(0, 1, 0);
+                maximumIterations--;
+            } while (!humanEntity.hasClearRay(adjustedGoalPos) && maximumIterations > 0);
+
+            if (maximumIterations < 0) {
+                // Bukkit.broadcastMessage("no clear goalPos");
+                return goalPos;
+            }
+        }
+        return adjustedGoalPos;
     }
 
-    private boolean isAir(Vec3 pos){
-        return humanEntity.level().getBlockState(BlockPos.containing(pos)).isAir();
-    }
+    private static final int PATH_REFRESH_CD = 20;
 
-
-    private boolean isAcceptableDirection(Direction direction){
-        Vec3 floorPos = humanEntity.getOnPos().getCenter();
-        Vec3 newPos = floorPos.relative(direction, 1);
-
-        return ( humanEntity.hasClearRay(Vec3.atLowerCornerOf(direction.getNormal())) && (isAir(newPos.relative(Direction.UP, 1)) && isSolid(newPos) ) || // forward
-                (isAir(newPos) && isSolid(newPos.relative(Direction.DOWN, 1)) ) || // down
-                (isAir(newPos.relative(Direction.UP, 2)) && isSolid(newPos.relative(Direction.UP, 1)) )); //up
-    }
-
+    private List<NavigationMesh.Node> currentPath = new ArrayList<>();
     public void tick(){
-        if (!isStuck && goalPos != null && !(humanEntity instanceof BendingNPC bendingNPC && bendingNPC.isBusyBending())) {
-                directions.stream().filter(this::isAcceptableDirection)
-                        .min(Comparator.comparingDouble(value -> humanEntity.getPosition(0).relative(value, 1).distanceToSqr(goalPos)))
-                        .ifPresentOrElse(direction -> {
-                            newPos = humanEntity.getOnPos().getCenter().relative(direction, 1);
-                            if ((isAir(newPos.relative(Direction.UP, 2)) && isSolid(newPos.relative(Direction.UP, 1)) )){
-                                moveControl.setWantedPosition(newPos.x, newPos.y + 1, newPos.z, 10);
-                                humanEntity.getJumpControl().jump();
-                            } else {
-                                moveControl.setWantedPosition(newPos.x, newPos.y, newPos.z, 10);
 
-                            }
-                        }, () -> {
-                            isStuck = true;
-                            newPos = humanEntity.getOnPos().getCenter().subtract(humanEntity.getForward().scale(3));
 
-                            moveControl.setWantedPosition(newPos.x, newPos.y, newPos.z, 10);
+        if ((humanEntity instanceof BendingNPC bendingNPC && bendingNPC.isBusyBending())){
+            return;
+        }
 
-                        });
+        if (goalPos != null &&  !humanEntity.level().getBlockState(humanEntity.getOnPos()).isAir()) {
+
+                if (humanEntity.tickCount - sinceLastPathRefresh > PATH_REFRESH_CD){
+                    currentPath = navigationMesh.getPath(goalPos);
+                    if (!currentPath.isEmpty()) {
+                        newPos = currentPath.removeFirst().getPos();
+                        sinceLastPathRefresh = humanEntity.tickCount;
+                    }
+                }
+
+            if (!currentPath.isEmpty() && newPos != null) {
+                if ( BlockPos.containing(newPos).getCenter().distanceTo(humanEntity.getOnPos().getCenter()) < 1){
+                    newPos = currentPath.removeFirst().getPos();
+                }
+
+                moveControl.setWantedPosition(newPos.x, newPos.y, newPos.z, 10);
+            }
 
         }
+
     }
 
     public boolean isStuck() {

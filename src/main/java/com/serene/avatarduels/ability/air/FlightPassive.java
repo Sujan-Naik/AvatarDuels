@@ -13,15 +13,15 @@ public class FlightPassive extends FlightAbility implements AddonAbility, Passiv
 
 	private boolean toggled = false, active = false, pickup;
 	private float original = 0.8f, speed, flySpeed, startSpeed, maxSpeed, acceleration;
-	
+
 	public FlightPassive(Player player) {
 		super(player);
-		
+
 		flySpeed = (float) AvatarDuels.getConfig(getName()).getDouble("Passives.Air.Flying.FlySpeed");
 		speed = startSpeed = (float) AvatarDuels.getConfig(getName()).getDouble("Passives.Air.Flying.Glide.StartSpeed");
 		maxSpeed = (float) AvatarDuels.getConfig(getName()).getDouble("Passives.Air.Flying.Glide.MaxSpeed");
 		acceleration = (float) AvatarDuels.getConfig(getName()).getDouble("Passives.Air.Flying.Acceleration");
-		
+
 		flightHandler.createInstance(player, "FlightPassive");
 	}
 
@@ -32,35 +32,35 @@ public class FlightPassive extends FlightAbility implements AddonAbility, Passiv
 			clear();
 			return;
 		}
-		
+
 		if (player.getLocation().getBlock().isLiquid()) {
 			clear();
 			return;
 		}
-		
+
 		player.setAllowFlight(true);
-		
-		if (active && toggled) {	
+
+		if (active && toggled) {
 			player.setGliding(true);
-			
+
 			if (player.isSneaking() && player.getFlySpeed() < maxSpeed) {
 				speed = speed + (float) acceleration;
 				if (speed > maxSpeed) {
 					speed = (float) maxSpeed;
-				}	
+				}
 			}
-			
+
 			player.setVelocity(player.getEyeLocation().getDirection().multiply(speed));
 		}
 	}
-	
+
 	private void clear() {
 		active = false;
 		toggled = false;
 		player.setFlying(false);
 		player.setGliding(false);
 	}
-	
+
 	@Override
 	public void remove() {
 		super.remove();
@@ -130,7 +130,7 @@ public class FlightPassive extends FlightAbility implements AddonAbility, Passiv
 			player.setFlying(false);
 		}
 	}
-	
+
 	public void fly(boolean flying) {
 		if (flying) {
 			active = true;
@@ -145,25 +145,26 @@ public class FlightPassive extends FlightAbility implements AddonAbility, Passiv
 		}
 		toggled = false;
 	}
-	
+
 	public boolean isActive() {
 		return active;
 	}
-	
+
 	public boolean isGliding() {
 		return toggled;
 	}
-	
+
 	@Override
 	public boolean isEnabled() {
-		return AvatarDuels.getConfig(getName()).getBoolean("Passives.Air.Flying.Enabled");
+		return false;
+//		return AvatarDuels.getConfig(getName()).getBoolean("Passives.Air.Flying.Enabled");
 	}
-	
+
 	@Override
 	public String getDescription() {
 		return "A very rare ability for airbenders is being able to fly freely, without the need of any glider. The only airbenders known to have this ability were Guru Laghima and Zaheer.";
 	}
-	
+
 	@Override
 	public String getInstructions() {
 		return "Use double jump to toggle flight, offhand swap to toggle between gliding and creative flight, and sneak while gliding to accelerate!";

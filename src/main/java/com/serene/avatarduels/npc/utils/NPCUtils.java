@@ -9,6 +9,7 @@ import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.NPCHandler;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 
+import com.sun.jna.platform.win32.DdemlUtil;
 import io.netty.channel.*;
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.flow.FlowControlHandler;
@@ -19,6 +20,7 @@ import net.minecraft.network.PacketEncoder;
 import net.minecraft.network.UnconfiguredPipelineHandler;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.ProtocolInfoBuilder;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -41,6 +43,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.javatuples.Triplet;
 
 import java.io.IOException;
+import java.net.SocketAddress;
 import java.net.URL;
 import java.util.*;
 
@@ -76,18 +79,38 @@ public class NPCUtils {
         Connection serverPlayerConnection = new Connection(PacketFlow.SERVERBOUND);
 
 //        serverPlayerConnection.channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
-        serverPlayerConnection.channel = new EmbeddedChannel(new ChannelInboundHandlerAdapter() {
+//        serverPlayerConnection.channel = new EmbeddedChannel();
+        serverPlayerConnection.channel = new EmbeddedChannel(new ChannelHandlerAdapter() {
             @Override
             public void channelRead(ChannelHandlerContext ctx, Object msg) {
-                // Ignore the incoming message
+                // Ignore incoming messages
+            }
+
+            @Override
+            public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
+                // Ignore outgoing messages
+                if (!promise.isDone()) {
+                    promise.setSuccess(); // Complete the promise immediately
+                }
+            }
+
+            @Override
+            public void flush(ChannelHandlerContext ctx) {
+                ctx.flush();
+                // Ignore flush requests
             }
 
             @Override
             public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-                // Handle exceptions here to avoid them getting suppressed
+                // Ignore exceptions
+                System.err.println("Exception occurred: " + cause.getMessage());
+                ctx.close();
             }
 
         });
+
+
+//        serverPlayerConnection.
 
         CommonListenerCookie commonListenerCookie = CommonListenerCookie.createInitial(gameProfile, true);
         ServerGamePacketListenerImpl serverGamePacketListener = new ServerGamePacketListenerImpl(minecraftServer, serverPlayerConnection, serverPlayer, commonListenerCookie);
