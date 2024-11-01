@@ -40,14 +40,15 @@ public class CircleEntity extends Movement implements EntityInteraction {
         if (npc == null || targetEntity == null || !npc.isAlive() || !targetEntity.isAlive()){
             setFinished(true);
         } else {
-            if (npc.getPosition(0).distanceTo(goalPos) < 5) {
+            if (npc.getPosition(0).distanceTo(goalPos) < 3) {
                 this.updatePos(); // Update position continuously
                 navigation.navigateToPos(goalPos);
             } else if (!isClearForMovementBetween(npc, npc.getPosition(0), goalPos, true)) {
                 this.updatePos();
                 if (!isClearForMovementBetween(npc, goalPos ,  npc.getPosition(0), true)) {
                     setFinished(true);
-
+                } else {
+                    navigation.navigateToPos(goalPos);
                 }
             }
         }

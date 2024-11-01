@@ -21,15 +21,17 @@ public class ScooterAbility extends MovementAbility {
             remove();
         } else {
 //            npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.FEET);
+            if (npc.getPosition(0).add(npc.getForward()).distanceToSqr(target.getPosition(0)) > npc.getPosition(0).distanceToSqr(target.getPosition(0))  ){
+                remove();
+            }
+
+            if (!npc.hasClearRayForward()) {
+                remove();
+            }
+
         }
 
-        if (npc.getPosition(0).add(npc.getForward()).distanceToSqr(target.getPosition(0)) > npc.getPosition(0).distanceToSqr(target.getPosition(0))  ){
-            remove();
-        }
 
-        if (!npc.hasClearRayForward()){
-            remove();
-        }
 
 
     }
@@ -37,7 +39,6 @@ public class ScooterAbility extends MovementAbility {
     @Override
     protected void remove(){
         if (hasStarted){
-
             Bukkit.getServer().getPluginManager().callEvent(new PlayerToggleSneakEvent(player, true));
             player.setSneaking(true);
             Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {

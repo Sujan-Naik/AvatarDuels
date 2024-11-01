@@ -82,11 +82,17 @@ public class CombatPositionSelector {
 
 
                 Vec3 bestPos = null;
-                Heightmap heightmap = Heightmap.getOrCreateHeightmapUnprimed( level.getChunk(chunkX, chunkZ), Heightmap.Types.MOTION_BLOCKING_NO_BARRIERS);
+                Heightmap.primeHeightmaps(level.getChunk(chunkX, chunkZ), Arrays.stream(Heightmap.Types.values()).collect(Collectors.toSet()));
+
+                Heightmap heightmap = Heightmap.getOrCreateHeightmapUnprimed( level.getChunk(chunkX, chunkZ), Heightmap.Types.MOTION_BLOCKING_NO_BARRIERS_OR_WATER);
+                Heightmap waterInclHeightMap = Heightmap.getOrCreateHeightmapUnprimed( level.getChunk(chunkX, chunkZ), Heightmap.Types.MOTION_BLOCKING_NO_BARRIERS);
                 int meanHeight = calculateMeanHeight(heightmap);
 
                 double stdDev = calculateStandardDeviation(heightmap, meanHeight);
 
+                if (stdDev > 50 || stdDev < 1){
+                    continue;
+                }
                 for (int blockX = 0; blockX < 16; blockX++) {
                     for (int blockZ = 0; blockZ < 16; blockZ++) {
 
@@ -95,9 +101,12 @@ public class CombatPositionSelector {
                         // Calculate score based on flatness metric
                         double score = -Math.abs(height - meanHeight) + stdDev; // You can adjust this formula
                         // Update best point
-                        if (score > bestScore) {
-                            bestScore = score;
-                            bestPos = new Vec3(blockX + chunkX * CHUNK_SIZE, heightmap.getFirstAvailable(blockX, blockZ), blockZ + chunkZ * CHUNK_SIZE);
+                        if (height == waterInclHeightMap.getFirstAvailable(blockX, blockZ)) {
+
+                            if (score > bestScore) {
+                                bestScore = score;
+                                bestPos = new Vec3(blockX + chunkX * CHUNK_SIZE, heightmap.getFirstAvailable(blockX, blockZ), blockZ + chunkZ * CHUNK_SIZE);
+                            }
                         }
                     }
                 }
@@ -151,7 +160,7 @@ public class CombatPositionSelector {
 
 
 
-    private static final int PATH_REFRESH_CD = 1200;
+    private static final int PATH_REFRESH_CD = 120;
 
 //    private double lastDistanceFromEntity;
 
@@ -189,7 +198,7 @@ public class CombatPositionSelector {
                     double npcDistSqrToEnemy = npcPosY0.distanceToSqr(targetPosY0);
                     double currentPosDistSqrToEnemy = currentNavigatingPosY0.distanceToSqr(targetPosY0);
 
-                    if (npcDistSqrToCurrentPos < CHUNK_SIZE * CHUNK_SIZE || npcDistSqrToEnemy < currentPosDistSqrToEnemy){
+                    if (npcDistSqrToCurrentPos < 4 * CHUNK_SIZE * CHUNK_SIZE || npcDistSqrToEnemy < currentPosDistSqrToEnemy){
 
                         currentNavigatingPos = path.removeFirst();
                         Vec3 relative = new Vec3(currentNavigatingPos.x()-npcPosY0.x(), 69 , currentNavigatingPos.z()-npcPosY0.z() );
@@ -201,6 +210,7 @@ public class CombatPositionSelector {
                     }
                 } else {
                     currentNavigatingPos = path.removeFirst();
+                    navigateIfChanged(currentNavigatingPos);
 
                 }
 //                navigateIfChanged(currentNavigatingPos);

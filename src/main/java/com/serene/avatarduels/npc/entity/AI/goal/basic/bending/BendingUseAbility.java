@@ -4,6 +4,7 @@ import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
+import com.serene.avatarduels.npc.entity.AI.control.MoveControl;
 import com.serene.avatarduels.npc.entity.AI.goal.BaseGoal;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.BasicGoal;
 import com.serene.avatarduels.npc.entity.AI.goal.basic.bending.mobility.MovementAbility;
@@ -44,12 +45,13 @@ public abstract class BendingUseAbility extends BasicGoal {
         }
     }
 
-    private void start(){
+    protected void start(){
         if (shouldStart()){
             npc.useAbility(AbilityUsages.fromName(abilityName));
             if (this instanceof  MovementAbility){
                 npc.setBusyMovementBending(true);
                 npc.setBusyBending(true);
+                npc.getMoveControl().setOperation(MoveControl.Operation.WAIT);
             } else {
 
                 if (bPlayer.getBoundAbility().isSneakAbility()) {
@@ -97,6 +99,7 @@ public abstract class BendingUseAbility extends BasicGoal {
             npc.setBusyBending(false);
             if (this instanceof MovementAbility) {
                 npc.setBusyMovementBending(false);
+                npc.getMoveControl().setOperation(MoveControl.Operation.WAIT);
             }
 
             setFinished(true);

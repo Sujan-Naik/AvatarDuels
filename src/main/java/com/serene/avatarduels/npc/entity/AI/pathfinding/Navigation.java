@@ -19,9 +19,6 @@ public class Navigation {
 
     private final MoveControl moveControl;
 
-    private final JumpControl jumpControl;
-
-
 
     private Vec3 goalPos;
     private Vec3 adjustedGoalPos;
@@ -37,7 +34,6 @@ public class Navigation {
     public Navigation(HumanEntity humanEntity){
         this.humanEntity = humanEntity;
         this.moveControl = humanEntity.getMoveControl();
-        this.jumpControl = humanEntity.getJumpControl();
         this.sinceLastPathRefresh = humanEntity.tickCount;
 
         this.navigationMesh = new NavigationMesh(humanEntity);
@@ -48,9 +44,6 @@ public class Navigation {
         if (pos != null) {
             this.goalPos = pos;
             adjustedGoalPos = null;
-
-//            humanEntity.level().setBlock(BlockPos.containing(pos), new BlockState(Blocks.DIRT,  n ));
-            Bukkit.broadcastMessage(String.valueOf(pos));
         }
     }
 
@@ -76,26 +69,7 @@ public class Navigation {
         return adjustedGoalPos;
     }
 
-
-//    private boolean isSolid(Vec3 pos){
-//        return !humanEntity.level().getBlockState(BlockPos.containing(pos)).isAir();
-//    }
-//
-//    private boolean isAir(Vec3 pos){
-//        return humanEntity.level().getBlockState(BlockPos.containing(pos)).isAir();
-//    }
-//
-//
-//    private boolean isAcceptableDirection(Direction direction){
-//        Vec3 floorPos = humanEntity.getOnPos().getCenter();
-//        Vec3 newPos = floorPos.relative(direction, 1);
-//
-//        return ( (isAir(newPos.relative(Direction.UP, 1 + humanEntity.getJumpBoostPower())) && isSolid(newPos) ) || // forward
-//                (isAir(newPos) && isSolid(newPos.relative(Direction.DOWN, 1)) ) || // down
-//                (isAir(newPos.relative(Direction.UP, 2 + humanEntity.getJumpBoostPower())) && isSolid(newPos.relative(Direction.UP, 1 + humanEntity.getJumpBoostPower())) )); //up
-//    }
-//
-    private static final int PATH_REFRESH_CD = 100;
+    private static final int PATH_REFRESH_CD = 20;
 
     private List<NavigationMesh.Node> currentPath = new ArrayList<>();
     public void tick(){
@@ -105,33 +79,24 @@ public class Navigation {
             return;
         }
 
-        if (goalPos != null ) {
-            if (currentPath.isEmpty()){
-                currentPath = navigationMesh.getPath(goalPos);
-                if (currentPath.isEmpty()){
+        if (goalPos != null &&  !humanEntity.level().getBlockState(humanEntity.getOnPos()).isAir()) {
 
-                } else {
-                    newPos = currentPath.removeFirst().getPos();
-                    if (newPos.y > humanEntity.getOnPos().getY() + 1) {
-                        jumpControl.jump();
-                    }
-                    moveControl.setWantedPosition(newPos.x, newPos.y, newPos.z, 10);
-                }
-            } else {
                 if (humanEntity.tickCount - sinceLastPathRefresh > PATH_REFRESH_CD){
                     currentPath = navigationMesh.getPath(goalPos);
-                    newPos = currentPath.removeFirst().getPos();
-                    sinceLastPathRefresh = humanEntity.tickCount;
+                    if (!currentPath.isEmpty()) {
+                        newPos = currentPath.removeFirst().getPos();
+                        sinceLastPathRefresh = humanEntity.tickCount;
+                    }
                 }
 
-                else if ( newPos.distanceTo(humanEntity.getOnPos().getCenter()) < 1){
+            if (!currentPath.isEmpty() && newPos != null) {
+                if ( BlockPos.containing(newPos).getCenter().distanceTo(humanEntity.getOnPos().getCenter()) < 1){
                     newPos = currentPath.removeFirst().getPos();
                 }
-                if (newPos.y > humanEntity.getOnPos().getY() + 1){
-                    jumpControl.jump();
-                }
+
                 moveControl.setWantedPosition(newPos.x, newPos.y, newPos.z, 10);
             }
+
         }
 
     }

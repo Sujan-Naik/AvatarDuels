@@ -132,8 +132,7 @@ public class BendingKillEntity extends MasterCombat {
                 movementGoalSelector.removeAllGoals();
 
                 if (npc.tickCount - lastAttemptedAbility > MOBILITY_ATTEMPT_COOLDOWN && !npc.isBusyBending() ) {
-                    Vec3 accessibleNavPos = npc.getNavigation().getLowestYAdjustedGoalPos();
-
+//                    Vec3 accessibleNavPos = npc.getNavigation().getLowestYAdjustedGoalPos();
 
                     AbilityUsages usage = getRandom(ABIL_CATEGORISATIONS.MOVEMENT);
                     bendingGoalSelector.addGoal(usage.makeGoal(npc));
@@ -177,7 +176,7 @@ public class BendingKillEntity extends MasterCombat {
         }
 
         // Define an angular speed (you can adjust this value as needed)
-        double angularSpeed = Math.toRadians(60); // Adjust this value based on desired circling speed
+        double angularSpeed = Math.toRadians(30); // Adjust this value based on desired circling speed
 
         // Add the CircleEntity goal to the movement goal selector
         if (!movementGoalSelector.hasGoal()) {

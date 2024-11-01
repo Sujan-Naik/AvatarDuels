@@ -73,7 +73,7 @@ public class MobilityManager {
         } else {
 
 
-            Vec3 accessibleNavPos = NMSPlayer.getNavigation().getLowestYAdjustedGoalPos();
+            Vec3 accessibleNavPos = NMSPlayer.getNavigation().getLowestYAdjustedGoalPos().add(0,2,0);
 
             // Look at the target
             if (!shouldLookAtGroundWhileShifting) {

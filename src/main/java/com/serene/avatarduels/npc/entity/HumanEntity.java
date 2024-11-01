@@ -110,7 +110,7 @@ public class HumanEntity extends ServerPlayer {
     }
 
     public boolean hasClearRayForward(){
-        return hasClearRay(this.getPosition(0).add(this.getForward().scale(1)));
+        return hasClearRay(this.getPosition(0).add(this.getForward().multiply(1,0,1).normalize()));
     }
 
     public boolean hasClearRay(Vec3 vec3d, Vec3 vec3d1){

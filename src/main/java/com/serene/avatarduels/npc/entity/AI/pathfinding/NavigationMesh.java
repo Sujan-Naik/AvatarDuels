@@ -47,6 +47,7 @@ public class NavigationMesh {
                 this.target = mesh.stream().min(Comparator.comparingDouble(o -> o.getPos().distanceTo(this.target.getPos()))).get();
                // Bukkit.broadcastMessage("target distance to start is " + target.dist(start));
             }
+
             return aStar(mesh);
         }
         return new ArrayList<>();
@@ -63,6 +64,10 @@ public class NavigationMesh {
 
     double heuristic(Node node){
         return target.dist(node);
+    }
+
+    double heuristic(Vec3 vec){
+        return target.getPos().distanceTo(vec);
     }
 
     List<Node> reconstructPath(Map<Node, Node> cameFrom) {
@@ -112,7 +117,8 @@ public class NavigationMesh {
             closedSet.add(current);
 
             for (Node neighbor : getNeighbors(current)) {
-                if (!validNodes.contains(neighbor) || closedSet.contains(neighbor)) {
+//                if (!validNodes.contains(neighbor) || closedSet.contains(neighbor)) {
+                if (closedSet.contains(neighbor)) {
                     continue; // Ignore if not valid or already evaluated
                 }
 
@@ -138,28 +144,51 @@ public class NavigationMesh {
         this.mesh = bfsToEstablishNodes();
     }
 
-    private boolean isAcceptableDirection(Vec3 floorPos, Direction direction){
-        Vec3 newPos = floorPos.relative(direction, 1);
+    private Node getAcceptableNextPosition( Node floorPos, Direction direction){
 
-        return  (isAir(newPos.relative(Direction.UP, 1)) && isAir(newPos.relative(Direction.UP, 2))  && isSolid(newPos) ) || // straight
-                (isAir(newPos) && isAir(newPos.relative(Direction.UP, 1))  && isSolid(newPos.relative(Direction.DOWN, 1)) ) || // down
-                (isAir(newPos.relative(Direction.UP, 2 )) && isAir(newPos.relative(Direction.UP, 3))  && isSolid(newPos.relative(Direction.UP, 1 )) ); //up
+        Vec3 newPos = floorPos.getPos().relative(direction, 1);
+
+        if (isAir(newPos.relative(Direction.UP, 1)) && isAir(newPos.relative(Direction.UP, 2))  && isSolid(newPos) ){
+            return new Node(newPos, floorPos.pathCost + 1, heuristic(newPos) );
+        } else if (isAir(newPos) && isAir(newPos.relative(Direction.UP, 1))  && isSolid(newPos.relative(Direction.DOWN, 1)) ) {
+            Vec3 newPosDown = newPos.relative(Direction.DOWN, 1);
+            return new Node(newPosDown, floorPos.pathCost + 2, heuristic(newPosDown) );
+
+        } else if (isAir(newPos.relative(Direction.UP, 2 )) && isAir(newPos.relative(Direction.UP, 3))  && isSolid(newPos.relative(Direction.UP, 1 )) ){
+            Vec3 newPosUp = newPos.relative(Direction.UP, 1);
+            return new Node(newPosUp, floorPos.pathCost + 2, heuristic(newPosUp) );
+        }
+        return null;
     }
 
-    private static final List<Direction> directions = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+    private boolean isFrownedUponDirection(Vec3 floorPos, Direction direction){
+        Vec3 newPos = floorPos.relative(direction, 1);
+
+        return  isAir(newPos) && isAir(newPos.relative(Direction.UP, 1)); // up
+    }
+
+    private static final List<Direction> directions = List.of(Direction.NORTH,  Direction.EAST, Direction.SOUTH, Direction.WEST);
 
     private Set<Node> getNeighbors(Node node){
         Set<Node>neighbours = new HashSet<>();
         directions.stream().forEach(direction -> {
-            if (isAcceptableDirection(node.getPos(), direction)){
-                neighbours.add(node.getNeighbour(direction));
+            if (getAcceptableNextPosition(node, direction) != null){
+                neighbours.add(getAcceptableNextPosition(node, direction));
             }
         });
+
+        if (neighbours.isEmpty()){
+            directions.stream().forEach(direction -> {
+                if (isFrownedUponDirection(node.getPos(), direction)){
+                    neighbours.add(node.getNeighbour(direction));
+                }
+            });
+        }
         return neighbours;
     }
 
     private boolean isSolid(Vec3 pos){
-        return !level.getBlockState(BlockPos.containing(pos)).isAir();
+        return !level.getBlockState(BlockPos.containing(pos)).isAir() && level.loadedAndEntityCanStandOn(BlockPos.containing(pos), humanEntity);
     }
 
     private boolean isAir(Vec3 pos){
@@ -189,7 +218,7 @@ public class NavigationMesh {
                 }
             }
 
-            if (counter > 1000000){
+            if (counter > 100000){
                 break;
             }
         }

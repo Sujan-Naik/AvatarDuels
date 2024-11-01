@@ -57,9 +57,9 @@ public class Heightmap {
         int j = chunk.getHighestFilledSectionIndex();
 
         if (j == -1) {
-            j = chunk.getMinBuildHeight();
+            j = chunk.getMinBuildHeight() + 16;
         } else {
-            SectionPos.sectionToBlockCoord(chunk.getSectionYFromSectionIndex(i));
+            j = SectionPos.sectionToBlockCoord(chunk.getSectionYFromSectionIndex(j)) + 16;
         }
 
 
@@ -159,14 +159,13 @@ public class Heightmap {
 
     public enum Types implements StringRepresentable {
         MOTION_BLOCKING("MOTION_BLOCKING", state -> state.blocksMotion() || !state.getFluidState().isEmpty()),
-        MOTION_BLOCKING_NO_LEAVES(
-                "MOTION_BLOCKING_NO_LEAVES",
-                state -> (state.blocksMotion() || !state.getFluidState().isEmpty()) && !(state.getBlock() instanceof LeavesBlock)
-        ),
+        MOTION_BLOCKING_NO_BARRIERS_OR_WATER(
+                "MOTION_BLOCKING_IGNORE_BARRIERS_AND_WATER",
+                state -> (state.blocksMotion() || !state.getFluidState().isEmpty()) && !(state.getBlock() instanceof BarrierBlock )),
         MOTION_BLOCKING_NO_BARRIERS(
-                "MOTION_BLOCKING_NO_LEAVES",
-                state -> (state.blocksMotion() || !state.getFluidState().isEmpty()) && !(state.getBlock() instanceof BarrierBlock )
-        );
+                "MOTION_BLOCKING_IGNORE_BARRIERS",
+                state -> (state.blocksMotion() &&  !(state.getBlock() instanceof BarrierBlock )
+        ));
 
         private final String serializationKey;
         private final Predicate<BlockState> isOpaque;

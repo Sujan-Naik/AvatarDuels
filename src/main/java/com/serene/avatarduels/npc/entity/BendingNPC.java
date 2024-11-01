@@ -78,7 +78,7 @@ public class BendingNPC extends HumanEntity {
     }
 
     public boolean hasClearRayForward(){
-        return hasClearRay(this.getPosition(0).add(this.getForward().scale(1)));
+        return hasClearRay(this.getPosition(0).add(this.getForward().scale(2)));
     }
 
     public boolean hasClearRay(Vec3 vec3d, Vec3 vec3d1){
@@ -139,7 +139,7 @@ public class BendingNPC extends HumanEntity {
     @Override
     public void tick() {
         super.tick();
-
+        this.setRemainingFireTicks(0);
 //        if (!masterGoalSelector.doingGoal("kill hostile entity")) {
 //            if (targetSelector.retrieveTopHostile() instanceof LivingEntity hostile && (!Vec3Utils.isObstructed(this.getPosition(0), hostile.getPosition(0), this.level()))) {
 ////                masterGoalSelector.addMasterGoal(new KillTargetEntity("kill hostile entity", this, hostile));

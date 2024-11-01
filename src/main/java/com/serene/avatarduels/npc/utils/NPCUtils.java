@@ -96,12 +96,15 @@ public class NPCUtils {
 
             @Override
             public void flush(ChannelHandlerContext ctx) {
+                ctx.flush();
                 // Ignore flush requests
             }
 
             @Override
             public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
                 // Ignore exceptions
+                System.err.println("Exception occurred: " + cause.getMessage());
+                ctx.close();
             }
 
         });

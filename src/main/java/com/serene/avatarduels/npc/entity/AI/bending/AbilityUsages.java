@@ -35,7 +35,7 @@ public enum AbilityUsages {
 
     //Mobility
     AIRBLAST("AirBlast", (player) -> {
-        player.getMobilityManager().useAbility(CoreAbility.getAbility("AirBlast"), true, 500, true, true, false, true);
+        player.getMobilityManager().useAbility(CoreAbility.getAbility("AirBlast"), true, 25, true, true, false, true);
     }, (npc) -> new SourcedMovementAbility("AirBlast", npc, "AirBlast", PK_CONFIG.getDouble("Abilities.Air.AirBlast.Range"))),
 
     AIRSCOOTER("AirScooter", (player) -> {
@@ -43,7 +43,7 @@ public enum AbilityUsages {
     }, (npc) -> new ScooterAbility("AirScooter", npc, "AirScooter", 10)),
 
     CATAPULT("Catapult", (player) -> {
-        player.getMobilityManager().useAbility(CoreAbility.getAbility("Catapult"), true, 1000, false, true, false, false);
+        player.getMobilityManager().useAbility(CoreAbility.getAbility("Catapult"), true, 500, false, true, false, false);
     }, (npc) -> new JumpAbility("Catapult", npc, "Catapult", PK_CONFIG.getDouble("Abilities.Earth.Catapult.Range"))),
 
     EARTHSURF("EarthSurf", (player) -> {
