@@ -42,36 +42,78 @@ public class DuelCommand implements CommandExecutor {
                     }
                     case "start" -> {
                         if (strings.length == 4){
-                            String player1String = strings[1];
-                            String player2String = strings[2];
-                            Player player1 = Bukkit.getPlayer(player1String);
-                            Player player2 = Bukkit.getPlayer(player2String);
-                            String world = strings[3];
+                            startDuel(strings[1], strings[2], strings[3]);
+                        } else if (strings.length == 5){
 
-                            new Duel(player1, player2, world);
+                            if (strings[1].equalsIgnoreCase("ai")){
+
+                                String player1String = strings[2];
+                                String player2String = strings[3];
+                                Player player1 = Bukkit.getPlayer(player1String);
+                                Player player2 = Bukkit.getPlayer(player2String);
+                                String world = strings[4];
+
+                                if (player1 == null) {
+                                    NPCHandler.getNpcs().stream().filter(bendingNPC -> bendingNPC.getUUID().equals(player1.getUniqueId())).findFirst().
+                                            ifPresentOrElse(bendingNPC -> bendingNPC.startDuel(player2), () ->
+                                            {
+                                                BendingNPC npc = NPCUtils.spawnNPC(player.getLocation(), player, player1String);
+                                                NPCHandler.addNPC(npc);
+
+                                                Bukkit.broadcastMessage("Player 1 is not a valid AI and there is no human player - spawning one in.");
+
+
+                                                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                                                    Bukkit.broadcastMessage("TARGET ACQUIRED. ELIMINATE " + player2String);
+                                                    npc.startDuel(Bukkit.getPlayer(player2String));
+                                                }, 100L);
+                                            });
+                                }
+
+                                if (player2 == null) {
+                                    NPCHandler.getNpcs().stream().filter(bendingNPC -> bendingNPC.getUUID().equals(player2.getUniqueId())).findFirst().
+                                            ifPresentOrElse(bendingNPC -> bendingNPC.startDuel(player1), () ->
+                                            {
+                                                BendingNPC npc = NPCUtils.spawnNPC(player.getLocation(), player, player2String);
+                                                NPCHandler.addNPC(npc);
+
+                                                Bukkit.broadcastMessage("Player 2 is not a valid AI and there is no human player - spawning one in");
+
+                                                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                                                    Bukkit.broadcastMessage("TARGET ACQUIRED. ELIMINATE " + player1String);
+                                                    npc.startDuel(Bukkit.getPlayer(player1String));
+
+                                                }, 100L);
+
+                                            });
+                                }
+
+                                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+
+
+                                    startDuel( player1String,  player2String,  world);
+                                }, 120L);
+
+                            }
                         }
                     }
-                    case "ai" -> {
-                        if (strings.length == 4){
-                            String player1String = strings[1];
-                            String player2String = strings[2];
-                            Player player1 = Bukkit.getPlayer(player1String);
-                            Player player2 = Bukkit.getPlayer(player2String);
-                            String world = strings[3];
 
-                            NPCHandler.getNpcs().stream().filter(bendingNPC -> bendingNPC.getUUID().equals(player1.getUniqueId())).findFirst().
-                                    ifPresentOrElse(bendingNPC -> bendingNPC.startDuel(player2), () ->  Bukkit.broadcastMessage("Player 1 is not a valid AI"));
 
-                            NPCHandler.getNpcs().stream().filter(bendingNPC -> bendingNPC.getUUID().equals(player2.getUniqueId())).findFirst().
-                                    ifPresentOrElse(bendingNPC -> bendingNPC.startDuel(player1), () ->  Bukkit.broadcastMessage("Player 2 is not a valid AI"));
-
-                            new Duel(player1, player2, world);
-                        }
-                    }
                 }
             }
         }
         return true;
+    }
+
+    private static boolean startDuel(String player1String, String player2String, String world){
+        Player player1 = Bukkit.getPlayer(player1String);
+        Player player2 = Bukkit.getPlayer(player2String);
+
+        if (player1 != null && player2 != null){
+            new Duel(player1, player2, world);
+            return true;
+        }
+        return false;
     }
 
     public static <E> E getRandom (Collection<E> e) {
