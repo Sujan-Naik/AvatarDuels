@@ -89,7 +89,7 @@ public class NPCUtils {
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
                 // Ignore outgoing messages
-                if (!promise.isDone()) {
+                if (promise !=null && !promise.isDone()) {
                     promise.setSuccess(); // Complete the promise immediately
                 }
             }

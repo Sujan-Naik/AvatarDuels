@@ -15,15 +15,14 @@ import com.serene.avatarduels.npc.entity.AI.sensing.Heightmap;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BendingKillEntity extends MasterCombat {
@@ -31,11 +30,11 @@ public class BendingKillEntity extends MasterCombat {
     private NPC_STATES state;
     private int lastChangedState;
 
-    private static final int STATE_CHANGE_TICK_COOLDOWN = 60;
+    private static final int STATE_CHANGE_TICK_COOLDOWN = 40;
 
     private int lastAttemptedAbility;
-    private static final int ABILITY_ATTEMPT_COOLDOWN = 5;
-    private static final int MOBILITY_ATTEMPT_COOLDOWN = 20;
+    private static final int ABILITY_ATTEMPT_COOLDOWN = 3;
+    private static final int MOBILITY_ATTEMPT_COOLDOWN = 10;
 
     private int lastSeen;
     private static final int ENTITY_MUST_SEE_COOLDOWN = 20;
@@ -125,20 +124,18 @@ public class BendingKillEntity extends MasterCombat {
         ChunkAccess chunkAccess = npc.level().getChunkAt(npc.getOnPos());
         Heightmap.primeHeightmaps(chunkAccess, Arrays.stream(Heightmap.Types.values()).collect(Collectors.toSet()));
 
-        Heightmap heightmap = Heightmap.getOrCreateHeightmapUnprimed( chunkAccess, Heightmap.Types.MOTION_BLOCKING_NO_BARRIERS_OR_WATER);
-        Heightmap heightmapWater = Heightmap.getOrCreateHeightmapUnprimed( chunkAccess, Heightmap.Types.MOTION_BLOCKING_NO_BARRIERS);
 
-
-        if (heightmap.getFirstAvailable( Math.abs((int) npc.getX() % 16), Math.abs((int) npc.getZ() % 16)) !=
-                heightmapWater.getFirstAvailable( Math.abs((int) npc.getX() % 16), Math.abs((int) npc.getZ() % 16))){
-
-            positionSelector.getChunkGrid().stream().min(Comparator.comparingDouble(value -> value.distanceToSqr(npc.getPosition(0))))
+        if (isDaWater(chunkAccess, npc.getBlockX(), npc.getBlockZ())){
+//            Bukkit.broadcastMessage("IN DA WATER");
+            positionSelector.getChunkGrid().stream()
+                    .filter(vec3 -> !isDaWater(npc.level().getChunkAt(BlockPos.containing(vec3)), (int) vec3.x(), (int) vec3.z())
+                            && !npc.level().getBlockState(BlockPos.containing(vec3)).is(Blocks.WATER) && !!npc.level().getBlockState(BlockPos.containing(vec3).above(2)).is(Blocks.WATER))
+                    .min(Comparator.comparingDouble(value -> value.distanceToSqr(npc.getPosition(0))))
                     .ifPresentOrElse(vec3 -> {
                         if ( npc.getNavigation().getGoalPos() != vec3) {
-                            // Bukkit.broadcastMessage("yeet 2");
+//                             Bukkit.broadcastMessage(String.valueOf(vec3));
                             npc.getNavigation().navigateToPos(vec3);
                         }
-
                     }, () -> {
                         // Bukkit.broadcastMessage("forward out of da water ?");
                     npc.moveRelative(10, npc.getForward()); });
@@ -149,14 +146,14 @@ public class BendingKillEntity extends MasterCombat {
             return;
         }
 
-        if (distance < 50) {
+        if (distance < 70) {
             double health = npc.getHealth();
 
             boolean canChangeState = npc.tickCount - lastChangedState > STATE_CHANGE_TICK_COOLDOWN;
 
             if (npc.tickCount - lastStrafed > STRAFE_COOLDOWN) {
                 lastStrafed = npc.tickCount;
-                npc.getMoveControl().strafe(0, 0.1f);
+                npc.getMoveControl().strafe(0, 0.2f);
             }
 
             if (!npc.hasCompleteLineOfSight(entity) ) {
@@ -176,7 +173,10 @@ public class BendingKillEntity extends MasterCombat {
             }
 
             if (canChangeState) {
-                state = NPC_STATES.getBestState(distance, health);
+                double currentHealthPercent = (health/ Bukkit.getPlayer(npc.getUUID()).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) * 100;
+//                Bukkit.broadcastMessage("current health percentage  is "+ currentHealthPercent);
+                state = NPC_STATES.getBestState(distance, currentHealthPercent);
+//                Bukkit.broadcastMessage(state.name());
                 double idealRange = state.getIdealRange();
 
                 if (distance > idealRange + DISTANCE_TOLERANCE) {
@@ -200,7 +200,14 @@ public class BendingKillEntity extends MasterCombat {
 
 
             if (npc.tickCount - lastAttemptedAbility > ABILITY_ATTEMPT_COOLDOWN && !npc.isBusyBending()) {
-                AbilityUsages usage = getRandom(state.getAbilityUsagesList());
+                AbilityUsages usage = getRandom(state.getAbilityUsagesList().stream().filter(abilityUsages -> {
+                    CoreAbility coreAbility = CoreAbility.getAbility(abilityUsages.getName());
+                    if (coreAbility == null){
+                        return false;
+                    }
+                    BendingPlayer bendingPlayer = BendingPlayer.getBendingPlayer(npc.displayName);
+                    return bendingPlayer.canBend(coreAbility);
+                }).collect(Collectors.toSet()));
                 bendingGoalSelector.addGoal(usage.makeGoal(npc));
                 this.lastAttemptedAbility = npc.tickCount;
             }
@@ -224,6 +231,16 @@ public class BendingKillEntity extends MasterCombat {
 
     }
 
+    private boolean isDaWater(ChunkAccess chunkAccess, int x, int z){
+        Heightmap.primeHeightmaps(chunkAccess, Arrays.stream(Heightmap.Types.values()).collect(Collectors.toSet()));
+
+        Heightmap heightmap = Heightmap.getOrCreateHeightmapUnprimed( chunkAccess, Heightmap.Types.MOTION_BLOCKING_NO_BARRIERS_OR_WATER);
+        Heightmap heightmapWater = Heightmap.getOrCreateHeightmapUnprimed( chunkAccess, Heightmap.Types.MOTION_BLOCKING_NO_BARRIERS);
+
+
+        return heightmap.getFirstAvailable(Math.abs(x % 16), Math.abs(z % 16)) !=
+                heightmapWater.getFirstAvailable(Math.abs(x % 16), Math.abs(z % 16));
+    }
 
 
 
@@ -263,10 +280,18 @@ public class BendingKillEntity extends MasterCombat {
         }
     }
 
-    public static <E> E getRandom (Collection<E> e) {
+    public static <E> E getRandom(Collection<E> collection) {
+        if (collection.isEmpty()) {
+            throw new IllegalArgumentException("Collection cannot be empty.");
+        }
 
-        return e.stream()
-                .skip((int) (e.size() * Math.random()))
-                .findFirst().get();
+        Random random = new Random();
+        int index = random.nextInt(collection.size());
+
+        // Use an iterator to traverse to the desired index
+        return collection.stream()
+                .skip(index)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Unexpected error retrieving random element.")); // Should never happen
     }
 }

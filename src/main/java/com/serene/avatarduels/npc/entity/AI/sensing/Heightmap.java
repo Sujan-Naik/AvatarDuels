@@ -161,11 +161,11 @@ public class Heightmap {
         MOTION_BLOCKING("MOTION_BLOCKING", state -> state.blocksMotion() || !state.getFluidState().isEmpty()),
         MOTION_BLOCKING_NO_BARRIERS_OR_WATER(
                 "MOTION_BLOCKING_IGNORE_BARRIERS_AND_WATER",
-                state -> (state.blocksMotion() || !state.getFluidState().isEmpty()) && !(state.getBlock() instanceof BarrierBlock )),
+                state -> (state.blocksMotion()  && !(state.getBlock() instanceof BarrierBlock )) ),
         MOTION_BLOCKING_NO_BARRIERS(
                 "MOTION_BLOCKING_IGNORE_BARRIERS",
-                state -> (state.blocksMotion() &&  !(state.getBlock() instanceof BarrierBlock )
-        ));
+                state -> ((state.blocksMotion()  &&  !(state.getBlock() instanceof BarrierBlock ) ) || state.is(Blocks.WATER))
+        );
 
         private final String serializationKey;
         private final Predicate<BlockState> isOpaque;

@@ -53,7 +53,13 @@ public enum AbilityUsages {
     FIREJET("FireJet", (player) -> {
         player.getMobilityManager().useAbility(CoreAbility.getAbility("FireJet"), false, 0, false, false, true, false);
     }, (npc) -> new JetAbility("FireJet", npc, "FireJet", 10)),
-    
+
+
+    //Avatar
+    ENERGYBEAM("EnergyBeam", (player) -> {
+        player.getBreathManager().useAbility(CoreAbility.getAbility("EnergyBeam"), AvatarDuels.getConfig("EnergyBeam").getLong("Abilities.Avatar.EnergyBeam.Duration"));
+    }, (npc) -> new ChargedAbility("EnergyBeam", npc, "EnergyBeam", AvatarDuels.getConfig("EnergyBeam").getDouble("Abilities.Avatar.EnergyBeam.Range"), null)),
+
 
     // AIR ABILITIES
     AIRBREATH("AirBreath", (player) -> {
@@ -106,9 +112,9 @@ public enum AbilityUsages {
             PK_CONFIG.getDouble("Abilities.Earth.EarthBlast.SelectRange"))),
 
     EARTHKICK("EarthKick", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthKick"));
+        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthKick"), AvatarDuels.getConfig("EarthKick").getDouble("Abilities.Earth.EarthKick.SourceRange"));
     }, (npc) -> new SourcedAbility("EarthKick", npc, "EarthKick", AvatarDuels.getConfig("EarthKick").getDouble("Abilities.Earth.EarthKick.Range"),
-            AvatarDuels.getConfig("EarthKick").getDouble("Abilities.Earth.EarthKick.SelectRange"))),
+            AvatarDuels.getConfig("EarthKick").getDouble("Abilities.Earth.EarthKick.SourceRange"))),
 
 //    FISSURE("Fissure", (player) -> {
 //        player.getBlastManager().useAbility(CoreAbility.getAbility("Fissure"));
@@ -124,7 +130,7 @@ public enum AbilityUsages {
     }, (npc) -> new RangedAbility("LavaFlux", npc, "LavaFlux", AvatarDuels.getConfig("LavaFlux").getDouble("Abilities.Earth.LavaFlux.Range"))),
 
     LAVASURGE("LavaSurge", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("LavaSurge"));
+        player.getSourceManager().useAbility(CoreAbility.getAbility("LavaSurge"), AvatarDuels.getConfig("LavaSurge").getLong("Abilities.Earth.LavaSurge.Burn.Duration") ,AvatarDuels.getConfig("LavaSurge").getInt("Abilities.Earth.LavaSurge.SelectRange"));
     }, (npc) -> new SourcedAbility("LavaSurge", npc, "LavaSurge", 30,
             AvatarDuels.getConfig("LavaSurge").getInt("Abilities.Earth.LavaSurge.SelectRange")) ),
 
@@ -139,12 +145,12 @@ public enum AbilityUsages {
 
 
     METALFRAGMENTS("MetalFragments", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("MetalFragments"), 1000L, true);
+        player.getSourceManager().useAbility(CoreAbility.getAbility("MetalFragments"), 1000L, true, AvatarDuels.getConfig("MetalFragments").getDouble("Abilities.Earth.MetalFragments.SourceRange"));
     }, (npc) -> new SourcedAbility("MetalFragments", npc, "MetalFragments", 20,
             AvatarDuels.getConfig("MetalFragments").getDouble("Abilities.Earth.MetalFragments.SourceRange")) ),
 
     SANDBLAST("SandBlast", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("SandBlast"));
+        player.getSourceManager().useAbility(CoreAbility.getAbility("SandBlast"), AvatarDuels.getConfig("SandBlast").getDouble("Abilities.Earth.SandBlast.SourceRange"));
     }, (npc) -> new SourcedAbility("SandBlast", npc, "SandBlast", AvatarDuels.getConfig("SandBlast").getDouble("Abilities.Earth.SandBlast.Range"),
             AvatarDuels.getConfig("SandBlast").getDouble("Abilities.Earth.SandBlast.SourceRange"))),
 
@@ -153,8 +159,8 @@ public enum AbilityUsages {
     }, (npc) -> new ChargedAbility("Shockwave", npc, "Shockwave", PK_CONFIG.getDouble("Abilities.Earth.Shockwave.Range"), null)),
 
     ACCRETION("Accretion", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("Accretion"));
-    }, (npc) -> new SourcedAbility("Accretion", npc, "Accretion", 25,
+        player.getSourceManager().useAbility(CoreAbility.getAbility("Accretion"), AvatarDuels.getConfig("Accretion").getDouble("Abilities.Earth.Accretion.SelectRange"));
+    }, (npc) -> new SourcedAbility("Accretion", npc, "Accretion", 40,
                                    AvatarDuels.getConfig("Accretion").getDouble("Abilities.Earth.Accretion.SelectRange"))),
 
 
@@ -164,12 +170,12 @@ public enum AbilityUsages {
             AvatarDuels.getConfig("EarthShard").getDouble("Abilities.Earth.EarthShard.PrepareRange"))),
 
     MUDSURGE("MudSurge", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("MudSurge"));
-    }, (npc) -> new SourcedAbility("MudSurge", npc, "MudSurge", 40,
+        player.getSourceManager().useAbility(CoreAbility.getAbility("MudSurge"), AvatarDuels.getConfig("MudSurge").getDouble("Abilities.Earth.MudSurge.SourceRange"));
+    }, (npc) -> new SourcedAbility("MudSurge", npc, "MudSurge", 50,
             AvatarDuels.getConfig("MudSurge").getDouble("Abilities.Earth.MudSurge.SourceRange"))),
 
     EARTHLINE("EarthLine", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthLine"));
+        player.getSourceManager().useAbility(CoreAbility.getAbility("EarthLine"),  AvatarDuels.getConfig("EarthLine").getDouble("Abilities.Earth.EarthLine.PrepareRange")) ;
     }, (npc) -> new SourcedAbility("EarthLine", npc, "EarthLine", AvatarDuels.getConfig("EarthLine").getDouble("Abilities.Earth.EarthLine.Range"),
             AvatarDuels.getConfig("EarthLine").getDouble("Abilities.Earth.EarthLine.PrepareRange"))),
 
@@ -236,7 +242,7 @@ public enum AbilityUsages {
 
     DISCHARGE("Discharge", (player) -> {
         player.getBlastManager().useAbility(CoreAbility.getAbility("Discharge"));
-    }, (npc) -> new RangedAbility("Discharge", npc, "Discharge", AvatarDuels.getConfig("Discharge").getDouble("Abilities.Fire.Discharge.Range"))),
+    }, (npc) -> new RangedAbility("Discharge", npc, "Discharge", 20)),
 
     EXPLODE("Explode", (player) -> {
         player.getBreathManager().useAbility(CoreAbility.getAbility("Explode"), 50);
@@ -284,10 +290,8 @@ public enum AbilityUsages {
 
 
     ICECLAWS("IceClaws", (player) -> {
-        player.getBlastManager().useAbility(CoreAbility.getAbility("IceClaws"), 0, true, 1);
-    }, (npc) -> new SourcedAbility("IceClaws", npc, "IceClaws", PK_CONFIG.getDouble("Abilities.Water.IceClaws.Range"),
-            PK_CONFIG.getDouble("Abilities.Water.IceClaws.SelectRange"))),
-
+        player.getBlastManager().useAbility(CoreAbility.getAbility("IceClaws"), AvatarDuels.getConfig("IceClaws").getLong("Abilities.Water.IceClaws.ChargeTime"), true, 1);
+    }, (npc) -> new ChargedAbility("IceClaws", npc, "IceClaws", AvatarDuels.getConfig("IceClaws").getDouble("Abilities.Water.IceClaws.Range"))),
 
     ICEWALL("IceWall", (player) -> {
         player.getSourceManager().useAbility(CoreAbility.getAbility("IceWall"));
@@ -296,12 +300,12 @@ public enum AbilityUsages {
 
 
     TORRENT("Torrent", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("Torrent"), 1000, true);
+        player.getSourceManager().useAbility(CoreAbility.getAbility("Torrent"), 1000, true, PK_CONFIG.getDouble("Abilities.Water.Torrent.SelectRange"));
     }, (npc) -> new SourcedAbility("Torrent", npc, "Torrent", PK_CONFIG.getDouble("Abilities.Water.Torrent.Range"),
             PK_CONFIG.getDouble("Abilities.Water.Torrent.SelectRange"))),
 
     WATERMANIPULATION("WaterManipulation", (player) -> {
-        player.getSourceManager().useAbility(CoreAbility.getAbility("WaterManipulation"));
+        player.getSourceManager().useAbility(CoreAbility.getAbility("WaterManipulation"), PK_CONFIG.getDouble("Abilities.Water.WaterManipulation.SelectRange"));
     }, (npc) -> new SourcedAbility("WaterManipulation", npc, "WaterManipulation", PK_CONFIG.getDouble("Abilities.Water.WaterManipulation.Range"),
             PK_CONFIG.getDouble("Abilities.Water.WaterManipulation.SelectRange")));
 

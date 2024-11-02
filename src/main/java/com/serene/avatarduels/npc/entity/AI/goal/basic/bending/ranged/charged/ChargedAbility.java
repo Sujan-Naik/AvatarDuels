@@ -35,9 +35,9 @@ public class ChargedAbility extends RangedAbility {
         } else {
             npc.lookAt(EntityAnchorArgument.Anchor.EYES, target, EntityAnchorArgument.Anchor.EYES );
 
-            if (!npc.hasLineOfSight(target)){
-                remove();
-            }
+//            if (!npc.hasLineOfSight(target)){
+//                remove();
+//            }
         }
 
     }

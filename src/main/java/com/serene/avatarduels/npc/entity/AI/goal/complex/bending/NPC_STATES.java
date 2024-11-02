@@ -16,13 +16,13 @@ public enum NPC_STATES {
 
 
 
-    KEEP_AWAY(25, 0, mergeCategories(SNIPER, DOOM, MOVEMENT)),
+    KEEP_AWAY(50, 30, mergeCategories(SNIPER, DOOM, MOVEMENT)),
 
-    NEUTRAL(20, 10, mergeCategories(CHUNKY, DOOM, SNIPER, MOVEMENT) ),
+    NEUTRAL(35, 50, mergeCategories(CHUNKY, DOOM, SNIPER, MOVEMENT, AVATAR) ),
 
-    RUSHDOWN(15, 15, mergeCategories(SHIELD, SHREDDER, YEETER, PUNCH_PROJECTILE, HARMLESS) ),
+    RUSHDOWN(20, 70, mergeCategories(SHREDDER, YEETER, PUNCH_PROJECTILE, HARMLESS, MOVEMENT) ),
 
-    POINT_BLANK(5, 20, mergeCategories(SHOTGUN, PUNCH_PROJECTILE, CLOSE_ONLY));
+    POINT_BLANK(10, 90, mergeCategories(SHOTGUN, PUNCH_PROJECTILE, CLOSE_ONLY, SHREDDER));
 
     private double idealRange;
 
@@ -52,12 +52,12 @@ public enum NPC_STATES {
         return abilityUsagesList;
     }
 
-    private static final double RANGE_WEIGHT = 1.2, HEALTH_WEIGHT = 1;
+    private static final double RANGE_WEIGHT = 3.0, HEALTH_WEIGHT = 4;
 
-    public static NPC_STATES getBestState(double currentRange, double currentHealth){
+    public static NPC_STATES getBestState(double currentRange, double currentHealthPercent){
         return Arrays.stream(NPC_STATES.values()).min(Comparator.comparingDouble(npcStates -> {
             return Math.abs(currentRange - npcStates.getIdealRange()) * RANGE_WEIGHT +
-                    Math.abs(currentHealth - npcStates.getIdealHealth()) * HEALTH_WEIGHT;
+                    Math.abs(currentHealthPercent  - npcStates.getIdealHealth()) * HEALTH_WEIGHT;
         })).get();
     }
 }
