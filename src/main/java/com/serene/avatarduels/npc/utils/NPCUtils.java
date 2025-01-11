@@ -77,7 +77,6 @@ public class NPCUtils {
         synchedEntityData.set(new EntityDataAccessor<>(17, EntityDataSerializers.BYTE), (byte) 127);
 
         Connection serverPlayerConnection = new Connection(PacketFlow.SERVERBOUND);
-
 //        serverPlayerConnection.channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
 //        serverPlayerConnection.channel = new EmbeddedChannel();
         serverPlayerConnection.channel = new EmbeddedChannel(new ChannelHandlerAdapter() {
@@ -89,7 +88,7 @@ public class NPCUtils {
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
                 // Ignore outgoing messages
-                if (!promise.isDone()) {
+                if (promise !=null && !promise.isDone()) {
                     promise.setSuccess(); // Complete the promise immediately
                 }
             }

@@ -83,6 +83,9 @@ public class CombatPositionSelector {
 
 
                 Vec3 bestPos = null;
+                if (!level.hasChunk(chunkX, chunkZ)) {
+                 continue;
+                }
                 Heightmap.primeHeightmaps(level.getChunk(chunkX, chunkZ), Arrays.stream(Heightmap.Types.values()).collect(Collectors.toSet()));
 
 

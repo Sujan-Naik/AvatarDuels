@@ -31,6 +31,7 @@ public class SourcedAbility extends RangedAbility {
 
     @Override
     public boolean shouldStart() {
+
         return super.shouldStart() && getSource()!=null;
     }
 
@@ -45,16 +46,18 @@ public class SourcedAbility extends RangedAbility {
         org.bukkit.entity.LivingEntity bukkitTarget = (org.bukkit.entity.LivingEntity) Bukkit.getEntity(target.getUUID());
         Player player = Bukkit.getPlayer(npc.getUUID());
 
-        Set<Block> nearbyBlocks = GeneralMethods.getBlocksAroundPoint(player.getLocation(), maxSourceRange).stream().filter(block -> block.getRelative(BlockFace.NORTH).isPassable()).collect(Collectors.toSet());
+        Set<Block> nearbyBlocks = GeneralMethods.getBlocksAroundPoint(player.getLocation(), maxSourceRange).stream().filter(block -> block.getRelative(BlockFace.UP).isPassable()).collect(Collectors.toSet());
 
         Block source = null;
 
 
-        switch (CoreAbility.getAbility(getAbilityName()).getElement().toString()) {
+        switch (CoreAbility.getAbility(getAbilityName()).getElement().getName()) {
             // Main Elements
 //            case "Air" -> source = fetchSource(nearbyBlocks.stream(), AirAbility::isAir, bukkitTarget);
-            case "Water" -> source = fetchSource(nearbyBlocks.stream(), WaterAbility::isWater, bukkitTarget);
-            case "Earth" -> source = fetchSource(nearbyBlocks.stream(), EarthAbility::isEarth, bukkitTarget);
+            case "Water" -> source = fetchSource(nearbyBlocks.stream(), block ->  ElementalAbility.isWater(block.getType())
+                    || ElementalAbility.isIce(block) || ElementalAbility.isPlant(block), bukkitTarget);
+            case "Earth" -> source = fetchSource(nearbyBlocks.stream(), block -> ElementalAbility.isEarth(block)
+                    || ElementalAbility.isSand(block) || ElementalAbility.isLava(block) || ElementalAbility.isMetal(block), bukkitTarget);
             case "Fire" -> source = fetchSource(nearbyBlocks.stream(), FireAbility::isFire, bukkitTarget);
 
             // Subelements for Air

@@ -77,7 +77,10 @@ public class DuelManager {
                         Location loc = new Location(world,
                                 arena.points().get(slot).x(),
                                 arena.points().get(slot).y(),
-                                arena.points().get(slot).z());
+                                arena.points().get(slot).z(),
+                                arena.points().get(slot).yaw(),
+                                arena.points().get(slot).pitch());
+
                         player.teleport(loc); // Teleport the player
                         player.sendMessage("Teleported to " + arena.name()); // Inform the player
                     } else {

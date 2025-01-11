@@ -8,6 +8,7 @@ import com.serene.avatarduels.npc.entity.AI.bending.AbilityUsages;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import com.serene.avatarduels.npc.utils.NPCUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -53,40 +54,44 @@ public class DuelCommand implements CommandExecutor {
                                 Player player2 = Bukkit.getPlayer(player2String);
                                 String world = strings[4];
 
-                                if (player1 == null) {
-                                    NPCHandler.getNpcs().stream().filter(bendingNPC -> bendingNPC.getUUID().equals(player1.getUniqueId())).findFirst().
+
+                                    NPCHandler.getNpcs().stream().filter(bendingNPC -> player1 != null && bendingNPC.getUUID().equals(player1.getUniqueId())).findFirst().
                                             ifPresentOrElse(bendingNPC -> bendingNPC.startDuel(player2), () ->
                                             {
-                                                BendingNPC npc = NPCUtils.spawnNPC(player.getLocation(), player, player1String);
-                                                NPCHandler.addNPC(npc);
+                                                if (player1 == null) {
+                                                    BendingNPC npc = NPCUtils.spawnNPC(player.getLocation(), player, player1String);
+                                                    NPCHandler.addNPC(npc);
 
-                                                Bukkit.broadcastMessage("Player 1 is not a valid AI and there is no human player - spawning one in.");
+                                                    Bukkit.broadcastMessage("Player 1 is not a valid AI and there is no human player - spawning one in.");
 
 
-                                                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-                                                    Bukkit.broadcastMessage("TARGET ACQUIRED. ELIMINATE " + player2String);
-                                                    npc.startDuel(Bukkit.getPlayer(player2String));
-                                                }, 100L);
+                                                    Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                                                        Bukkit.broadcastMessage("TARGET ACQUIRED. ELIMINATE " + player2String);
+                                                        npc.startDuel(Bukkit.getPlayer(player2String));
+                                                    }, 100L);
+                                                }
                                             });
-                                }
 
-                                if (player2 == null) {
-                                    NPCHandler.getNpcs().stream().filter(bendingNPC -> bendingNPC.getUUID().equals(player2.getUniqueId())).findFirst().
+
+
+                                    NPCHandler.getNpcs().stream().filter(bendingNPC -> player2 != null && bendingNPC.getUUID().equals(player2.getUniqueId())).findFirst().
                                             ifPresentOrElse(bendingNPC -> bendingNPC.startDuel(player1), () ->
                                             {
-                                                BendingNPC npc = NPCUtils.spawnNPC(player.getLocation(), player, player2String);
-                                                NPCHandler.addNPC(npc);
+                                                if (player2 == null) {
 
-                                                Bukkit.broadcastMessage("Player 2 is not a valid AI and there is no human player - spawning one in");
+                                                    BendingNPC npc = NPCUtils.spawnNPC(player.getLocation(), player, player2String);
+                                                    NPCHandler.addNPC(npc);
 
-                                                Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
-                                                    Bukkit.broadcastMessage("TARGET ACQUIRED. ELIMINATE " + player1String);
-                                                    npc.startDuel(Bukkit.getPlayer(player1String));
+                                                    Bukkit.broadcastMessage("Player 2 is not a valid AI and there is no human player - spawning one in");
 
-                                                }, 100L);
+                                                    Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+                                                        Bukkit.broadcastMessage("TARGET ACQUIRED. ELIMINATE " + player1String);
+                                                        npc.startDuel(Bukkit.getPlayer(player1String));
 
+                                                    }, 100L);
+                                                }
                                             });
-                                }
+
 
                                 Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
 
@@ -110,6 +115,13 @@ public class DuelCommand implements CommandExecutor {
         Player player2 = Bukkit.getPlayer(player2String);
 
         if (player1 != null && player2 != null){
+            player1.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(100);
+            player2.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(100);
+
+            player1.setHealth(100);
+            player2.setHealth(100);
+
+
             new Duel(player1, player2, world);
             return true;
         }
