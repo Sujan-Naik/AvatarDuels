@@ -14,6 +14,7 @@ import com.serene.avatarduels.npc.entity.AI.sensing.CombatPositionSelector;
 import com.serene.avatarduels.npc.entity.AI.sensing.Heightmap;
 import com.serene.avatarduels.npc.entity.BendingNPC;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -81,8 +82,6 @@ public class BendingKillEntity extends MasterCombat {
             this.setFinished(true);
             return;
         }
-
-
 
         double distance = Math.sqrt(npc.distanceToSqr(entity));
 
@@ -200,14 +199,17 @@ public class BendingKillEntity extends MasterCombat {
 
 
             if (npc.tickCount - lastAttemptedAbility > ABILITY_ATTEMPT_COOLDOWN && !npc.isBusyBending()) {
-                AbilityUsages usage = getRandom(state.getAbilityUsagesList().stream().filter(abilityUsages -> {
-                    CoreAbility coreAbility = CoreAbility.getAbility(abilityUsages.getName());
-                    if (coreAbility == null){
-                        return false;
-                    }
-                    BendingPlayer bendingPlayer = BendingPlayer.getBendingPlayer(npc.displayName);
-                    return bendingPlayer.canBend(coreAbility);
-                }).collect(Collectors.toSet()));
+//                AbilityUsages usage = getRandom(state.getAbilityUsagesList().stream().filter(abilityUsages -> {
+//                    CoreAbility coreAbility = CoreAbility.getAbility(abilityUsages.getName());
+//                    if (coreAbility == null){
+//                        return false;
+//                    }
+//                    BendingPlayer bendingPlayer = BendingPlayer.getBendingPlayer(npc.displayName);
+//                    return bendingPlayer.canBend(coreAbility);
+//                }).collect(Collectors.toSet()));
+
+                AbilityUsages usage = getRandom(state.getAbilityUsagesList());
+
                 bendingGoalSelector.addGoal(usage.makeGoal(npc));
                 this.lastAttemptedAbility = npc.tickCount;
             }

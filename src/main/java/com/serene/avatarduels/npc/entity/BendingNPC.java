@@ -3,6 +3,7 @@ package com.serene.avatarduels.npc.entity;
 import com.mojang.authlib.GameProfile;
 import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.Element;
+import com.serene.avatarduels.AvatarDuels;
 import com.serene.avatarduels.npc.entity.AI.bending.*;
 import com.serene.avatarduels.npc.entity.AI.goal.complex.bending.BendingKillEntity;
 import com.serene.avatarduels.npc.utils.Vec3Utils;
@@ -67,6 +68,8 @@ public class BendingNPC extends HumanEntity {
         isBusyMovementBending = busyBending;
     }
 
+    public boolean canBend = false;
+
     public boolean hasCompleteLineOfSight(Entity entity) {
         if (entity.level() != this.level()) {
             return false;
@@ -110,6 +113,7 @@ public class BendingNPC extends HumanEntity {
 
     public void enableBending(){
         Player player = Bukkit.getPlayer(this.getUUID());
+
         BendingPlayer.getOrLoadOfflineAsync(player).thenRun(() -> {
             BendingPlayer bPlayer =  BendingPlayer.getBendingPlayer(player);
             Arrays.stream(Element.getAllElements()).forEach(element -> {
@@ -123,17 +127,25 @@ public class BendingNPC extends HumanEntity {
             player.setGlowing(true);
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(100);
             player.setHealth(100);
-
+            canBend = true;
         });
+
 
     }
 
     public void startDuel(LivingEntity target){
-        masterGoalSelector.addMasterGoal(new BendingKillEntity("kill entity", this, target));
+        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+            masterGoalSelector.addMasterGoal(new BendingKillEntity("kill entity", this, target));
+
+        }, 100L);
     }
 
     public void startDuel(org.bukkit.entity.LivingEntity target){
-        masterGoalSelector.addMasterGoal(new BendingKillEntity("kill entity", this, ((CraftLivingEntity)target).getHandle()));
+        Bukkit.getScheduler().runTaskLater(AvatarDuels.plugin, () -> {
+            masterGoalSelector.addMasterGoal(new BendingKillEntity("kill entity", this, ((CraftLivingEntity)target).getHandle()));
+
+        }, 100L);
+
     }
 
     @Override

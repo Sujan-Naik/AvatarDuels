@@ -77,7 +77,6 @@ public class NPCUtils {
         synchedEntityData.set(new EntityDataAccessor<>(17, EntityDataSerializers.BYTE), (byte) 127);
 
         Connection serverPlayerConnection = new Connection(PacketFlow.SERVERBOUND);
-
 //        serverPlayerConnection.channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
 //        serverPlayerConnection.channel = new EmbeddedChannel();
         serverPlayerConnection.channel = new EmbeddedChannel(new ChannelHandlerAdapter() {
