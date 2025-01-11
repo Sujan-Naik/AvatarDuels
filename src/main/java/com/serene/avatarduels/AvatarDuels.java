@@ -21,6 +21,14 @@ import com.serene.avatarduels.npc.command.SerenityCommand;
 import com.serene.avatarduels.npc.listeners.SereneNPCsListener;
 import com.serene.avatarduels.npc.utils.NPCUtils;
 import com.serene.avatarduels.scoreboard.BendingBoard;
+import com.serene.avatarduels.spirits.ability.dark.DarkBlast;
+import com.serene.avatarduels.spirits.ability.dark.Shackle;
+import com.serene.avatarduels.spirits.ability.dark.Strike;
+import com.serene.avatarduels.spirits.ability.light.LightBlast;
+import com.serene.avatarduels.spirits.ability.light.Shelter;
+import com.serene.avatarduels.spirits.listeners.Abilities;
+import com.serene.avatarduels.spirits.listeners.PKEvents;
+import com.serene.avatarduels.spirits.listeners.Passives;
 import com.serene.avatarduels.util.*;
 import com.serene.avatarduels.util.versionadapter.ParticleAdapter;
 import com.serene.avatarduels.util.versionadapter.ParticleAdapterFactory;
@@ -53,7 +61,6 @@ public class AvatarDuels extends JavaPlugin {
 	
 	public static AvatarDuels instance;
 	public static FileConfiguration PK_CONFIG ;
-	public static FileConfiguration JC_CONFIG;
 
 	public static final HashMap<String, Config> abilityNameConfigHashMap = new HashMap<>();
 	private MainListener listener;
@@ -146,6 +153,34 @@ public class AvatarDuels extends JavaPlugin {
 
 		NPCUtils.initUUID(0, this);
 
+
+		getLogger().info("Init config");
+		new com.serene.avatarduels.spirits.config.Config();
+		getLogger().info("Init abilities");
+
+        CoreAbility.registerPluginAbilities(plugin, "com.serene.avatarduels.spirits.ability");
+
+		registerListeners();
+		registerCollisions();
+
+		plugin.getLogger().info("Successfully enabled Spirits.");
+	}
+
+	//TODO: collision system needs testing
+	private void registerCollisions() {
+		com.projectkorra.projectkorra.ability.util.CollisionInitializer collisionInitializer = ProjectKorra.getCollisionInitializer();
+		collisionInitializer.addSmallAbility(CoreAbility.getAbility(DarkBlast.class));
+		collisionInitializer.addSmallAbility(CoreAbility.getAbility(Shackle.class));
+		collisionInitializer.addSmallAbility(CoreAbility.getAbility(Strike.class));
+		collisionInitializer.addSmallAbility(CoreAbility.getAbility(LightBlast.class));
+		collisionInitializer.addLargeAbility(CoreAbility.getAbility(Shelter.class));
+		collisionInitializer.initializeDefaultCollisions();
+	}
+
+	private void registerListeners() {
+		getServer().getPluginManager().registerEvents(new Abilities(), this);
+		getServer().getPluginManager().registerEvents(new Passives(), this);
+		getServer().getPluginManager().registerEvents(new PKEvents(), this);
 	}
 
 	public void initializeCollisions() {
@@ -204,6 +239,8 @@ public class AvatarDuels extends JavaPlugin {
 		}
 
 		RegenTempBlock.revertAll();
+
+		plugin.getLogger().info("Successfully disabled Spirits.");
 
 	}
 
