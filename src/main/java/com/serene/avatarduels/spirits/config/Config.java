@@ -216,6 +216,18 @@ public class Config {
                 new Pair<>("Language.Abilities.DarkSpirit.Strike.Instructions", "Right-click to strike an enemy within range!")
         );
 
+        createAbilityConfig("Corruption",
+                new Pair<>("Abilities.Spirits.DarkSpirit.Corruption.Enabled", true),
+                new Pair<>("Abilities.Spirits.DarkSpirit.Corruption.Cooldown", 12000),
+                new Pair<>("Abilities.Spirits.DarkSpirit.Corruption.Radius", 6),
+                new Pair<>("Abilities.Spirits.DarkSpirit.Corruption.Duration", 15),
+                new Pair<>("Abilities.Spirits.DarkSpirit.Corruption.EffectDuration", 2),
+                new Pair<>("Abilities.Spirits.DarkSpirit.Corruption.EffectAmplifier", 1),
+                new Pair<>("Language.Abilities.DarkSpirit.Corruption.Description", "Dark spirits are entities filled with rage and malevolence. They are able to infect and influence the area around them ★\n" +
+                        "and imbue their negative energies to it. They could also summon more dark spirits within this area in order to spread their corruption. Mobs and land are also affected in this area of influence."),
+                new Pair<>("Language.Abilities.DarkSpirit.Corruption.Instructions", "Hold Sneak to cast Corruption in the specified radius and weaken your foes!")
+        );
+
         //COMBOS
 
         createAbilityConfig("Rejuvenate",

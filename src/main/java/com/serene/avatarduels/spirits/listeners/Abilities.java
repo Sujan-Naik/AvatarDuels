@@ -2,10 +2,7 @@ package com.serene.avatarduels.spirits.listeners;
 
 import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.ability.CoreAbility;
-import com.serene.avatarduels.spirits.ability.dark.DarkBlast;
-import com.serene.avatarduels.spirits.ability.dark.Intoxicate;
-import com.serene.avatarduels.spirits.ability.dark.Shackle;
-import com.serene.avatarduels.spirits.ability.dark.Strike;
+import com.serene.avatarduels.spirits.ability.dark.*;
 import com.serene.avatarduels.spirits.ability.light.Alleviate;
 import com.serene.avatarduels.spirits.ability.light.LightBlast;
 import com.serene.avatarduels.spirits.ability.light.Orb;
@@ -89,6 +86,8 @@ public class Abilities implements Listener {
         } else if (bPlayer.getBoundAbilityName().equalsIgnoreCase("Orb")) {
             new Orb(player);
 
+        } else if (bPlayer.getBoundAbilityName().equalsIgnoreCase("Corruption")) {
+            new Corruption(player);
         }
     }
 
