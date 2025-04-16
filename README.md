@@ -3,6 +3,9 @@
 
 ## Features
 > Integration of Jedcore
+>
 > Integration of ProjectAddons
+> 
 > A fully autonomous AI bender that can engage in duels with opponents (even other AI) over large maps
+> 
 > A basic duel system with an arena revert using Gaia
