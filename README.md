@@ -1,6 +1,8 @@
 # AvatarDuels 
 **A huge plugin I decided to make to actively update ProjectKorra addons and provide other features for the AvatarDuels server.**
 
+Preview https://www.youtube.com/watch?v=eiEDAnGJ7Lg
+
 ## Features
 > Integration of Jedcore
 >
